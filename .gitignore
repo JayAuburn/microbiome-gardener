@@ -139,7 +139,3 @@ models/
 *.onnx
 *.pt
 *.pth
-
-#ai_docs
-ai_docs/diagrams/
-ai_docs/internal/
