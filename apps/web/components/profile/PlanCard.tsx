@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  createBasicCheckoutSession,
-  createProCheckoutSession,
+  createPlanCheckoutSession,
+  createCancelSession,
 } from "@/app/actions/subscriptions";
 import { useUsage } from "@/contexts/UsageContext";
 import { type PlanFeature } from "@/lib/subscriptions";
@@ -14,16 +14,9 @@ import { cn } from "@/lib/utils";
 interface PlanCardProps {
   plan: PlanFeature;
   loading: boolean;
-  onCancelClick?: () => void;
-  onDowngradeClick?: () => void;
 }
 
-export function PlanCard({
-  plan,
-  loading,
-  onCancelClick,
-  onDowngradeClick,
-}: PlanCardProps) {
+export function PlanCard({ plan, loading }: PlanCardProps) {
   const { usageStats } = useUsage();
   const subscriptionTier = usageStats?.subscriptionTier || "free";
   const isCurrentPlan = subscriptionTier === plan.name.toLowerCase();
@@ -32,7 +25,7 @@ export function PlanCard({
   const handleBasicCheckout = async (): Promise<void> => {
     setCheckoutLoading(true);
     try {
-      await createBasicCheckoutSession();
+      await createPlanCheckoutSession("basic");
     } catch (error) {
       console.error("Error during checkout:", error);
       setCheckoutLoading(false);
@@ -42,9 +35,19 @@ export function PlanCard({
   const handleProCheckout = async (): Promise<void> => {
     setCheckoutLoading(true);
     try {
-      await createProCheckoutSession();
+      await createPlanCheckoutSession("pro");
     } catch (error) {
       console.error("Error during checkout:", error);
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async (): Promise<void> => {
+    setCheckoutLoading(true);
+    try {
+      await createCancelSession();
+    } catch (error) {
+      console.error("Error during cancellation:", error);
       setCheckoutLoading(false);
     }
   };
@@ -97,35 +100,43 @@ export function PlanCard({
       }
 
       if (subscriptionTier === "basic") {
-        // Cancel basic subscription
+        // Cancel basic subscription - direct portal link
         return (
           <Button
             size="sm"
             className="w-full"
             variant="outline"
-            disabled={usageStats?.cancelAtPeriodEnd || loading}
-            onClick={onCancelClick}
+            disabled={
+              usageStats?.cancelAtPeriodEnd || loading || checkoutLoading
+            }
+            onClick={handleCancelSubscription}
           >
             {usageStats?.cancelAtPeriodEnd
               ? "Cancellation Scheduled"
-              : "Cancel"}
+              : checkoutLoading
+                ? "Loading..."
+                : "Cancel"}
           </Button>
         );
       }
 
       if (subscriptionTier === "pro") {
-        // Downgrade from pro to basic
+        // Downgrade from pro to basic - direct portal link
         return (
           <Button
             size="sm"
             className="w-full"
             variant="outline"
-            disabled={usageStats?.downgradeScheduled || loading}
-            onClick={onDowngradeClick}
+            disabled={
+              usageStats?.downgradeScheduled || loading || checkoutLoading
+            }
+            onClick={handleBasicCheckout}
           >
             {usageStats?.downgradeScheduled
               ? "Downgrade Scheduled"
-              : "Downgrade at Renewal"}
+              : checkoutLoading
+                ? "Loading..."
+                : "Downgrade"}
           </Button>
         );
       }
@@ -162,18 +173,22 @@ export function PlanCard({
       }
 
       if (subscriptionTier === "pro") {
-        // Cancel pro subscription
+        // Cancel pro subscription - direct portal link
         return (
           <Button
             size="sm"
             className="w-full"
             variant="outline"
-            disabled={usageStats?.cancelAtPeriodEnd || loading}
-            onClick={onCancelClick}
+            disabled={
+              usageStats?.cancelAtPeriodEnd || loading || checkoutLoading
+            }
+            onClick={handleCancelSubscription}
           >
             {usageStats?.cancelAtPeriodEnd
               ? "Cancellation Scheduled"
-              : "Cancel"}
+              : checkoutLoading
+                ? "Loading..."
+                : "Cancel"}
           </Button>
         );
       }

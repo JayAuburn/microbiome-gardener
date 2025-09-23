@@ -2,14 +2,138 @@
 
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
+import Stripe from "stripe";
 import { stripe, STRIPE_CONFIG } from "@/lib/stripe";
 import { db } from "@/lib/drizzle/db";
 import { users } from "@/lib/drizzle/schema";
 import { env } from "@/lib/env";
 import { requireUserId, getCurrentUserId } from "@/lib/auth";
 
+/**
+ * Extended Stripe billing portal session creation parameters
+ * to support subscription flows with after_completion
+ */
+interface ExtendedBillingPortalParams {
+  customer: string;
+  return_url: string;
+  flow_data?: {
+    type: "subscription_update" | "subscription_cancel";
+    subscription_update?: {
+      subscription: string;
+    };
+    subscription_cancel?: {
+      subscription: string;
+    };
+    after_completion?: {
+      type: "redirect";
+      redirect: {
+        return_url: string;
+      };
+    };
+  };
+}
+
+/**
+ * Create customer portal session for subscription update with deep link
+ */
+async function getSubscriptionUpdateURL(
+  customerId: string,
+  newPriceId: string,
+  activeSubscription: Stripe.Subscription
+): Promise<{ success: true; url: string }> {
+  try {
+    // 1. Check if they're already on the target plan
+    const currentPriceId = activeSubscription.items.data[0]?.price.id;
+    if (currentPriceId === newPriceId) {
+      // Already on this plan, redirect to profile
+      return {
+        success: true,
+        url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile?message=already_subscribed`,
+      };
+    }
+
+    // 2. Create customer portal session with subscription update flow
+    const sessionParams: ExtendedBillingPortalParams = {
+      customer: customerId,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile`, // Cancel/back URL (no message)
+      flow_data: {
+        type: "subscription_update",
+        subscription_update: {
+          subscription: activeSubscription.id,
+        },
+        after_completion: {
+          type: "redirect",
+          redirect: {
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile?message=upgraded`, // Success-only URL
+          },
+        },
+      },
+    };
+
+    const session = await stripe.billingPortal.sessions.create(
+      sessionParams as Stripe.BillingPortal.SessionCreateParams
+    );
+
+    return {
+      success: true,
+      url: session.url,
+    };
+  } catch (error) {
+    console.error("Error creating subscription update portal session:", error);
+    // If portal session fails, redirect to profile with error
+    return {
+      success: true,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile?message=portal_error`,
+    };
+  }
+}
+
+/**
+ * Create customer portal session for subscription cancellation with deep link
+ */
+async function getSubscriptionCancelURL(
+  customerId: string,
+  activeSubscription: Stripe.Subscription
+): Promise<{ success: true; url: string }> {
+  try {
+    // Create customer portal session with subscription cancel flow
+    const sessionParams: ExtendedBillingPortalParams = {
+      customer: customerId,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile`, // Cancel/back URL
+      flow_data: {
+        type: "subscription_cancel",
+        subscription_cancel: {
+          subscription: activeSubscription.id,
+        },
+        after_completion: {
+          type: "redirect",
+          redirect: {
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile?message=cancelled`, // Success-only URL
+          },
+        },
+      },
+    };
+
+    const session = await stripe.billingPortal.sessions.create(
+      sessionParams as Stripe.BillingPortal.SessionCreateParams
+    );
+
+    return {
+      success: true,
+      url: session.url,
+    };
+  } catch (error) {
+    console.error("Error creating subscription cancel portal session:", error);
+    // If portal session fails, redirect to profile with error
+    return {
+      success: true,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile?message=portal_error`,
+    };
+  }
+}
+
 // Create Stripe checkout session for subscription
-export async function createCheckoutSession(priceId: string) {
+export async function createCheckoutSession(priceId: string): Promise<void> {
   try {
     const userId = await requireUserId();
 
@@ -45,7 +169,24 @@ export async function createCheckoutSession(priceId: string) {
         .where(eq(users.id, userId));
     }
 
-    // Create checkout session
+    // Check if user has existing subscription
+    const subscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: "active",
+      limit: 1,
+    });
+
+    if (subscriptions.data.length > 0) {
+      // User has existing subscription, use portal deep link for update
+      const portalResult = await getSubscriptionUpdateURL(
+        customerId,
+        priceId,
+        subscriptions.data[0]
+      );
+      redirect(portalResult.url);
+    }
+
+    // No existing subscription, proceed with checkout for new subscription
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ["card"],
@@ -172,32 +313,78 @@ export async function createCustomerPortalSession(): Promise<{
 }
 
 /**
- * Create checkout session for Basic plan ($9.99)
+ * Create checkout session for specified plan
  */
-export async function createBasicCheckoutSession() {
-  return createCheckoutSession(STRIPE_CONFIG.BASIC_PRICE_ID);
+export async function createPlanCheckoutSession(
+  plan: "basic" | "pro"
+): Promise<{ success: true; url: string } | { success: false; error: string }> {
+  try {
+    const priceId =
+      plan === "basic"
+        ? STRIPE_CONFIG.BASIC_PRICE_ID
+        : STRIPE_CONFIG.PRO_PRICE_ID;
+
+    await createCheckoutSession(priceId);
+    return {
+      success: true,
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/profile`,
+    };
+  } catch (error) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+
+    console.error(`Error creating ${plan} checkout session:`, error);
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to create checkout session",
+    };
+  }
 }
 
 /**
- * Create checkout session for Pro plan ($19.99)
+ * Create portal session for subscription cancellation
  */
-export async function createProCheckoutSession() {
-  return createCheckoutSession(STRIPE_CONFIG.PRO_PRICE_ID);
-}
+export async function createCancelSession(): Promise<void> {
+  try {
+    const userId = await requireUserId();
 
-/**
- * Redirect to Customer Portal for subscription management
- * This handles upgrades, downgrades, cancellations, and all other subscription changes
- */
-export async function redirectToCustomerPortal(): Promise<void> {
-  const result = await createCustomerPortalSession();
+    const [dbUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1);
 
-  if (result.success && result.portalUrl) {
-    redirect(result.portalUrl);
-  } else if (result.fallbackUrl) {
-    redirect(result.fallbackUrl);
-  } else {
-    // Redirect back to profile with error
-    redirect("/profile?error=portal_unavailable");
+    if (!dbUser?.stripe_customer_id) {
+      throw new Error("No Stripe customer found");
+    }
+
+    // Find active subscription
+    const subscriptions = await stripe.subscriptions.list({
+      customer: dbUser.stripe_customer_id,
+      status: "active",
+      limit: 1,
+    });
+
+    if (subscriptions.data.length === 0) {
+      throw new Error("No active subscription found");
+    }
+
+    const portalResult = await getSubscriptionCancelURL(
+      dbUser.stripe_customer_id,
+      subscriptions.data[0]
+    );
+
+    redirect(portalResult.url);
+  } catch (error) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+
+    console.error("Error creating cancel portal session:", error);
+    throw new Error("Failed to create cancel portal session");
   }
 }

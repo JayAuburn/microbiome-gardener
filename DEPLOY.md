@@ -103,17 +103,16 @@ Deployment is complete when all 6 phases are finished and user can successfully 
 
 ### 🤖 For Best Setup Experience
 
-**⚠️ IMPORTANT RECOMMENDATION:** Use **Claude Sonnet 4 1M (Thinking)** for this setup process.
+**⚠️ IMPORTANT RECOMMENDATION:** Use **Claude Sonnet 4 - Thinking** for this setup process.
 
-**Why Claude Sonnet 4 1M (Thinking) (MAX MODE)?**
-- ✅ **1M Context Window** - Can maintain full context of this entire deployment guide
+**Why Claude Sonnet 4 - Thinking?**
 - ✅ **Maximum Accuracy** - Provides the most reliable guidance throughout all 6 phases
 - ✅ **Complete Memory** - Remembers all previous deployment steps and configurations
 - ✅ **Best Results** - Optimized for complex, multi-step technical processes
 
 **How to Enable:**
-1. In Cursor, select **"Claude Sonnet 4 1M (Thinking) (MAX MODE)"** 
-2. Avoid switching models mid-setup to maintain context consistency
+1. In Cursor, select **"Claude Sonnet 4 - Thinking"** 
+2. As soon as context window reaches 75%, we recommend you to turn on **MAX MODE** for better results
 
 💡 **This ensures the AI assistant will have complete memory of your progress and provide accurate guidance throughout the entire RAG SaaS deployment process.**
 
@@ -495,7 +494,7 @@ Please confirm your Supabase authentication is now configured with your producti
    - A slide-out panel will appear on the right titled "Add a product"
    - Fill in the product details:
      - **Name (required):** "Basic Plan"
-     - **Description:** "Basic tier for AI chat application with essential features"
+     - **Description:** "Basic tier for RAG-powered document analysis with essential AI features"
    - In the pricing section of the same panel:
      - **Pricing model:** Select **"Recurring"** (should already be selected)
      - **Amount:** Enter `9.99` (or your preferred Basic plan price)
@@ -523,7 +522,7 @@ Please confirm your Supabase authentication is now configured with your producti
    - Click **"Add product"** again to create the second product
    - Fill in the Pro plan product details:
      - **Name (required):** "Pro Plan"
-     - **Description:** "Premium tier with advanced features and higher usage limits"
+     - **Description:** "Premium tier with higher usage limits"
    - In the pricing section of the same panel:
      - **Pricing model:** Select **"Recurring"**
      - **Amount:** Enter `19.99` (or your preferred Pro plan price)
@@ -581,7 +580,7 @@ Please confirm your Supabase authentication is now configured with your producti
    - Click on **Developers** in the bottom left corner → **Webhooks**
    - Click **"Add endpoint"**
    - **Endpoint URL**: [YOUR_VERCEL_URL]/api/webhooks/stripe
-   - Select required events: `customer.subscription.*`, `invoice.payment.*`
+   - Select required events depending on what you handle in your webhook handler `app/api/webhooks/stripe/route.ts`, RAG-SaaS template handles this event by default: `invoice.payment_succeeded`
 
    **8b. Copy Stripe Webhook Secret and Update Immediately:**
    - **Copy the webhook signing secret** (starts with `whsec_`, click to copy)
@@ -1197,33 +1196,6 @@ git push -u origin staging
      - Find `SUPABASE_URL` variable in your **Pre-Production** environment variables 
      - Click on it to edit and replace the existing value with your copied staging Project URL
    - Return to Supabase tab
-   - **Now update Next.js configuration for staging environment image loading:**
-     - Open `next.config.ts` in your project root
-     - Extract just the hostname from your staging Supabase URL (e.g., from `https://staging-xyz123.supabase.co` → `staging-xyz123.supabase.co`)
-     - Replace BOTH `hostname` entries in the `remotePatterns` array:
-```typescript
-const nextConfig: NextConfig = {
-   images: {
-      remotePatterns: [
-      // Supabase Storage - signed URLs (private buckets)
-      {
-         protocol: "https",
-         hostname: "staging-xyz123.supabase.co", // ← Replace with YOUR staging hostname
-         port: "",
-         pathname: "/storage/v1/object/sign/**",
-      },
-      // Supabase Storage - authenticated URLs (private buckets)
-      {
-         protocol: "https",
-         hostname: "staging-xyz123.supabase.co", // ← Replace with YOUR staging hostname  
-         port: "",
-         pathname: "/storage/v1/object/authenticated/**",
-      },
-      ],
-   },
-};
-```
-   💡 **Why update next.config.ts?** This allows Next.js to display images from your staging Supabase storage when working in the development environment.
 
 2. **Get Staging API Keys and Update Immediately**
    - In the same **Project Settings** page, click on **API Keys** in the sub-menu
@@ -1273,14 +1245,7 @@ const nextConfig: NextConfig = {
    - All your staging Supabase credentials are now properly configured in Vercel Preview/Development environment
 
 **🛑 STOP AND WAIT FOR USER APPROVAL:** <!-- AI INTERNAL REFERENCE - DO NOT SHOW THE "STOP AND WAIT FOR USER APPROVAL" PHRASE TO USER -->
-Please confirm you have completed both:
-- ✅ **Updated all four Supabase environment variables** in Vercel Pre-Production environment (DATABASE_URL saved individually)
-- ✅ **Updated next.config.ts** with staging hostname in both remotePatterns entries
-
-**🛑 STOP AND WAIT FOR USER APPROVAL:** <!-- AI INTERNAL REFERENCE - DO NOT SHOW THE "STOP AND WAIT FOR USER APPROVAL" PHRASE TO USER -->
-Please confirm you have completed both:
-- ✅ **Updated all four Supabase environment variables** in Vercel Pre-Production environment (DATABASE_URL saved individually)
-- ✅ **Updated next.config.ts** with staging hostname in both remotePatterns entries
+Please confirm you have **Updated all four Supabase environment variables** in Vercel Pre-Production environment (DATABASE_URL saved individually)
 
 ### Step 5.6: Configure Authentication URLs for Staging Branch
 
@@ -1297,14 +1262,12 @@ Now that you have the staging branch credentials configured, you need to add aut
 
 2. **Add Staging Redirect URL**
    - In the **Redirect URLs** section, click **"Add URL"**
-   - Add your staging callback URL: `https://your-app-git-staging-[username].vercel.app/auth/confirm`
-   - Keep the existing localhost URL for local development: `http://localhost:3000/auth/confirm`
-   - Click **"Save"** to save both URLs
-
-💡 **Important:** Your preview URL follows the pattern: `https://[project-name]-git-staging-[username].vercel.app`. You can find your exact preview URL in your Vercel project dashboard under the Deployments tab.
+   - Add the localhost URL for local development: `http://localhost:3000/auth/confirm`
+   - If you have a staging URL, add it as well.
+   - Click **"Save"** to save the URL
 
 3. **Verify Staging Authentication Configuration**
-   - Confirm **Redirect URLs** contains your staging URL and localhost URL
+   - Confirm **Redirect URLs** contains your localhost URL
    - Authentication redirects are now properly configured for the staging environment
 
 ### Step 5.7: Enable Database Extensions for Staging Branch
@@ -1341,25 +1304,7 @@ Please confirm you have:
 - ✅ **Added staging redirect URL** to authentication configuration
 - ✅ **Enabled both required database extensions** (pgvector and pg_cron) in the staging branch
 
-Are you ready for me to commit and push the next.config.ts changes to the staging branch?
-
-**🤖 AI ASSISTANT TASK - Commit next.config.ts changes to staging branch (Only after user approval):** <!-- AI INTERNAL REFERENCE - DO NOT SHOW THE "AI ASSISTANT TASK" PHRASE TO USER -->
-
-Now I'll commit and push the updated `next.config.ts` configuration to the staging branch:
-
-```bash
-# Make sure you're on the staging branch, if not, switch to it
-git checkout staging
-
-# Add the updated next.config.ts file
-git add next.config.ts
-
-# Commit the staging configuration update
-git commit -m "Update next.config.ts with staging Supabase hostname for development"
-
-# Push to staging branch (not main - main should only have production config)
-git push origin staging
-```
+Are you ready to proceed to Phase 6 where we'll sync the local environment and set up the staging database?
 
 ### Phase 5 Completion Check
 Before proceeding to Phase 6, verify:
@@ -1372,7 +1317,6 @@ Before proceeding to Phase 6, verify:
 - ✅ All staging Supabase credentials immediately updated in Vercel Preview/Development
 - ✅ **Authentication redirect URLs configured** for staging branch with preview environment URLs
 - ✅ **Database extensions enabled** in staging branch (pgvector and pg_cron)
-- ✅ `apps/web/next.config.ts` updated with staging hostname and committed to staging branch
 - ✅ Development environment ready with staging Supabase + current development Stripe/Gemini + development Google Cloud
 
 ---
@@ -1449,7 +1393,82 @@ apps/web/.env.prod     # Production environment (main Supabase + prod Stripe/Gem
 - **Important:** Your `apps/web/.env.local` contains staging Supabase credentials for local development
 - **Important:** Your `apps/web/.env.prod` contains final production credentials with complete Google Cloud configuration
 
-### Step 6.2: Set Up Staging Database Schema
+### Step 6.2: Update Next.js Configuration with Staging Hostname
+
+**🤖 AI ASSISTANT TASK - Update apps/web/next.config.ts with staging hostname from .env.local:**
+
+Now I'll extract the staging Supabase hostname from the synced `apps/web/.env.local` file and append it to `apps/web/next.config.ts` for proper image loading in both environments:
+
+1. **Extract staging hostname from apps/web/.env.local**
+```bash
+# From the root directory, extract the SUPABASE_URL from apps/web/.env.local
+grep "SUPABASE_URL=" apps/web/.env.local
+```
+
+2. **Read current apps/web/next.config.ts**
+```bash
+# From the root directory, check current next.config.ts structure
+cat apps/web/next.config.ts
+```
+
+3. **Update apps/web/next.config.ts with both production and staging hostnames**
+I'll use the search_replace tool to append the staging hostname entries alongside the existing production entries. The updated file will include remotePatterns for both environments:
+
+```typescript
+const nextConfig: NextConfig = {
+   images: {
+      remotePatterns: [
+      // Supabase Storage - signed URLs (private buckets) - Production
+      {
+         protocol: "https",
+         hostname: "your-production-project-id.supabase.co", // Current Production hostname
+         port: "",
+         pathname: "/storage/v1/object/sign/**",
+      },
+      // Supabase Storage - authenticated URLs (private buckets) - Production
+      {
+         protocol: "https",
+         hostname: "your-production-project-id.supabase.co", // Current Production hostname  
+         port: "",
+         pathname: "/storage/v1/object/authenticated/**",
+      },
+      // Supabase Storage - signed URLs (private buckets) - Staging
+      {
+         protocol: "https",
+         hostname: "your-staging-project-id.supabase.co", // ← Will be replaced with actual staging hostname
+         port: "",
+         pathname: "/storage/v1/object/sign/**",
+      },
+      // Supabase Storage - authenticated URLs (private buckets) - Staging
+      {
+         protocol: "https",
+         hostname: "your-staging-project-id.supabase.co", // ← Will be replaced with actual staging hostname
+         port: "",
+         pathname: "/storage/v1/object/authenticated/**",
+      },
+      ],
+   },
+};
+```
+
+4. **Commit and push the updated configuration**
+```bash
+# Make sure you're on the staging branch
+git checkout staging
+
+# Add the updated apps/web/next.config.ts file
+git add apps/web/next.config.ts
+
+# Commit the staging configuration update
+git commit -m "Update apps/web/next.config.ts with staging Supabase hostname for development"
+
+# Push to staging branch
+git push origin staging
+```
+
+💡 **Why update apps/web/next.config.ts?** This allows Next.js to display images from both production and staging Supabase storage depending on which environment is being used.
+
+### Step 6.3: Set Up Staging Database Schema
 
 **🤖 AI ASSISTANT TASK - Set up complete database schema for staging branch:**
 
@@ -1545,7 +1564,7 @@ Please confirm you can see:
 - ✅ **Document cleanup job** scheduled and active in pg_cron
 - ✅ Staging branch showing proper "Preview" badge
 
-### Step 6.3: Update Development RAG Services with Staging Credentials
+### Step 6.4: Update Development RAG Services with Staging Credentials
 
 **🤖 AI ASSISTANT TASK - Re-deploy development RAG services with staging Supabase credentials:**
 
@@ -1608,7 +1627,7 @@ npm run deploy:task-processor:dev
 
 1. **Access Preview Application**
    
-   **Note:** The preview deployment was already created when you pushed the `next.config.ts` changes to the staging branch earlier.
+   **Note:** The preview deployment was already created when we pushed the `next.config.ts` changes to the staging branch earlier.
    
    - Go to your Vercel project dashboard
    - Click on the **"Deployments"** tab
@@ -1620,7 +1639,7 @@ npm run deploy:task-processor:dev
 2. **Test Staging Environment**
    - Create an account on the preview deployment
    - Verify this user appears in your **staging Supabase branch** (not main)
-   - Test basic chat functionality with your development Gemini API key
+   - Test RAG-powered chat functionality with your development Gemini API key
    - Test document upload functionality (should use development Google Cloud storage)
    - Test billing with your development Stripe keys
 
@@ -1629,7 +1648,7 @@ npm run deploy:task-processor:dev
    - **Preview users** should only appear in **staging Supabase branch**  
    - **No data mixing** between environments
 
-### Step 6.5: Test Image Upload Functionality
+### Step 6.6: Test Image Upload Functionality
 
 **👤 USER TASK - Test image features:**
 
@@ -1650,7 +1669,7 @@ npm run deploy:task-processor:dev
    - Repeat image upload test on preview environment
    - **Staging Branch Storage:** Verify image appears in staging branch storage (not main)
 
-### Step 6.6: Performance and Security Verification
+### Step 6.7: Performance and Security Verification
 
 **🤖 AI ASSISTANT TASK - Verify deployment health:**
 
@@ -1666,14 +1685,13 @@ Let me help you verify the deployment is properly configured.
    - Verify Row Level Security policies are active
    - Confirm environment variables are not exposed to client
 
-### Step 6.7: Final Deployment Verification
+### Step 6.8: Final Deployment Verification
 
 **👤 USER TASK - Complete final verification:**
 
 1. **Test All Core Features**
    - ✅ User registration and email confirmation
-   - ✅ User login and authentication
-   - ✅ AI chat with multiple models  
+   - ✅ User login and authentication  
    - ✅ Image upload and analysis
    - ✅ Conversation history and persistence
    - ✅ Subscription billing and upgrades
@@ -1696,6 +1714,7 @@ Let me help you verify the deployment is properly configured.
 ### Phase 6 Completion Check
 Complete development environment setup and comprehensive testing finished! Verify all functionality:
 - ✅ Local `apps/web/.env.local` synced with Vercel preview environment using `vercel env pull`
+- ✅ **Next.js configuration automatically updated** with staging hostname extracted from `apps/web/.env.local`
 - ✅ **Staging database schema fully set up** with tables, triggers, storage policies, and extensions
 - ✅ **Database extensions enabled** in staging branch (pgvector for embeddings, pg_cron for cleanup)
 - ✅ **RPC functions verified** in staging branch (match_text_chunks, match_multimodal_chunks)
@@ -1755,7 +1774,7 @@ Complete development environment setup and comprehensive testing finished! Verif
   - Verify API key is linked to correct Google Cloud project
   - Verify the Google Cloud project exists and is active
   - Test API key directly with Gemini API
-- **Quick Test:** Test basic chat functionality to verify API connectivity
+- **Quick Test:** Test RAG-powered chat functionality to verify API connectivity
 
 **Issue: "Document processing not working" in production**
 - **Root Cause:** Google Cloud Platform services not configured or failing
@@ -1868,7 +1887,8 @@ Complete development environment setup and comprehensive testing finished! Verif
 - [ ] **Vercel preview/development environment variables** configured with staging Supabase + current development keys
 
 ### Phase 6: Complete Development Environment & Test All Systems ✅
-- [ ] **Local `.env.local` synced** with Vercel preview environment using `vercel env pull`
+- [ ] **Local `apps/web/.env.local` synced** with Vercel preview environment using `vercel env pull`
+- [ ] **Next.js configuration automatically updated** with staging hostname extracted from `apps/web/.env.local`
 - [ ] **Staging database schema fully set up** with fresh migrations, triggers, storage policies, and seed data
 - [ ] **Staging environment database verified** - all tables, storage bucket, and models visible in Supabase
 - [ ] **Production environment** tested with live Stripe and production Gemini API

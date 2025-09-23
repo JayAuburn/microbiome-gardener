@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,10 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { redirectToCustomerPortal } from "@/app/actions/subscriptions";
 import { PlanCard } from "./PlanCard";
-import { CancelSubscriptionDialog } from "./dialogs/CancelSubscriptionDialog";
-import { DowngradeSubscriptionDialog } from "./dialogs/DowngradeSubscriptionDialog";
 import { type PlanFeature } from "@/lib/subscriptions";
 
 const PLANS: PlanFeature[] = [
@@ -51,68 +46,21 @@ const PLANS: PlanFeature[] = [
 ];
 
 export function SubscriptionPlansCard() {
-  const [internalLoading, setInternalLoading] = useState(false);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [downgradeDialogOpen, setDowngradeDialogOpen] =
-    useState<boolean>(false);
-
-  const handleManageSubscription = async (): Promise<void> => {
-    setInternalLoading(true);
-    setCancelDialogOpen(false);
-    setDowngradeDialogOpen(false);
-    try {
-      await redirectToCustomerPortal();
-    } finally {
-      setInternalLoading(false);
-    }
-  };
-
-  const handleCancelClick = (): void => {
-    setCancelDialogOpen(true);
-  };
-
-  const handleDowngradeClick = (): void => {
-    setDowngradeDialogOpen(true);
-  };
-
   return (
-    <>
-      <Card className="md:col-span-2" data-section="plans">
-        <CardHeader>
-          <CardTitle>Available Plans</CardTitle>
-          <CardDescription>
-            Choose the plan that best fits your needs
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            {PLANS.map((plan) => (
-              <PlanCard
-                key={plan.name}
-                plan={plan}
-                loading={internalLoading}
-                onCancelClick={handleCancelClick}
-                onDowngradeClick={handleDowngradeClick}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Dialogs */}
-      <CancelSubscriptionDialog
-        open={cancelDialogOpen}
-        onOpenChange={setCancelDialogOpen}
-        onConfirm={handleManageSubscription}
-        loading={internalLoading}
-      />
-
-      <DowngradeSubscriptionDialog
-        open={downgradeDialogOpen}
-        onOpenChange={setDowngradeDialogOpen}
-        onConfirm={handleManageSubscription}
-        loading={internalLoading}
-      />
-    </>
+    <Card className="md:col-span-2" data-section="plans">
+      <CardHeader>
+        <CardTitle>Available Plans</CardTitle>
+        <CardDescription>
+          Choose the plan that best fits your needs
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-4 md:grid-cols-3">
+          {PLANS.map((plan) => (
+            <PlanCard key={plan.name} plan={plan} loading={false} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
