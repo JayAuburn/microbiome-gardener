@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState, RefObject } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  RefObject,
+} from "react";
 import { toast } from "sonner";
 
 export function useChatStreaming(
@@ -7,7 +14,7 @@ export function useChatStreaming(
   isStopping: boolean;
   setIsStopping: (value: boolean) => void;
   abortControllerRef: RefObject<AbortController | null>;
-  savePartialResponseAndStop: (stop: () => void, messages?: any[]) => Promise<void>;
+  savePartialResponseAndStop: (stop: () => void) => Promise<void>;
   createNewAbortController: () => void;
 } {
   const [isStopping, setIsStopping] = useState(false);
@@ -22,7 +29,7 @@ export function useChatStreaming(
   }, []);
 
   const savePartialResponseAndStop = useCallback(
-    async (stop: () => void, _messages?: any[]): Promise<void> => {
+    async (stop: () => void): Promise<void> => {
       if (!currentConversationId.current) return;
 
       setIsStopping(true);

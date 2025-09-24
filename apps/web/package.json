@@ -6,7 +6,7 @@
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "db:generate": "npx dotenv-cli -e .env.local -- drizzle-kit generate",
     "db:generate:custom": "npx dotenv-cli -e .env.local -- drizzle-kit generate --custom",
