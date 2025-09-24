@@ -116,7 +116,10 @@ export function BulkUploadArea({
         if (validation.valid) {
           validFiles.push(file);
         } else {
-          invalidFiles.push({ file, error: validation.error || "Invalid file" });
+          invalidFiles.push({
+            file,
+            error: validation.error || "Invalid file",
+          });
         }
       });
 
@@ -142,9 +145,13 @@ export function BulkUploadArea({
         const validation = await validateFilenames(validFiles);
 
         if (validation.errors.length > 0) {
-          // Show error message for validation errors
+          // Show error toast notifications for validation errors
           console.error("Filename validation errors:", validation.errors);
-          // TODO: Show error toast or inline error display
+          validation.errors.forEach((error) => {
+            toast.error(`Validation failed: ${error}`, {
+              duration: 6000, // Longer duration for validation errors
+            });
+          });
           setIsValidating(false);
           return;
         }
@@ -188,7 +195,7 @@ export function BulkUploadArea({
           onConflictCancelled?.();
         }
       }
-      
+
       // Clear selected files after processing
       setSelectedFiles([]);
       // Reset conflict state
@@ -332,7 +339,9 @@ export function BulkUploadArea({
                       >
                         <div className="flex items-center space-x-2 flex-1 min-w-0">
                           <Files className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
-                          <span className="truncate text-xs sm:text-sm">{file.name}</span>
+                          <span className="truncate text-xs sm:text-sm">
+                            {file.name}
+                          </span>
                         </div>
                         <span className="text-muted-foreground ml-2 flex-shrink-0 text-xs">
                           {formatFileSize(file.size)}
@@ -405,7 +414,9 @@ export function BulkUploadArea({
           <DialogHeader className="pb-3 sm:pb-4">
             <DialogTitle className="flex items-center space-x-2 text-lg sm:text-xl">
               <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 flex-shrink-0" />
-              <span className="leading-tight">Duplicate Filenames Detected</span>
+              <span className="leading-tight">
+                Duplicate Filenames Detected
+              </span>
             </DialogTitle>
             <DialogDescription className="text-sm sm:text-base">
               Some files have the same names as documents you&rsquo;ve already
@@ -486,12 +497,14 @@ export function BulkUploadArea({
 
             <div className="text-xs text-muted-foreground p-2 bg-muted/50 rounded space-y-1">
               <div>
-                <strong>Skip Conflicts:</strong> Upload only files without naming conflicts ({pendingFiles.length} files).
-                Conflicting files will be discarded.
+                <strong>Skip Conflicts:</strong> Upload only files without
+                naming conflicts ({pendingFiles.length} files). Conflicting
+                files will be discarded.
               </div>
               <div>
-                <strong>Upload All:</strong> Upload all files including conflicts. 
-                Duplicate names will create separate documents with unique storage paths.
+                <strong>Upload All:</strong> Upload all files including
+                conflicts. Duplicate names will create separate documents with
+                unique storage paths.
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ interface RouteParams {
   }>;
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   try {
     // Get authenticated user
     const supabase = await createClient();

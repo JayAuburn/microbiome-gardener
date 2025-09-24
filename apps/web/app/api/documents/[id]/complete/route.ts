@@ -11,7 +11,10 @@ interface RouteParams {
   }>;
 }
 
-export async function POST(request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
+export async function POST(
+  _request: NextRequest,
+  { params }: RouteParams
+): Promise<NextResponse> {
   try {
     const { id } = await params;
     console.log("🚀 [complete] POST request received for document:", id);
@@ -117,7 +120,7 @@ export async function POST(request: NextRequest, { params }: RouteParams): Promi
 
     // Extract file path from full GCS URL (remove gs://bucket-name/ prefix)
     const gcsUrlPrefix = `gs://${document.gcs_bucket}/`;
-    const filePath = document.gcs_path.startsWith(gcsUrlPrefix) 
+    const filePath = document.gcs_path.startsWith(gcsUrlPrefix)
       ? document.gcs_path.substring(gcsUrlPrefix.length)
       : document.gcs_path;
 
@@ -150,15 +153,18 @@ export async function POST(request: NextRequest, { params }: RouteParams): Promi
       );
     }
 
-    // Upload verified - EventArc will automatically detect the GCS event 
+    // Upload verified - EventArc will automatically detect the GCS event
     // and transition the document to processing status
-    console.log("✅ [complete] Upload verification complete, EventArc will handle processing");
+    console.log(
+      "✅ [complete] Upload verification complete, EventArc will handle processing"
+    );
 
     const response = {
       success: true,
       documentId,
       status: "uploading", // Status remains uploading until EventArc processes it
-      message: "Upload completed successfully, automatic processing will begin shortly",
+      message:
+        "Upload completed successfully, automatic processing will begin shortly",
     };
 
     console.log("🎉 [complete] Successfully completed upload process");

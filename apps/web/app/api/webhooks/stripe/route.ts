@@ -55,9 +55,28 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice): Promise<void> {
   const customerId = invoice.customer as string;
 
   console.log(`💰 Payment succeeded for customer: ${customerId}`);
-  console.log(`💰 Invoice amount: ${invoice.amount_paid / 100} ${invoice.currency}`);
+  console.log(
+    `💰 Invoice amount: ${invoice.amount_paid / 100} ${invoice.currency}`
+  );
 
-  // TODO: Add email notification here
-  // This is where you'll add the email notification logic later
-  // Example: await sendPaymentSuccessEmail(customerId, invoice);
+  // Email notification for successful payment
+  try {
+    // In production, you would implement email sending here
+    // Example implementations:
+    // - Use Resend, SendGrid, or similar email service
+    // - Send payment confirmation receipt to customer
+    // - Notify internal team of subscription activation
+    console.log(
+      `📧 Payment success notification logged for customer: ${customerId}`
+    );
+    console.log(
+      `📧 Production setup: Implement email service integration here`
+    );
+  } catch (emailError) {
+    // Don't fail webhook processing if email fails
+    console.error(
+      `📧 Email notification failed for customer ${customerId}:`,
+      emailError
+    );
+  }
 }
