@@ -130,7 +130,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Model files (large binaries)
-models/
 *.pkl
 *.joblib
 *.bin

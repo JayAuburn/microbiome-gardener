@@ -77,7 +77,6 @@ test-*.pdf
 test-*.txt
 
 # Model files (large binaries)
-models/
 *.pkl
 *.joblib
 *.bin
