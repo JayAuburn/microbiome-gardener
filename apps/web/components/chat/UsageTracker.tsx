@@ -54,15 +54,15 @@ export function UsageTracker() {
   // Calculate percentages for each usage type
   const documentsPercentage = calculateUsagePercentage(
     documents.used,
-    documents.limit
+    documents.limit,
   );
   const storagePercentage = calculateUsagePercentage(
     storage.used,
-    storage.limit
+    storage.limit,
   );
   const requestsPercentage = calculateUsagePercentage(
     requests.used,
-    requests.limit
+    requests.limit,
   );
 
   const getTierBadgeColor = (tier: string) => {
@@ -85,7 +85,7 @@ export function UsageTracker() {
           <Badge
             className={cn(
               "text-xs text-white capitalize",
-              getTierBadgeColor(subscriptionTier)
+              getTierBadgeColor(subscriptionTier),
             )}
           >
             {subscriptionTier}

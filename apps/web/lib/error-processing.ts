@@ -12,7 +12,7 @@ const errorCache = new Map<string, ProcessedError>();
  */
 export function processError(
   technicalError: string,
-  context?: string
+  context?: string,
 ): ProcessedError {
   // Create cache key from technical error
   const cacheKey = `${technicalError}-${context || ""}`;
@@ -24,7 +24,7 @@ export function processError(
 
   // Find matching pattern
   const matchingPattern = ERROR_PATTERNS.find((pattern) =>
-    pattern.pattern.test(technicalError)
+    pattern.pattern.test(technicalError),
   );
 
   let processedError: ProcessedError;
@@ -69,7 +69,7 @@ export function processError(
  */
 function createFallbackError(
   technicalError: string,
-  category: ErrorCategory
+  category: ErrorCategory,
 ): ProcessedError {
   const fallbackMessages = {
     connectivity: {
@@ -247,7 +247,7 @@ export function getRetryDelayMessage(seconds: number): string {
  */
 export function formatErrorMessage(
   message: string,
-  maxLength?: number
+  maxLength?: number,
 ): string {
   // Clean up the message
   let formatted = message.trim();

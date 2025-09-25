@@ -8,7 +8,7 @@ const lastUpdated = "2025-06-30";
 
 export const metadata: Metadata = generateLegalMetadata(
   "Privacy Policy",
-  "Privacy Policy for ShipKit.ai - How we collect, use, and protect your personal information in compliance with GDPR and CCPA."
+  "Privacy Policy for ShipKit.ai - How we collect, use, and protect your personal information in compliance with GDPR and CCPA.",
 );
 
 const tocSections = [

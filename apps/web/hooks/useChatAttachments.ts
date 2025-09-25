@@ -9,7 +9,7 @@ export function useChatAttachments(): {
 } {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [attachmentPreviews, setAttachmentPreviews] = useState<ImagePreview[]>(
-    []
+    [],
   );
 
   const handleAttachmentsChange = (newAttachments: ImagePreview[]): void => {

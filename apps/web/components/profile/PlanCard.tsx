@@ -203,7 +203,7 @@ export function PlanCard({ plan, loading }: PlanCardProps) {
         "rounded-lg p-4",
         isCurrentPlan
           ? "ring-2 ring-primary/80 bg-primary/10 dark:bg-primary/20"
-          : "border"
+          : "border",
       )}
     >
       <div className="space-y-3">

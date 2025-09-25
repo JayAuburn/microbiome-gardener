@@ -40,7 +40,7 @@ export function getBaseStageInfo(stage: string): ParsedStageInfo {
  */
 export function calculateMonotonicProgress(
   stage: string,
-  fileType: FileTypeWorkflow
+  fileType: FileTypeWorkflow,
 ): number {
   // Handle stage mapping first
   const mappedStage =
@@ -86,7 +86,7 @@ export function parseProcessingStage(
   stage: string,
   retryCount: number,
   isRetry: boolean,
-  fileType: FileTypeWorkflow = "video"
+  fileType: FileTypeWorkflow = "video",
 ): ParsedStageInfo {
   // Handle retry states first
   if (isRetry && retryCount > 0) {
@@ -114,7 +114,7 @@ export function parseProcessingStage(
     const stageStart = 20;
     const stageEnd = 95;
     const totalProgress = Math.round(
-      stageStart + (stageEnd - stageStart) * chunkProgress
+      stageStart + (stageEnd - stageStart) * chunkProgress,
     );
 
     return {
@@ -155,7 +155,7 @@ export function estimateTimeRemaining(
   currentStage: string,
   fileSize: number,
   fileType: FileTypeWorkflow = "document",
-  startTime?: string
+  startTime?: string,
 ): string | null {
   if (!startTime) return null;
 

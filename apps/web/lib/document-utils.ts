@@ -4,7 +4,7 @@ import { DocumentWithProcessingJob } from "@/lib/documents";
  * Convert MIME type to content type for document categorization
  */
 export function getContentTypeFromMimeType(
-  mimeType: string
+  mimeType: string,
 ): "document" | "video" | "audio" | "image" {
   if (mimeType.startsWith("video/")) return "video";
   if (mimeType.startsWith("audio/")) return "audio";
@@ -55,14 +55,14 @@ export function formatPollingTime(date: Date): string {
  */
 export function mergeDocuments(
   documents: DocumentWithProcessingJob[],
-  optimisticDocuments: DocumentWithProcessingJob[]
+  optimisticDocuments: DocumentWithProcessingJob[],
 ): DocumentWithProcessingJob[] {
   const merged = [...optimisticDocuments];
 
   // Create sets of both IDs and filenames from optimistic documents
   const optimisticIds = new Set(optimisticDocuments.map((doc) => doc.id));
   const optimisticFilenames = new Set(
-    optimisticDocuments.map((doc) => doc.originalFilename)
+    optimisticDocuments.map((doc) => doc.originalFilename),
   );
 
   // Add server documents, but skip any that match optimistic documents by ID or filename
@@ -77,7 +77,7 @@ export function mergeDocuments(
 
   // Sort by creation date (newest first)
   return merged.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 }
 
@@ -85,7 +85,7 @@ export function mergeDocuments(
  * Create optimistic document structure
  */
 export function createOptimisticDocument(
-  documentData: Omit<DocumentWithProcessingJob, "id"> & { id?: string }
+  documentData: Omit<DocumentWithProcessingJob, "id"> & { id?: string },
 ): DocumentWithProcessingJob {
   return {
     ...documentData,

@@ -14,7 +14,7 @@ import {
 
 export async function searchMultimodalChunks(
   queryEmbedding: number[],
-  options: SearchOptions
+  options: SearchOptions,
 ): Promise<SearchResult[]> {
   const { limit, similarity_threshold, user_id } = options;
 
@@ -37,7 +37,7 @@ export async function searchMultimodalChunks(
         p_user_id: user_id,
         p_match_threshold: similarity_threshold,
         p_match_count: limit,
-      }
+      },
     );
 
     if (error) {
@@ -61,7 +61,7 @@ export async function searchMultimodalChunks(
         metadata: result.metadata as ChunkMetadata,
         document_filename: result.document_filename,
         document_id: result.document_id,
-      })
+      }),
     );
 
     console.log("Multimodal search completed via RPC:", {

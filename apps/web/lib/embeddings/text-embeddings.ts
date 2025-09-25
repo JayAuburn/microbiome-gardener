@@ -15,7 +15,7 @@ export class TextEmbeddingService {
   constructor() {
     if (!env.GEMINI_API_KEY) {
       throw new EmbeddingServiceError(
-        "GEMINI_API_KEY environment variable is required. Get it from https://aistudio.google.com/app/apikey"
+        "GEMINI_API_KEY environment variable is required. Get it from https://aistudio.google.com/app/apikey",
       );
     }
 
@@ -31,7 +31,7 @@ export class TextEmbeddingService {
       | "RETRIEVAL_QUERY"
       | "RETRIEVAL_DOCUMENT"
       | "SEMANTIC_SIMILARITY" = "RETRIEVAL_QUERY",
-    outputDimensionality: number = 768
+    outputDimensionality: number = 768,
   ): Promise<number[]> {
     try {
       console.log("Generating text embedding:", {
@@ -64,7 +64,7 @@ export class TextEmbeddingService {
       }
 
       throw new EmbeddingServiceError(
-        `Failed to generate text embedding: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to generate text embedding: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -99,7 +99,7 @@ export function copyDebugEmbeddingToClipboard(): void {
         })
         .catch(() => {
           console.log(
-            "❌ Failed to copy to clipboard. Use getDebugEmbedding() instead."
+            "❌ Failed to copy to clipboard. Use getDebugEmbedding() instead.",
           );
         });
     } else {

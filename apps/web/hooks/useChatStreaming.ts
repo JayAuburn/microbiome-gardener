@@ -9,7 +9,7 @@ import {
 import { toast } from "sonner";
 
 export function useChatStreaming(
-  currentConversationId: RefObject<string | null>
+  currentConversationId: RefObject<string | null>,
 ): {
   isStopping: boolean;
   setIsStopping: (value: boolean) => void;
@@ -41,7 +41,7 @@ export function useChatStreaming(
         toast.error("Error stopping stream");
       }
     },
-    [currentConversationId]
+    [currentConversationId],
   );
 
   const createNewAbortController = useCallback((): void => {
@@ -56,6 +56,6 @@ export function useChatStreaming(
       savePartialResponseAndStop,
       createNewAbortController,
     }),
-    [isStopping, savePartialResponseAndStop, createNewAbortController]
+    [isStopping, savePartialResponseAndStop, createNewAbortController],
   );
 }

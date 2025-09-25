@@ -19,7 +19,11 @@ interface ConversationRowProps {
   onDeleted?: (conversationId: string) => void;
 }
 
-export function ConversationRow({ conversation, onRenamed, onDeleted }: ConversationRowProps) {
+export function ConversationRow({
+  conversation,
+  onRenamed,
+  onDeleted,
+}: ConversationRowProps) {
   const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -30,7 +34,7 @@ export function ConversationRow({ conversation, onRenamed, onDeleted }: Conversa
       month: "short",
       day: "numeric",
       year: "numeric",
-    }
+    },
   );
 
   return (
@@ -54,9 +58,7 @@ export function ConversationRow({ conversation, onRenamed, onDeleted }: Conversa
 
           {/* Date Column with Actions (desktop only) */}
           <div className="hidden md:flex md:items-center md:justify-between">
-            <div className="text-sm text-muted-foreground">
-              {formattedDate}
-            </div>
+            <div className="text-sm text-muted-foreground">{formattedDate}</div>
 
             {/* Desktop Action Buttons */}
             <div
@@ -86,7 +88,10 @@ export function ConversationRow({ conversation, onRenamed, onDeleted }: Conversa
         </div>
 
         {/* Mobile Action Menu */}
-        <div className="md:hidden absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="md:hidden absolute top-3 right-3"
+          onClick={(e) => e.stopPropagation()}
+        >
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -99,7 +104,8 @@ export function ConversationRow({ conversation, onRenamed, onDeleted }: Conversa
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-32 dark:bg-muted">
-              <DropdownMenuItem onClick={() => setShowRenameDialog(true)}
+              <DropdownMenuItem
+                onClick={() => setShowRenameDialog(true)}
                 className="text-foreground"
               >
                 <Edit className="h-4 w-4 mr-2 text-foreground" />

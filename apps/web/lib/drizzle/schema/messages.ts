@@ -15,10 +15,7 @@ export const messageSenderEnum = pgEnum("message_sender", [
   "assistant",
 ]);
 
-export const messageStatusEnum = pgEnum("message_status", [
-  "success",
-  "error",
-]);
+export const messageStatusEnum = pgEnum("message_status", ["success", "error"]);
 
 export interface MessageAttachment {
   id: string;
@@ -49,7 +46,7 @@ export const messages = pgTable(
     index("conversation_id_idx").on(table.conversation_id),
     index("messages_attachments_gin_idx").using("gin", table.attachments), // GIN index for JSON queries
     index("messages_status_idx").on(table.status), // Index for efficient status queries
-  ]
+  ],
 );
 
 // Drizzle schema types

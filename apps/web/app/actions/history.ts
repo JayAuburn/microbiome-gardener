@@ -8,7 +8,7 @@ import { requireUserId } from "@/lib/auth";
 
 export async function renameConversation(
   conversationId: string,
-  newTitle: string
+  newTitle: string,
 ) {
   try {
     const userId = await requireUserId();
@@ -29,8 +29,8 @@ export async function renameConversation(
       .where(
         and(
           eq(conversations.id, conversationId),
-          eq(conversations.user_id, userId)
-        )
+          eq(conversations.user_id, userId),
+        ),
       );
 
     revalidatePath("/history");
@@ -56,8 +56,8 @@ export async function deleteConversation(conversationId: string) {
       .where(
         and(
           eq(conversations.id, conversationId),
-          eq(conversations.user_id, userId)
-        )
+          eq(conversations.user_id, userId),
+        ),
       );
 
     revalidatePath("/history");

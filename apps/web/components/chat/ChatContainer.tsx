@@ -27,7 +27,7 @@ export function ChatContainer() {
             ? "left-0"
             : sidebarState === "collapsed"
               ? "left-16"
-              : "left-64"
+              : "left-64",
         )}
       >
         <div className={cn("w-full px-4", isMobile ? "pb-2" : "pb-4")}>

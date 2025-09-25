@@ -70,10 +70,11 @@ export function DeleteConfirmDialog({
           <DialogTitle>Delete Conversation</DialogTitle>
           <DialogDescription className="break-words">
             Are you sure you want to delete &ldquo;
-            <span className="break-all sm:break-words">{conversationTitle}</span>
-            &rdquo;?
-            This action cannot be undone and all messages in this conversation
-            will be permanently removed.
+            <span className="break-all sm:break-words">
+              {conversationTitle}
+            </span>
+            &rdquo;? This action cannot be undone and all messages in this
+            conversation will be permanently removed.
           </DialogDescription>
         </DialogHeader>
 

@@ -34,7 +34,7 @@ export {
  */
 export async function refreshConversationAttachments(
   messages: { id: string; attachments: unknown }[],
-  userId: string
+  userId: string,
 ): Promise<{
   success: boolean;
   message: string;
@@ -61,7 +61,7 @@ export async function refreshConversationAttachments(
     // Calculate new expiration time (same for all attachments)
     const newExpiresAt = new Date();
     newExpiresAt.setSeconds(
-      newExpiresAt.getSeconds() + IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME
+      newExpiresAt.getSeconds() + IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME,
     );
     const newExpiresAtISO = newExpiresAt.toISOString();
 
@@ -93,7 +93,7 @@ export async function refreshConversationAttachments(
 
       totalExpiredCount += expiredAttachments.length;
       console.log(
-        `🔄 Bulk refreshing ${expiredAttachments.length} URLs for message ${message.id}`
+        `🔄 Bulk refreshing ${expiredAttachments.length} URLs for message ${message.id}`,
       );
 
       try {
@@ -102,16 +102,16 @@ export async function refreshConversationAttachments(
           .from(IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME)
           .createSignedUrls(
             storagePaths,
-            IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME
+            IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME,
           );
 
         if (bulkError || !signedUrls) {
           console.error(
             `❌ Failed to bulk refresh URLs for message ${message.id}:`,
-            bulkError
+            bulkError,
           );
           expiredAttachments.forEach((attachment) =>
-            failed.push(attachment.id)
+            failed.push(attachment.id),
           );
           continue;
         }
@@ -127,7 +127,7 @@ export async function refreshConversationAttachments(
           if (urlResult.error || !urlResult.signedUrl) {
             console.error(
               `❌ Failed to refresh URL for ${expiredAttachment.name}:`,
-              urlResult.error
+              urlResult.error,
             );
             failed.push(expiredAttachment.id);
             return;
@@ -135,7 +135,7 @@ export async function refreshConversationAttachments(
 
           // Find and update the attachment in the full attachments array
           const attachmentIndex = updatedAttachments.findIndex(
-            (att) => att.id === expiredAttachment.id
+            (att) => att.id === expiredAttachment.id,
           );
           if (attachmentIndex !== -1) {
             updatedAttachments[attachmentIndex] = {
@@ -167,13 +167,13 @@ export async function refreshConversationAttachments(
           };
 
           console.log(
-            `✅ Updated message ${message.id} with ${expiredAttachments.length} refreshed URLs`
+            `✅ Updated message ${message.id} with ${expiredAttachments.length} refreshed URLs`,
           );
         }
       } catch (error) {
         console.error(
           `❌ Error bulk refreshing URLs for message ${message.id}:`,
-          error
+          error,
         );
         expiredAttachments.forEach((attachment) => failed.push(attachment.id));
       }

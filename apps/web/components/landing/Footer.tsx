@@ -7,7 +7,9 @@ const Footer = () => {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start gap-8 sm:gap-12 mb-8 sm:mb-12">
           <div className="text-center sm:text-left">
-            <div className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">RAGI</div>
+            <div className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">
+              RAGI
+            </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 max-w-sm text-sm sm:text-base">
               Turn your documents into intelligent, searchable knowledge using
               powerful AI.
@@ -35,7 +37,9 @@ const Footer = () => {
           </div>
 
           <div className="text-center sm:text-left">
-            <h4 className="font-semibold mb-3 sm:mb-4 text-base sm:text-lg">Legal</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-base sm:text-lg">
+              Legal
+            </h4>
             <ul className="space-y-1.5 sm:space-y-2 text-gray-600 dark:text-gray-400 text-sm sm:text-base">
               <li>
                 <Link
@@ -66,7 +70,9 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-200 dark:border-gray-800 pt-6 sm:pt-8 text-center text-gray-600 dark:text-gray-400">
-          <p className="text-sm sm:text-base">&copy; 2025 RAGI. All rights reserved.</p>
+          <p className="text-sm sm:text-base">
+            &copy; 2025 RAGI. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

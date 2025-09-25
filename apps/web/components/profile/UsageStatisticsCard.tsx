@@ -66,7 +66,7 @@ export function UsageStatisticsCard() {
                 <Progress
                   value={calculateUsagePercentage(
                     displayStats.usage.documents.used,
-                    displayStats.usage.documents.limit
+                    displayStats.usage.documents.limit,
                   )}
                   className="h-2 [&>div]:bg-primary"
                 />
@@ -100,7 +100,7 @@ export function UsageStatisticsCard() {
                 <Progress
                   value={calculateUsagePercentage(
                     displayStats.usage.storage.used,
-                    displayStats.usage.storage.limit
+                    displayStats.usage.storage.limit,
                   )}
                   className="h-2 [&>div]:bg-primary"
                 />
@@ -134,7 +134,7 @@ export function UsageStatisticsCard() {
                 <Progress
                   value={calculateUsagePercentage(
                     displayStats.usage.requests.used,
-                    displayStats.usage.requests.limit
+                    displayStats.usage.requests.limit,
                   )}
                   className="h-2 [&>div]:bg-primary"
                 />

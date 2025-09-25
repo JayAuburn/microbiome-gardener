@@ -1,18 +1,9 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect
-} from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
-import {
-  DefaultChatTransport,
-  type TextUIPart,
-  type FileUIPart,
-} from "ai";
-import { type Conversation } from "@/lib/drizzle/schema"; 
+import { DefaultChatTransport, type TextUIPart, type FileUIPart } from "ai";
+import { type Conversation } from "@/lib/drizzle/schema";
 import { saveMessage } from "@/app/actions/chat";
 import { useUser } from "@/contexts/UserContext";
 import { useUsage } from "@/contexts/UsageContext";
@@ -21,7 +12,11 @@ import { toast } from "sonner";
 
 import { type ExtendedMessage } from "@/lib/chat-utils";
 
-import { useChatAttachments, useChatConversation, useChatStreaming } from "@/hooks";
+import {
+  useChatAttachments,
+  useChatConversation,
+  useChatStreaming,
+} from "@/hooks";
 
 // Context interface
 interface ChatStateContextType {
@@ -40,13 +35,13 @@ interface ChatStateContextType {
   handleInputChange: (
     e:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
   setInput: (value: string) => void;
   setMessages: (messages: ExtendedMessage[]) => void;
   stop: () => void;
   error: Error | undefined;
-  status: 'ready' | 'submitted' | 'streaming' | 'error';
+  status: "ready" | "submitted" | "streaming" | "error";
   regenerate: () => void;
   isLoading: boolean;
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -57,7 +52,7 @@ interface ChatStateContextType {
 
 // Create context
 const ChatStateContext = createContext<ChatStateContextType | undefined>(
-  undefined
+  undefined,
 );
 
 // Provider component
@@ -87,7 +82,7 @@ export function ChatStateProvider({
   const handleInputChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setInput(e.target.value);
   };
@@ -185,27 +180,24 @@ export function ChatStateProvider({
 
   // Form submission logic
   const handleFormSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     if (!userId) return;
 
     // Block submission when usage limits or prerequisites prevent sending
     const usageGate = canSendMessage();
-    if (
-      usageLoading ||
-      isStreaming ||
-      isLoading ||
-      !usageGate.canSend
-    ) {
-      toast.error(usageGate.reason || "Usage limit reached. Upgrade to continue.");
+    if (usageLoading || isStreaming || isLoading || !usageGate.canSend) {
+      toast.error(
+        usageGate.reason || "Usage limit reached. Upgrade to continue.",
+      );
       return;
     }
 
     // Always require text input, regardless of attachments
     if (!input.trim()) {
       toast.error(
-        "Please enter a text query. Text is required for all searches."
+        "Please enter a text query. Text is required for all searches.",
       );
       return;
     }
@@ -229,7 +221,7 @@ export function ChatStateProvider({
       const result = await saveMessage(
         conversationHook.localConversation?.id || null,
         userInput,
-        filesToUpload
+        filesToUpload,
       );
 
       if (!result.success) {
@@ -283,10 +275,7 @@ export function ChatStateProvider({
   // Determine if sending/regenerating should be disabled based on global usage check
   const usageGate = canSendMessage();
   const isSendDisabled =
-    usageLoading ||
-    isLoading ||
-    isStreaming ||
-    !usageGate.canSend;
+    usageLoading || isLoading || isStreaming || !usageGate.canSend;
 
   const contextValue: ChatStateContextType = {
     // Attachments

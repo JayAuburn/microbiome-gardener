@@ -1,9 +1,7 @@
 import { useRef, useState, RefObject } from "react";
 import { type Conversation } from "@/lib/drizzle/schema";
 
-export function useChatConversation(
-  initialConversation: Conversation | null
-): {
+export function useChatConversation(initialConversation: Conversation | null): {
   localConversation: Conversation | null;
   currentConversationId: RefObject<string | null>;
   isNewConversationRef: RefObject<boolean>;
@@ -22,9 +20,7 @@ export function useChatConversation(
     isNewConversationRef.current = false;
   };
 
-  const handleNewConversation = (
-    conversationId: string,
-  ): void => {
+  const handleNewConversation = (conversationId: string): void => {
     setLocalConversation(null);
     currentConversationId.current = conversationId;
     isNewConversationRef.current = true;
@@ -36,7 +32,7 @@ export function useChatConversation(
       window.history.replaceState(
         { ...window.history.state, url: newUrl, as: newUrl },
         "",
-        newUrl
+        newUrl,
       );
       isNewConversationRef.current = false;
     }

@@ -27,12 +27,18 @@ export async function GET(request: NextRequest) {
     // If requesting only active processing jobs (for polling)
     if (activeOnly) {
       const activeResult = await getActiveProcessingJobs(user.id);
-      
+
       if (!activeResult.success) {
-        console.error("❌ Failed to fetch active processing jobs:", activeResult.error);
+        console.error(
+          "❌ Failed to fetch active processing jobs:",
+          activeResult.error,
+        );
         return NextResponse.json(
-          { error: activeResult.error || "Failed to fetch active processing jobs" },
-          { status: 500 }
+          {
+            error:
+              activeResult.error || "Failed to fetch active processing jobs",
+          },
+          { status: 500 },
         );
       }
 
@@ -58,10 +64,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (!result.success) {
-      console.error("❌ Failed to fetch documents with processing status:", result.error);
+      console.error(
+        "❌ Failed to fetch documents with processing status:",
+        result.error,
+      );
       return NextResponse.json(
         { error: result.error || "Failed to fetch documents" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -76,7 +85,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching documents:", error);
     return NextResponse.json(
       { error: "Failed to fetch documents" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -15,7 +15,7 @@ export interface UseDocumentsReturn {
     React.SetStateAction<DocumentWithProcessingJob[]>
   >;
   addOptimisticDocument: (
-    documentData: Omit<DocumentWithProcessingJob, "id"> & { id?: string }
+    documentData: Omit<DocumentWithProcessingJob, "id"> & { id?: string },
   ) => void;
 }
 
@@ -46,19 +46,19 @@ export function useDocuments(): UseDocumentsReturn {
       // Clean up optimistic documents that now have real counterparts
       if (data.documents && data.documents.length > 0) {
         const serverIds = new Set(
-          data.documents.map((doc: DocumentWithProcessingJob) => doc.id)
+          data.documents.map((doc: DocumentWithProcessingJob) => doc.id),
         );
         const serverFilenames = new Set(
           data.documents.map(
-            (doc: DocumentWithProcessingJob) => doc.originalFilename
-          )
+            (doc: DocumentWithProcessingJob) => doc.originalFilename,
+          ),
         );
         setOptimisticDocuments((prev) =>
           prev.filter(
             (doc) =>
               !serverIds.has(doc.id) &&
-              !serverFilenames.has(doc.originalFilename)
-          )
+              !serverFilenames.has(doc.originalFilename),
+          ),
         );
       }
     } catch (err) {
@@ -107,11 +107,11 @@ export function useDocuments(): UseDocumentsReturn {
       // Remove optimistic document after 30 seconds if still there (fallback)
       setTimeout(() => {
         setOptimisticDocuments((prev) =>
-          prev.filter((doc) => doc.id !== optimisticDoc.id)
+          prev.filter((doc) => doc.id !== optimisticDoc.id),
         );
       }, 30000);
     },
-    [fetchDocuments]
+    [fetchDocuments],
   );
 
   return {

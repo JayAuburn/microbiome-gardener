@@ -29,21 +29,15 @@ export function CancelSubscriptionDialog({
         <DialogHeader>
           <DialogTitle>Confirm Cancellation</DialogTitle>
           <DialogDescription>
-            You&rsquo;ll be redirected to Stripe&rsquo;s secure portal to manage your subscription cancellation.
+            You&rsquo;ll be redirected to Stripe&rsquo;s secure portal to manage
+            your subscription cancellation.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Keep Subscription
           </Button>
-          <Button
-            variant="destructive"
-            onClick={onConfirm}
-            disabled={loading}
-          >
+          <Button variant="destructive" onClick={onConfirm} disabled={loading}>
             {loading ? "Redirecting..." : "Continue"}
           </Button>
         </DialogFooter>

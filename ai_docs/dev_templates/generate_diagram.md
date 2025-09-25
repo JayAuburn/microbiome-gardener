@@ -7,15 +7,21 @@
 ## 1. Diagram Request Overview
 
 ### Diagram Title
+
 <!-- Provide a clear, specific title for this diagram -->
+
 **Title:** [Brief, descriptive title of what you want to diagram]
 
 ### Goal Statement
+
 <!-- One paragraph describing what should be documented -->
+
 **Goal:** [Clear statement of what flow/system/architecture you want to visualize and why it would be helpful]
 
 ### Diagram Type
+
 <!-- Specify the type of Mermaid diagram to create -->
+
 **Type:** [flowchart/sequence/class/state/er/other]
 
 ---
@@ -23,19 +29,22 @@
 ## 2. Code Analysis & Flow Discovery
 
 ### Target Components
-<!-- 
+
+<!--
 AI Agent: Analyze the specified files/systems to understand the flow.
 Use codebase_search and read_file tools to gather comprehensive information.
 -->
 
 **Files/Systems to Analyze:**
+
 - [File path 1: e.g., `/app/api/example/route.ts`]
 - [File path 2: e.g., `/lib/services/example.ts`]
 - [Directory: e.g., `/components/chat/`]
 - [System: e.g., Authentication flow, Database operations]
 
 ### Flow Analysis
-<!-- 
+
+<!--
 AI Agent: Document your findings from code analysis.
 Map out the complete flow including:
 - Entry points and triggers
@@ -47,24 +56,29 @@ Map out the complete flow including:
 -->
 
 **Entry Points:**
+
 - [Entry point 1: How the flow starts]
 - [Entry point 2: Alternative triggers]
 
 **Key Decision Points:**
+
 - [Decision 1: Condition and outcomes]
 - [Decision 2: Validation or routing logic]
 
 **Data Flow:**
+
 - [Step 1: Initial data/request format]
 - [Step 2: Transformations and processing]
 - [Step 3: External calls or database operations]
 - [Step 4: Response format and handling]
 
 **Error Paths:**
+
 - [Error scenario 1: What happens when X fails]
 - [Error scenario 2: Validation failures]
 
 **External Dependencies:**
+
 - [Service 1: API calls, database operations]
 - [Service 2: Third-party integrations]
 
@@ -73,9 +87,10 @@ Map out the complete flow including:
 ## 3. Diagram Generation
 
 ### Numbering Detection
-<!-- 
+
+<!--
 AI Agent: Automatically detect the next diagram number.
-1. List all files in `ai_docs/diagrams/` 
+1. List all files in `ai_docs/diagrams/`
 2. Find files matching pattern `XXX_*.md` where XXX is a 3-digit number
 3. Determine the highest number and increment by 1
 4. Format as 3-digit number (e.g., 001, 012, 103)
@@ -84,7 +99,8 @@ AI Agent: Automatically detect the next diagram number.
 **Next Diagram Number:** [Auto-detected: e.g., 001, 012, etc.]
 
 ### File Naming
-<!-- 
+
+<!--
 AI Agent: Create standardized file names.
 Format: `XXX_descriptive_name.md`
 - XXX = 3-digit auto-incremented number
@@ -95,7 +111,8 @@ Format: `XXX_descriptive_name.md`
 **Analysis File:** `ai_docs/diagrams/[XXX_snake_case_name]_analysis.md`
 
 ### Mermaid Diagram Code
-<!-- 
+
+<!--
 AI Agent: Generate the complete Mermaid diagram based on your analysis.
 Include:
 - Proper diagram type syntax
@@ -126,7 +143,8 @@ classDef category6 fill:#8BC34A,stroke:#689F38,stroke-width:2px,color:#fff
 ## 4. Documentation Generation
 
 ### Diagram File Structure
-<!-- 
+
+<!--
 AI Agent: Create the main diagram file with this structure:
 1. Title and overview
 2. Mermaid diagram
@@ -135,10 +153,12 @@ AI Agent: Create the main diagram file with this structure:
 -->
 
 **Main Diagram File Content:**
-```markdown
+
+````markdown
 # [Diagram Title]
 
 ## Overview
+
 [Brief description of what this diagram shows]
 
 ## Diagram
@@ -146,16 +166,20 @@ AI Agent: Create the main diagram file with this structure:
 ```mermaid
 [Insert diagram code]
 ```
+````
 
 ## Key Components
+
 [Explain main components and their roles]
 
 ## Related Files
+
 [List relevant source files]
-```
+
+````
 
 ### Analysis File Structure
-<!-- 
+<!--
 AI Agent: Create separate analysis file with detailed explanations:
 1. Flow explanation in plain English
 2. Step-by-step walkthrough
@@ -182,14 +206,15 @@ AI Agent: Create separate analysis file with detailed explanations:
 
 ## Recommendations & Ideas
 [Bullet points with potential improvements, optimizations, or considerations]
-```
+````
 
 ---
 
 ## 5. Implementation Instructions
 
 ### File Creation Steps
-<!-- 
+
+<!--
 AI Agent: Follow these steps to create the diagram files:
 1. Detect next diagram number by listing `ai_docs/diagrams/` directory
 2. Create the main diagram file with proper naming
@@ -199,6 +224,7 @@ AI Agent: Follow these steps to create the diagram files:
 -->
 
 **Steps to Execute:**
+
 - [ ] Analyze specified code/systems thoroughly
 - [ ] Auto-detect next diagram number (XXX format)
 - [ ] Generate Mermaid diagram based on analysis
@@ -208,6 +234,7 @@ AI Agent: Follow these steps to create the diagram files:
 - [ ] Include comprehensive explanations and recommendations
 
 ### Quality Checklist
+
 - [ ] Diagram accurately represents the analyzed flow
 - [ ] All major decision points are included
 - [ ] Error paths are documented
@@ -223,13 +250,15 @@ AI Agent: Follow these steps to create the diagram files:
 ## 6. Template Usage Examples
 
 ### Example Request Format
+
 ```
-"Please generate a diagram showing the authentication flow in our Next.js app. 
-Analyze /lib/auth.ts, /app/api/auth/*, and /middleware.ts to understand how 
+"Please generate a diagram showing the authentication flow in our Next.js app.
+Analyze /lib/auth.ts, /app/api/auth/*, and /middleware.ts to understand how
 users log in, sessions are managed, and protected routes work."
 ```
 
 ### Example Diagram Types by Use Case
+
 - **Flowchart (`graph TD`)**: API request flows, business logic, decision trees
 - **Sequence (`sequenceDiagram`)**: User interactions, API communications, service calls
 - **Class (`classDiagram`)**: Component relationships, data models, inheritance
@@ -238,7 +267,7 @@ users log in, sessions are managed, and protected routes work."
 
 ---
 
-*Template Version: 1.0*  
-*Last Updated: 7/26/2025*  
-*Created By: Brandon Hancock*  
-*Focus: Mermaid Diagram Generation with Code Analysis* 
+_Template Version: 1.0_  
+_Last Updated: 7/26/2025_  
+_Created By: Brandon Hancock_  
+_Focus: Mermaid Diagram Generation with Code Analysis_

@@ -30,22 +30,22 @@ function getStorageClient(): Storage {
       if (env.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY) {
         // Option 1: Use explicit service account key (development/explicit config)
         console.log(
-          "🔑 [google-cloud] Initializing Google Cloud Storage with service account key"
+          "🔑 [google-cloud] Initializing Google Cloud Storage with service account key",
         );
 
         let credentials;
         try {
           // Assume base64 encoding by default
           console.log(
-            "🔐 [google-cloud] Decoding base64 service account key for Google Cloud Storage..."
+            "🔐 [google-cloud] Decoding base64 service account key for Google Cloud Storage...",
           );
           const decoded = Buffer.from(
             env.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY,
-            "base64"
+            "base64",
           ).toString("utf8");
           credentials = JSON.parse(decoded);
           console.log(
-            "✅ [google-cloud] Successfully parsed service account key for GCS"
+            "✅ [google-cloud] Successfully parsed service account key for GCS",
           );
           console.log("🔑 [google-cloud] Service account info:", {
             projectId: credentials.project_id,
@@ -57,7 +57,7 @@ function getStorageClient(): Storage {
             "❌ [google-cloud] Failed to parse base64 service account key for GCS:",
             {
               error: error instanceof Error ? error.message : String(error),
-            }
+            },
           );
           throw new Error("Invalid base64 service account key format");
         }
@@ -67,18 +67,18 @@ function getStorageClient(): Storage {
           credentials,
         });
         console.log(
-          "✅ [google-cloud] Storage client initialized with service account key"
+          "✅ [google-cloud] Storage client initialized with service account key",
         );
       } else {
         // Option 2: Use Application Default Credentials (production/gcloud auth)
         console.log(
-          "🔐 [google-cloud] Initializing Google Cloud Storage with Application Default Credentials"
+          "🔐 [google-cloud] Initializing Google Cloud Storage with Application Default Credentials",
         );
         storage = new Storage({
           projectId: env.GOOGLE_CLOUD_PROJECT_ID,
         });
         console.log(
-          "✅ [google-cloud] Storage client initialized with Application Default Credentials"
+          "✅ [google-cloud] Storage client initialized with Application Default Credentials",
         );
       }
     } catch (error) {
@@ -87,10 +87,10 @@ function getStorageClient(): Storage {
         {
           error: error instanceof Error ? error.message : String(error),
           stack: error instanceof Error ? error.stack : undefined,
-        }
+        },
       );
       throw new Error(
-        "Google Cloud Storage authentication failed. Please check your credentials."
+        "Google Cloud Storage authentication failed. Please check your credentials.",
       );
     }
   }
@@ -221,7 +221,7 @@ export async function generateSignedUploadUrl({
  */
 export async function fileExists(
   bucketName: string,
-  fileName: string
+  fileName: string,
 ): Promise<boolean> {
   console.log("🔍 [google-cloud] fileExists called with:", {
     bucketName,
@@ -275,7 +275,7 @@ export async function getFileMetadata(bucketName: string, fileName: string) {
  */
 export async function deleteFile(
   bucketName: string,
-  fileName: string
+  fileName: string,
 ): Promise<void> {
   try {
     const storageClient = getStorageClient();

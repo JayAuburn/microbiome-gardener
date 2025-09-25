@@ -1,11 +1,13 @@
 # GCP Deployment Debugging Guide
 
 ## Overview
+
 This guide provides comprehensive troubleshooting steps and CLI commands for debugging Google Cloud Platform deployments after running `setup-gcp.py`, `gcp_setup_core.py`, and `deploy-dev.py` scripts.
 
 ## Quick Diagnostic Commands
 
 ### 1. Service Status Check
+
 ```bash
 # Check Cloud Run service status
 gcloud run services describe rag-processor-dev --region=us-central1 --format="table(status.conditions[0].type,status.conditions[0].status,status.conditions[0].message)"
@@ -18,6 +20,7 @@ gcloud run services list --region=us-central1
 ```
 
 ### 2. Recent Logs Analysis
+
 ```bash
 # Get recent logs (last 1 hour)
 gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=rag-processor-dev" --limit=50 --freshness=1h
@@ -33,6 +36,7 @@ gcloud run logs read rag-processor-dev --region=us-central1 --follow
 ```
 
 ### 3. Secret Manager Verification
+
 ```bash
 # List all secrets
 gcloud secrets list
@@ -48,6 +52,7 @@ gcloud secrets versions access latest --secret=database-url-dev | hexdump -C
 ```
 
 ### 4. Service Account Permissions
+
 ```bash
 # Check service account exists
 gcloud iam service-accounts describe rag-processor-dev@PROJECT_ID.iam.gserviceaccount.com
@@ -65,6 +70,7 @@ gcloud secrets get-iam-policy rag-processor-dev-api-key
 ### 1. Database Connection Errors
 
 #### Symptoms
+
 ```
 FATAL: database "postgres\n" does not exist
 server didn't return client encoding
@@ -72,6 +78,7 @@ connection to server failed
 ```
 
 #### Debugging Commands
+
 ```bash
 # Check current database URL
 gcloud secrets versions access latest --secret=database-url-dev
@@ -84,6 +91,7 @@ gcloud secrets versions access latest --secret=database-url-dev | grep -o ':[0-9
 ```
 
 #### Solutions
+
 ```bash
 # Fix trailing newline in secret (CRITICAL: use printf, not echo)
 printf "postgresql://postgres:password@host:5432/postgres" | gcloud secrets versions add database-url-dev --data-file=-
@@ -96,6 +104,7 @@ gcloud run services update rag-processor-dev --region=us-central1 --update-env-v
 ```
 
 **⚠️ CRITICAL: Secret Creation Best Practice**
+
 ```bash
 # ❌ WRONG - echo adds trailing newline causing "database postgres\n does not exist"
 echo "secret_value" | gcloud secrets versions add secret-name --data-file=-
@@ -107,6 +116,7 @@ printf "secret_value" | gcloud secrets versions add secret-name --data-file=-
 ### 2. Service Authentication Issues
 
 #### Symptoms
+
 ```
 Permission denied on secret
 403 Forbidden
@@ -114,6 +124,7 @@ Service account does not have permission
 ```
 
 #### Debugging Commands
+
 ```bash
 # Check if service account has secret access
 gcloud secrets get-iam-policy database-url-dev --format="table(bindings.role,bindings.members)"
@@ -126,6 +137,7 @@ gcloud run services describe rag-processor-dev --region=us-central1 --format="va
 ```
 
 #### Solutions
+
 ```bash
 # Grant secret access to service account
 PROJECT_ID=$(gcloud config get-value project)
@@ -143,6 +155,7 @@ gcloud secrets add-iam-policy-binding rag-processor-dev-api-key \
 ### 3. EventArc Trigger Issues
 
 #### Symptoms
+
 ```
 File uploads not triggering processing
 EventArc trigger not found
@@ -150,6 +163,7 @@ Permission denied for EventArc
 ```
 
 #### Debugging Commands
+
 ```bash
 # List EventArc triggers
 gcloud eventarc triggers list --location=us-central1
@@ -166,6 +180,7 @@ gcloud storage buckets get-iam-policy gs://your-bucket-name
 ```
 
 #### Solutions
+
 ```bash
 # Recreate EventArc trigger
 gcloud eventarc triggers delete rag-processor-trigger-dev --location=us-central1 --quiet
@@ -195,6 +210,7 @@ gcloud eventarc triggers create rag-processor-trigger-dev \
 ### 4. Storage Bucket Issues
 
 #### Symptoms
+
 ```
 Bucket not found
 Access denied to bucket
@@ -202,6 +218,7 @@ CORS errors
 ```
 
 #### Debugging Commands
+
 ```bash
 # Check bucket exists
 gcloud storage ls gs://your-bucket-name/
@@ -217,6 +234,7 @@ echo "test content" | gcloud storage cp - gs://your-bucket-name/test-file.txt
 ```
 
 #### Solutions
+
 ```bash
 # Create bucket if missing
 PROJECT_ID=$(gcloud config get-value project)
@@ -245,6 +263,7 @@ rm cors-config.json
 ### 5. API and Service Enablement Issues
 
 #### Symptoms
+
 ```
 API not enabled
 Service not found
@@ -252,6 +271,7 @@ Quota exceeded
 ```
 
 #### Debugging Commands
+
 ```bash
 # Check enabled APIs
 gcloud services list --enabled --filter="name:cloudbuild OR name:run OR name:storage OR name:secretmanager OR name:eventarc OR name:aiplatform"
@@ -265,6 +285,7 @@ gcloud beta billing projects describe $(gcloud config get-value project)
 ```
 
 #### Solutions
+
 ```bash
 # Enable all required APIs
 gcloud services enable \
@@ -281,6 +302,7 @@ gcloud services enable \
 ## Advanced Debugging Techniques
 
 ### 1. Test Service Manually
+
 ```bash
 # Get service URL and API key
 SERVICE_URL=$(gcloud run services describe rag-processor-dev --region=us-central1 --format="value(status.url)")
@@ -300,6 +322,7 @@ curl -X POST "${SERVICE_URL}/" \
 ```
 
 ### 2. Monitor Resource Usage
+
 ```bash
 # Check Cloud Run metrics
 gcloud run services describe rag-processor-dev --region=us-central1 --format="table(status.traffic[].revisionName,status.traffic[].percent)"
@@ -312,6 +335,7 @@ gcloud billing budgets list --billing-account=$(gcloud beta billing projects des
 ```
 
 ### 3. Environment Variable Debugging
+
 ```bash
 # Check environment variables in Cloud Run
 gcloud run services describe rag-processor-dev --region=us-central1 --format="table(spec.template.spec.template.spec.containers[].env[].name,spec.template.spec.template.spec.containers[].env[].value)"
@@ -323,6 +347,7 @@ gcloud run services describe rag-processor-dev --region=us-central1 --format="ta
 ## Preventive Monitoring
 
 ### 1. Set Up Log-Based Alerts
+
 ```bash
 # Create error rate alert
 gcloud alpha logging metrics create error_rate_metric \
@@ -331,6 +356,7 @@ gcloud alpha logging metrics create error_rate_metric \
 ```
 
 ### 2. Regular Health Checks
+
 ```bash
 # Create a simple health check script
 cat > health_check.sh << 'EOF'
@@ -352,6 +378,7 @@ chmod +x health_check.sh
 ## Recovery Procedures
 
 ### 1. Complete Service Reset
+
 ```bash
 # Delete and recreate service (nuclear option)
 gcloud run services delete rag-processor-dev --region=us-central1 --quiet
@@ -361,6 +388,7 @@ python deploy-dev.py
 ```
 
 ### 2. Secret Rotation
+
 ```bash
 # Generate new API key
 NEW_API_KEY="sk_live_$(openssl rand -base64 32)"
@@ -373,6 +401,7 @@ gcloud run services update rag-processor-dev --region=us-central1 --update-env-v
 ```
 
 ### 3. Rollback to Previous Version
+
 ```bash
 # List revisions
 gcloud run revisions list --service=rag-processor-dev --region=us-central1
@@ -384,16 +413,19 @@ gcloud run services update-traffic rag-processor-dev --region=us-central1 --to-r
 ## Getting Help
 
 ### 1. Useful Documentation Links
+
 - [Cloud Run Troubleshooting](https://cloud.google.com/run/docs/troubleshooting)
 - [Secret Manager Best Practices](https://cloud.google.com/secret-manager/docs/best-practices)
 - [EventArc Troubleshooting](https://cloud.google.com/eventarc/docs/troubleshooting)
 
 ### 2. Support Channels
+
 - Google Cloud Support Console
 - Stack Overflow with `google-cloud-platform` tag
 - Google Cloud Community Slack
 
 ### 3. Emergency Contacts
+
 - On-call engineer: [Your contact info]
 - Project owner: [Your contact info]
 - Billing admin: [Your contact info]
@@ -415,4 +447,4 @@ When debugging issues, work through this checklist:
 - [ ] Test service endpoints manually
 - [ ] Monitor resource usage and quotas
 
-Remember: Most issues are related to permissions, secret formatting, or network connectivity. Start with the basics before diving into complex debugging. 
+Remember: Most issues are related to permissions, secret formatting, or network connectivity. Start with the basics before diving into complex debugging.

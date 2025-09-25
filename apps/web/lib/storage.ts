@@ -8,7 +8,7 @@ import { IMAGE_UPLOAD_CONSTRAINTS } from "@/lib/app-utils";
  */
 export async function getSignedUrl(
   filePath: string,
-  expiresIn: number = 3600
+  expiresIn: number = 3600,
 ): Promise<string | null> {
   try {
     const supabase = await createClient();

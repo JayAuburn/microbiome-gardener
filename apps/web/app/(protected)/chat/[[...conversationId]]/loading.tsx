@@ -13,7 +13,7 @@ export default function ChatLoading() {
       <div
         className={cn(
           "h-full w-full overflow-y-auto pb-[calc(9rem+2vh)]", // Match ChatContainer padding
-          isMobile && "pt-14" // Add top padding on mobile for fixed header
+          isMobile && "pt-14", // Add top padding on mobile for fixed header
         )}
       >
         {/* Match ChatMessages layout exactly: p-4 space-y-4 flex flex-col justify-end */}
@@ -90,14 +90,14 @@ export default function ChatLoading() {
       <div
         className={cn(
           "fixed bottom-0 right-0 z-40 bg-background transition-[left] duration-200 ease-linear", // Match ChatContainer positioning and transitions
-          isMobile ? "left-0" : state === "collapsed" ? "left-16" : "left-64"
+          isMobile ? "left-0" : state === "collapsed" ? "left-16" : "left-64",
         )}
       >
         {/* Input area skeleton - match ChatContainer padding */}
         <div
           className={cn(
             "w-full px-4",
-            isMobile ? "pb-2" : "pb-4" // Match ChatContainer mobile padding
+            isMobile ? "pb-2" : "pb-4", // Match ChatContainer mobile padding
           )}
         >
           <div className="max-w-4xl mx-auto">

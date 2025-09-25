@@ -121,7 +121,9 @@ export function RenameDialog({
             </Button>
             <Button
               type="submit"
-              disabled={isLoading || !title.trim() || title.trim() === currentTitle}
+              disabled={
+                isLoading || !title.trim() || title.trim() === currentTitle
+              }
             >
               {isLoading ? "Saving..." : "Save"}
             </Button>

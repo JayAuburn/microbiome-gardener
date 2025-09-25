@@ -22,7 +22,7 @@ export interface SearchResult {
 }
 
 export interface SearchResultsDict {
-  "text"?: SearchResult[];
+  text?: SearchResult[];
   "text-multimodal"?: SearchResult[];
   "image-multimodal"?: SearchResult[];
 }

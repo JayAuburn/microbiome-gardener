@@ -25,7 +25,7 @@ export function getFileCategory(mimeType: string): FileCategory | null {
 
 export function validateFileMetadata(
   mimeType: string,
-  fileSize: number
+  fileSize: number,
 ): FileValidationResult {
   // Check if file type is supported
   const category = getFileCategory(mimeType);

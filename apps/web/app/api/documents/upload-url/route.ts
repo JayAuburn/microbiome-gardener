@@ -47,7 +47,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       console.error("❌ [upload-url] Authentication failed");
       return NextResponse.json(
         { error: "Authentication required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!validation.valid) {
       console.error(
         "❌ [upload-url] File validation failed:",
-        validation.error
+        validation.error,
       );
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         gcsPath: uploadResponse.fileName,
         fileCategory,
         expiresAt: new Date(
-          Date.now() + uploadResponse.expiresIn * 1000
+          Date.now() + uploadResponse.expiresIn * 1000,
         ).toISOString(),
       },
     };
@@ -167,13 +167,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       console.error("❌ [upload-url] Zod validation error:", error.errors);
       return NextResponse.json(
         { error: "Invalid request data", details: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     return NextResponse.json(
       { error: "Failed to generate upload URL" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

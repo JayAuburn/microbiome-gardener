@@ -10,7 +10,7 @@
 | Sidebar (64px↔256px) |  Main Content (dynamic width)    |
 |---------------------|-----------------------------------|
 | 💬 Chat             |  [Page-specific content]          |
-| 📄 Documents        |  - Desktop: Starts after sidebar  |  
+| 📄 Documents        |  - Desktop: Starts after sidebar  |
 | 🕐 History          |  - Mobile: Full width overlay     |
 | 👤 Profile          |                                   |
 |                     |                                   |
@@ -33,7 +33,7 @@
 |-------------------------------------------------------------|
 | Problem Section: "Hours wasted searching documents"        |
 |-------------------------------------------------------------|
-| RAG Demo Section: Interactive preview                      |  
+| RAG Demo Section: Interactive preview                      |
 |-------------------------------------------------------------|
 | Pricing Section: Free | Basic $29 | Pro $99               |
 |-------------------------------------------------------------|
@@ -169,7 +169,7 @@ Chat → Documents (upload more files)
                                    → Cancel Subscription → Profile
 
 Documents → Chat (start conversation with uploaded docs)
-         → History (view conversations about documents)  
+         → History (view conversations about documents)
          → Profile (check storage usage)
 
 History → Chat (resume any conversation)

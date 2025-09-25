@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-  index,
-} from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, index } from "drizzle-orm/pg-core";
 import type { InferSelectModel } from "drizzle-orm";
 
 // Users table - for application user data (references auth.users.id)
@@ -25,7 +19,7 @@ export const users = pgTable(
 
     // Stripe integration fields - only essential data for querying Stripe
     stripe_customer_id: text("stripe_customer_id"),
-    
+
     // Role-based access control
     role: text("role", {
       enum: ["member", "admin"],
@@ -36,7 +30,7 @@ export const users = pgTable(
   (t) => [
     // Add index for role-based queries
     index("role_idx").on(t.role),
-  ]
+  ],
 );
 
 // TypeScript types

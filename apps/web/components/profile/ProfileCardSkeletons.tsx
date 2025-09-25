@@ -62,7 +62,7 @@ export function BillingManagementCardSkeleton() {
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-20" />
           </div>
-          
+
           <div className="h-px bg-border" />
 
           <div className="flex items-center justify-between">

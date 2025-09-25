@@ -39,7 +39,7 @@ interface ExtendedBillingPortalParams {
 async function getSubscriptionUpdateURL(
   customerId: string,
   newPriceId: string,
-  activeSubscription: Stripe.Subscription
+  activeSubscription: Stripe.Subscription,
 ): Promise<{ success: true; url: string }> {
   try {
     // 1. Check if they're already on the target plan
@@ -71,7 +71,7 @@ async function getSubscriptionUpdateURL(
     };
 
     const session = await stripe.billingPortal.sessions.create(
-      sessionParams as Stripe.BillingPortal.SessionCreateParams
+      sessionParams as Stripe.BillingPortal.SessionCreateParams,
     );
 
     return {
@@ -93,7 +93,7 @@ async function getSubscriptionUpdateURL(
  */
 async function getSubscriptionCancelURL(
   customerId: string,
-  activeSubscription: Stripe.Subscription
+  activeSubscription: Stripe.Subscription,
 ): Promise<{ success: true; url: string }> {
   try {
     // Create customer portal session with subscription cancel flow
@@ -115,7 +115,7 @@ async function getSubscriptionCancelURL(
     };
 
     const session = await stripe.billingPortal.sessions.create(
-      sessionParams as Stripe.BillingPortal.SessionCreateParams
+      sessionParams as Stripe.BillingPortal.SessionCreateParams,
     );
 
     return {
@@ -181,7 +181,7 @@ export async function createCheckoutSession(priceId: string): Promise<void> {
       const portalResult = await getSubscriptionUpdateURL(
         customerId,
         priceId,
-        subscriptions.data[0]
+        subscriptions.data[0],
       );
       redirect(portalResult.url);
     }
@@ -270,7 +270,7 @@ export async function createCustomerPortalSession(): Promise<{
 
       // Check if customer portal is not configured
       const isStripeError = (
-        err: unknown
+        err: unknown,
       ): err is { code?: string; message?: string } => {
         return typeof err === "object" && err !== null;
       };
@@ -316,7 +316,7 @@ export async function createCustomerPortalSession(): Promise<{
  * Create checkout session for specified plan
  */
 export async function createPlanCheckoutSession(
-  plan: "basic" | "pro"
+  plan: "basic" | "pro",
 ): Promise<{ success: true; url: string } | { success: false; error: string }> {
   try {
     const priceId =
@@ -375,7 +375,7 @@ export async function createCancelSession(): Promise<void> {
 
     const portalResult = await getSubscriptionCancelURL(
       dbUser.stripe_customer_id,
-      subscriptions.data[0]
+      subscriptions.data[0],
     );
 
     redirect(portalResult.url);

@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 
 export const generateLegalMetadata = (
   title: string,
-  description: string
+  description: string,
 ): Metadata => {
   return {
     title: `${title} | RAGI`,

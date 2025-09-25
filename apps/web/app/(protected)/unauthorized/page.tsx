@@ -15,9 +15,12 @@ export default function UnauthorizedPage() {
 
             {/* Message */}
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-foreground">Access Denied</h1>
+              <h1 className="text-2xl font-bold text-foreground">
+                Access Denied
+              </h1>
               <p className="text-muted-foreground">
-                You don&rsquo;t have permission to view this page. Admin access is required.
+                You don&rsquo;t have permission to view this page. Admin access
+                is required.
               </p>
             </div>
           </div>
@@ -42,7 +45,8 @@ export default function UnauthorizedPage() {
           {/* Help text */}
           <div className="pt-4 border-t border-border">
             <p className="text-xs text-muted-foreground">
-              If you believe this is a mistake, please contact your administrator.
+              If you believe this is a mistake, please contact your
+              administrator.
             </p>
           </div>
         </div>

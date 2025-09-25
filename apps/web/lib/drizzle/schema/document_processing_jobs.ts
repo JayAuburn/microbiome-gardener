@@ -21,7 +21,7 @@ export const documentProcessingJobStatusEnum = pgEnum(
     "retry_pending",
     "cancelled",
     "partially_processed",
-  ]
+  ],
 );
 
 // Processing stages for better progress tracking
@@ -94,18 +94,18 @@ export const documentProcessingJobs = pgTable(
     // Composite index for status + updated_at queries
     index("document_processing_jobs_status_updated_at_idx").on(
       table.status,
-      table.updatedAt
+      table.updatedAt,
     ),
     // Unique constraint on file path for idempotent operations
     unique("document_processing_jobs_file_path_unique").on(table.filePath),
-  ]
+  ],
 );
 
 // Helper function to calculate overall progress
 export function calculateOverallProgress(
   currentStage: number,
   totalStages: number,
-  stageProgress: number
+  stageProgress: number,
 ): number {
   const stageWeight = 100 / totalStages;
   const completedStages = currentStage * stageWeight;

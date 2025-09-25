@@ -52,7 +52,7 @@ export function AttachmentArea({
       onAttachmentsChange([...attachments, ...newPreviews]);
       setErrorMessage(null);
     },
-    [attachments, maxImages, onAttachmentsChange]
+    [attachments, maxImages, onAttachmentsChange],
   );
 
   const handleDragOver = useCallback(
@@ -62,7 +62,7 @@ export function AttachmentArea({
         setIsDragOver(true);
       }
     },
-    [disabled]
+    [disabled],
   );
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
@@ -82,7 +82,7 @@ export function AttachmentArea({
         handleFiles(files);
       }
     },
-    [disabled, handleFiles]
+    [disabled, handleFiles],
   );
 
   const handleFileSelect = useCallback(
@@ -94,17 +94,17 @@ export function AttachmentArea({
       // Reset the input value so the same file can be selected again
       e.target.value = "";
     },
-    [handleFiles]
+    [handleFiles],
   );
 
   const removeAttachment = useCallback(
     (attachmentId: string) => {
       const updatedAttachments = attachments.filter(
-        (attachment) => attachment.id !== attachmentId
+        (attachment) => attachment.id !== attachmentId,
       );
       onAttachmentsChange(updatedAttachments);
     },
-    [attachments, onAttachmentsChange]
+    [attachments, onAttachmentsChange],
   );
 
   const canAddMore = attachments.length < maxImages;
@@ -128,7 +128,7 @@ export function AttachmentArea({
             "border-2 border-dashed p-6 text-center transition-colors cursor-pointer",
             "hover:border-primary/50 hover:bg-muted/50",
             isDragOver && "border-primary bg-primary/5",
-            disabled && "opacity-50 cursor-not-allowed"
+            disabled && "opacity-50 cursor-not-allowed",
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -188,7 +188,7 @@ export function AttachmentArea({
                   "hover:border-primary/50 hover:bg-muted/50",
                   "flex items-center justify-center",
                   isDragOver && "border-primary bg-primary/5",
-                  disabled && "opacity-50 cursor-not-allowed"
+                  disabled && "opacity-50 cursor-not-allowed",
                 )}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}

@@ -40,7 +40,7 @@ export interface VectorSearchResult {
  */
 async function uploadFileToStorage(
   file: File,
-  userId: string
+  userId: string,
 ): Promise<{
   success: boolean;
   storagePath?: string;
@@ -102,7 +102,7 @@ async function uploadFileToStorage(
     // Calculate expiration
     const expiresAt = new Date();
     expiresAt.setSeconds(
-      expiresAt.getSeconds() + IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME
+      expiresAt.getSeconds() + IMAGE_UPLOAD_CONSTRAINTS.EXPIRATION_TIME,
     );
 
     return {
@@ -130,7 +130,7 @@ async function uploadFileToStorage(
 export async function saveAssistantResponse(
   conversationId: string,
   content: string,
-  status: "success" | "error" = "success"
+  status: "success" | "error" = "success",
 ): Promise<string> {
   try {
     const userId = await getCurrentUserId();
@@ -140,13 +140,16 @@ export async function saveAssistantResponse(
     }
 
     // Save assistant message with status tracking for error recovery
-    const [newMessage] = await db.insert(dbMessages).values({
-      conversation_id: conversationId,
-      sender: "assistant",
-      content: content,
-      attachments: [],
-      status: status,
-    }).returning({ id: dbMessages.id });
+    const [newMessage] = await db
+      .insert(dbMessages)
+      .values({
+        conversation_id: conversationId,
+        sender: "assistant",
+        content: content,
+        attachments: [],
+        status: status,
+      })
+      .returning({ id: dbMessages.id });
 
     // Note: No revalidation here to prevent flickering during streaming
     return newMessage.id;
@@ -168,7 +171,7 @@ export async function handleAssistantMessage({
   trigger,
   conversationId,
   content,
-  status = "success"
+  status = "success",
 }: {
   trigger: "submit-message" | "regenerate-message";
   conversationId: string;
@@ -180,15 +183,11 @@ export async function handleAssistantMessage({
     await updateLastAssistantMessage({
       conversationId,
       content,
-      status
+      status,
     });
   } else {
     // Create new assistant message for submit-message trigger
-    await saveAssistantResponse(
-      conversationId,
-      content,
-      status
-    );
+    await saveAssistantResponse(conversationId, content, status);
   }
 }
 
@@ -203,7 +202,7 @@ export async function handleAssistantMessage({
 export async function updateLastAssistantMessage({
   conversationId,
   content,
-  status = "success"
+  status = "success",
 }: {
   conversationId: string;
   content: string;
@@ -223,8 +222,8 @@ export async function updateLastAssistantMessage({
       .where(
         and(
           eq(dbMessages.conversation_id, conversationId),
-          eq(dbMessages.sender, "assistant")
-        )
+          eq(dbMessages.sender, "assistant"),
+        ),
       )
       .orderBy(desc(dbMessages.created_at))
       .limit(1);
@@ -255,7 +254,7 @@ export async function updateLastAssistantMessage({
  */
 export async function updateConversationTitle(
   conversationId: string,
-  title: string
+  title: string,
 ): Promise<{ success: boolean }> {
   const userId = await getCurrentUserId();
 
@@ -287,7 +286,7 @@ export async function updateConversationTitle(
  */
 export async function generateConversationTitle(
   conversationId: string,
-  userMessageContent: string
+  userMessageContent: string,
 ): Promise<void> {
   try {
     // Validate inputs
@@ -341,7 +340,7 @@ export async function generateConversationTitle(
   } catch (error) {
     console.error(
       `Title generation failed for conversation ${conversationId}:`,
-      error
+      error,
     );
 
     // Fallback to simple title on error
@@ -354,7 +353,7 @@ export async function generateConversationTitle(
     } catch (fallbackError) {
       console.error(
         `Both AI generation and fallback failed for conversation ${conversationId}:`,
-        fallbackError
+        fallbackError,
       );
     }
   }
@@ -370,7 +369,7 @@ export async function generateConversationTitle(
 export async function saveMessage(
   conversationId: string | null,
   userMessageContent: string,
-  files: File[] = []
+  files: File[] = [],
 ): Promise<{
   success: boolean;
   conversationId?: string;
@@ -414,18 +413,17 @@ export async function saveMessage(
       finalConversationId = conversation.id;
 
       // Generate AI title in background (fire-and-forget)
-      generateConversationTitle(
-        finalConversationId,
-        userMessageContent
-      ).catch((error) => {
-        console.error("Background title generation failed:", error);
-      });
+      generateConversationTitle(finalConversationId, userMessageContent).catch(
+        (error) => {
+          console.error("Background title generation failed:", error);
+        },
+      );
     } else {
       // Update existing conversation timestamp
       await db
         .update(conversations)
         .set({
-          updated_at: new Date()
+          updated_at: new Date(),
         })
         .where(eq(conversations.id, finalConversationId));
     }

@@ -44,7 +44,7 @@ async function getAppliedMigrations(): Promise<MigrationRecord[]> {
       console.log(
         `   ${idx + 1}. created_at: ${
           row.created_at
-        } (type: ${typeof row.created_at})`
+        } (type: ${typeof row.created_at})`,
       );
     });
     console.log("");
@@ -53,7 +53,7 @@ async function getAppliedMigrations(): Promise<MigrationRecord[]> {
   } catch (error: unknown) {
     // Type guard for error objects
     const isErrorWithCodeAndMessage = (
-      err: unknown
+      err: unknown,
     ): err is { code?: string; message?: string } => {
       return typeof err === "object" && err !== null;
     };
@@ -79,14 +79,14 @@ async function getAppliedMigrations(): Promise<MigrationRecord[]> {
         error.message?.includes("ECONNREFUSED")
       ) {
         console.error(
-          "   💡 This looks like a connection issue. Check your DATABASE_URL."
+          "   💡 This looks like a connection issue. Check your DATABASE_URL.",
         );
       } else if (
         error.message?.includes("authentication") ||
         error.message?.includes("password")
       ) {
         console.error(
-          "   💡 This looks like an authentication issue. Check your database credentials."
+          "   💡 This looks like an authentication issue. Check your database credentials.",
         );
       }
     } else {
@@ -139,7 +139,9 @@ async function showMigrationStatus(): Promise<void> {
 
   // Calculate actual pending by checking timestamp matches
   const appliedCount = localMigrations.filter((local) =>
-    appliedMigrations.some((applied) => applied.created_at === local.created_at)
+    appliedMigrations.some(
+      (applied) => applied.created_at === local.created_at,
+    ),
   ).length;
   const pendingCount = localMigrations.length - appliedCount;
 
@@ -152,7 +154,7 @@ async function showMigrationStatus(): Promise<void> {
   const currentMigration = appliedMigrations[appliedMigrations.length - 1];
   if (currentMigration) {
     const currentLocal = localMigrations.find(
-      (m) => m.created_at === currentMigration.created_at
+      (m) => m.created_at === currentMigration.created_at,
     );
     console.log("🎯 Current Migration:");
     console.log(`   Hash: ${currentMigration.hash}`);
@@ -163,14 +165,14 @@ async function showMigrationStatus(): Promise<void> {
       const date = new Date(currentMigration.created_at);
       if (isNaN(date.getTime())) {
         console.log(
-          `   Applied: Invalid timestamp (${currentMigration.created_at})`
+          `   Applied: Invalid timestamp (${currentMigration.created_at})`,
         );
       } else {
         console.log(`   Applied: ${date.toISOString()}`);
       }
     } catch {
       console.log(
-        `   Applied: Invalid timestamp (${currentMigration.created_at})`
+        `   Applied: Invalid timestamp (${currentMigration.created_at})`,
       );
     }
     console.log("");
@@ -185,16 +187,16 @@ async function showMigrationStatus(): Promise<void> {
     console.log("📁 Applied migrations in database:");
     appliedMigrations.forEach((migration, idx) => {
       const localMatch = localMigrations.find(
-        (l) => l.created_at === migration.created_at
+        (l) => l.created_at === migration.created_at,
       );
       const timestamp = new Date(migration.created_at).toLocaleString();
       console.log(
         `   ${idx + 1}. Hash: ${migration.hash.substring(
           0,
-          12
+          12,
         )}... Time: ${timestamp} ${
           localMatch ? `✅ (${localMatch.folder})` : "❌ (not in local)"
-        }`
+        }`,
       );
     });
     console.log("");
@@ -206,7 +208,7 @@ async function showMigrationStatus(): Promise<void> {
   for (const local of localMigrations) {
     // Match by timestamp instead of hash-to-tag
     const isApplied = appliedMigrations.some(
-      (applied) => applied.created_at === local.created_at
+      (applied) => applied.created_at === local.created_at,
     );
     const statusIcon = isApplied ? "✅" : "⏳";
     const statusText = isApplied ? "Applied" : "Pending";

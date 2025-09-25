@@ -8,12 +8,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useUsage } from "@/contexts/UsageContext";
 
 export function DocumentsUsageWarningBanner() {
-  const { 
-    usageStats: usage, 
-    isDocumentsNearLimit, 
-    isDocumentsAtLimit, 
-    isStorageNearLimit, 
-    isStorageAtLimit 
+  const {
+    usageStats: usage,
+    isDocumentsNearLimit,
+    isDocumentsAtLimit,
+    isStorageNearLimit,
+    isStorageAtLimit,
   } = useUsage();
 
   // Don't show banner if no usage data
@@ -62,9 +62,7 @@ export function DocumentsUsageWarningBanner() {
 
   return (
     <Alert
-      className={`mb-4 ${
-        isAtLimit ? "border-destructive" : "border-warning"
-      }`}
+      className={`mb-4 ${isAtLimit ? "border-destructive" : "border-warning"}`}
     >
       <AlertTriangle
         className={`h-4 w-4 ${
@@ -94,4 +92,4 @@ export function DocumentsUsageWarningBanner() {
       </AlertDescription>
     </Alert>
   );
-} 
+}

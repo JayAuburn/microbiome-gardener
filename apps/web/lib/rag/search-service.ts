@@ -40,18 +40,18 @@ export interface RAGSearchResult {
  * Fetch actual image data from URL for visual content processing
  */
 async function fetchImageData(
-  url: string
+  url: string,
 ): Promise<{ data: string; mimeType: string }> {
   try {
     console.log(
       "📥 Fetching image data from URL:",
-      url.substring(0, 100) + "..."
+      url.substring(0, 100) + "...",
     );
 
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch image: ${response.status} ${response.statusText}`
+        `Failed to fetch image: ${response.status} ${response.statusText}`,
       );
     }
 
@@ -68,7 +68,7 @@ async function fetchImageData(
   } catch (error) {
     console.error("❌ Failed to fetch image data:", error);
     throw new Error(
-      `Image fetch failed: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Image fetch failed: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
   }
 }
@@ -78,7 +78,7 @@ async function fetchImageData(
  */
 async function searchText(
   userText: string,
-  searchOptions: SearchOptions
+  searchOptions: SearchOptions,
 ): Promise<Pick<SearchResultsDict, "text" | "text-multimodal">> {
   if (!userText || userText.trim().length === 0) {
     return {};
@@ -91,7 +91,7 @@ async function searchText(
     const [textEmbedding, multimodalEmbedding] = await Promise.all([
       getTextEmbeddingService().generateTextEmbedding(
         userText,
-        "RETRIEVAL_QUERY"
+        "RETRIEVAL_QUERY",
       ),
       getMultimodalEmbeddingService().generateMultimodalEmbedding(userText),
     ]);
@@ -104,7 +104,7 @@ async function searchText(
     ]);
     console.log(`✅ Text search completed (${textResults.length} results)`);
     console.log(
-      `✅ Multimodal search (from text) completed (${multimodalResults.length} results)`
+      `✅ Multimodal search (from text) completed (${multimodalResults.length} results)`,
     );
 
     return {
@@ -123,7 +123,7 @@ async function searchText(
  */
 async function searchImages(
   images: Array<{ name: string; url: string }>,
-  searchOptions: SearchOptions
+  searchOptions: SearchOptions,
 ): Promise<Pick<SearchResultsDict, "image-multimodal">> {
   if (!images || images.length === 0) {
     return {};
@@ -135,19 +135,19 @@ async function searchImages(
     async (image, index): Promise<SearchResult[]> => {
       try {
         console.log(
-          `✅ Processing image ${index + 1}/${images.length}: ${image.name}`
+          `✅ Processing image ${index + 1}/${images.length}: ${image.name}`,
         );
 
         const imageData = await fetchImageData(image.url);
         const embedding =
           await getMultimodalEmbeddingService().generateImageEmbedding(
-            imageData
+            imageData,
           );
         console.log(`✅ Image embedding generated for: ${image.name}`);
 
         const results = await searchMultimodalChunks(embedding, searchOptions);
         console.log(
-          `✅ Image search completed for ${image.name} (${results.length} results)`
+          `✅ Image search completed for ${image.name} (${results.length} results)`,
         );
 
         return results;
@@ -155,7 +155,7 @@ async function searchImages(
         console.warn(`❌ Image search failed for ${image.name}:`, error);
         return [];
       }
-    }
+    },
   );
 
   const allImageResults = await Promise.all(imageSearchPromises);
@@ -173,7 +173,7 @@ async function searchImages(
 export async function searchForRAGContext(
   userText: string,
   images: Array<{ name: string; url: string }>,
-  userId: string
+  userId: string,
 ): Promise<RAGSearchResult> {
   const limit = 5;
   const similarity_threshold = 0.5;
@@ -219,7 +219,7 @@ export async function searchForRAGContext(
 
     // Check if we have any results
     const hasAnyResults = Object.values(allSearchResults).some(
-      (results) => results && results.length > 0
+      (results) => results && results.length > 0,
     );
 
     if (!hasAnyResults) {
@@ -267,7 +267,7 @@ export async function searchForRAGContext(
     if (error instanceof EmbeddingServiceError) {
       console.warn(
         "Embedding service error, continuing without RAG context:",
-        error.message
+        error.message,
       );
     }
 

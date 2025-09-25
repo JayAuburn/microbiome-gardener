@@ -7,9 +7,8 @@ export const SUPPORTED_FILE_TYPES = {
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
       ".docx",
     ],
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation": [
-      ".pptx",
-    ],
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+      [".pptx"],
     "application/vnd.ms-powerpoint": [".ppt"],
     "application/msword": [".doc"],
     "text/plain": [".txt"],
@@ -66,4 +65,3 @@ export const MAX_FILE_SIZES = {
   videos: 1024 * 1024 * 1024, // 1GB for videos (system limit)
   audio: 1024 * 1024 * 1024, // 1GB for audio files (system limit)
 } as const;
-

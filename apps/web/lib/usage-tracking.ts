@@ -17,7 +17,10 @@
 import { eq, and, sql, gte } from "drizzle-orm";
 import { db } from "@/lib/drizzle/db";
 import { users } from "@/lib/drizzle/schema/users";
-import { userUsageEvents, type UsageEventType } from "@/lib/drizzle/schema/usage-events";
+import {
+  userUsageEvents,
+  type UsageEventType,
+} from "@/lib/drizzle/schema/usage-events";
 import { documents } from "@/lib/drizzle/schema/documents";
 import {
   getUsageLimitsForTier,
@@ -55,7 +58,7 @@ export type {
 async function calculateRequestUsage(
   userId: string,
   eventType: "message",
-  windowStart: Date
+  windowStart: Date,
 ): Promise<number> {
   const result = await db
     .select({ count: sql<number>`count(*)` })
@@ -64,8 +67,8 @@ async function calculateRequestUsage(
       and(
         eq(userUsageEvents.userId, userId),
         eq(userUsageEvents.eventType, eventType),
-        gte(userUsageEvents.createdAt, windowStart)
-      )
+        gte(userUsageEvents.createdAt, windowStart),
+      ),
     );
 
   return Number(result[0]?.count || 0);
@@ -76,7 +79,7 @@ async function calculateRequestUsage(
  */
 function getUsageWindowStart(
   resetPeriod: string,
-  currentPeriodStart?: Date
+  currentPeriodStart?: Date,
 ): Date {
   const now = new Date();
 
@@ -149,12 +152,14 @@ async function getUserUsage(userId: string): Promise<{
     if (!user.stripe_customer_id) {
       // User without Stripe customer ID = free tier
       stripeSubscriptionData = {
-        tier: 'free' as SubscriptionTier,
+        tier: "free" as SubscriptionTier,
         currentPeriodStart: null,
         currentPeriodEnd: null,
       };
     } else {
-      stripeSubscriptionData = await getSubscriptionFromStripe(user.stripe_customer_id);
+      stripeSubscriptionData = await getSubscriptionFromStripe(
+        user.stripe_customer_id,
+      );
     }
 
     const subscriptionTier = stripeSubscriptionData.tier;
@@ -163,14 +168,14 @@ async function getUserUsage(userId: string): Promise<{
     // Calculate usage window start using Stripe period dates
     const windowStart = getUsageWindowStart(
       limits.requestResetPeriod,
-      stripeSubscriptionData.currentPeriodStart || undefined
+      stripeSubscriptionData.currentPeriodStart || undefined,
     );
 
     // Get document count and storage usage
     const [documentStats] = await db
       .select({
         count: sql<number>`count(*)`,
-        storage: sql<number>`coalesce(sum(file_size), 0)`, 
+        storage: sql<number>`coalesce(sum(file_size), 0)`,
       })
       .from(documents)
       .where(eq(documents.user_id, userId));
@@ -179,7 +184,7 @@ async function getUserUsage(userId: string): Promise<{
     const requestUsage = await calculateRequestUsage(
       userId,
       "message",
-      windowStart
+      windowStart,
     );
 
     return {
@@ -220,7 +225,7 @@ async function getUserUsage(userId: string): Promise<{
  */
 export async function checkDocumentUploadLimits(
   userId: string,
-  fileSize: number
+  fileSize: number,
 ): Promise<UsageCheckResult> {
   try {
     const usageData = await getUserUsage(userId);
@@ -272,7 +277,7 @@ export async function checkDocumentUploadLimits(
  * Check if user can send a message
  */
 export async function checkMessageLimits(
-  userId: string
+  userId: string,
 ): Promise<MessageCheckResult> {
   try {
     const usageData = await getUserUsage(userId);
@@ -326,7 +331,7 @@ export async function checkMessageLimits(
  * This is the main function used throughout the app for fetching user usage data
  */
 export async function getUserUsageStatsForUI(
-  userId: string
+  userId: string,
 ): Promise<UsageStats | null> {
   const data = await getUserUsage(userId);
 
@@ -385,7 +390,9 @@ export type UsageEventResult = {
 };
 
 /** Usage event recording function */
-export async function recordUsageEvent(eventType: UsageEventType): Promise<UsageEventResult> {
+export async function recordUsageEvent(
+  eventType: UsageEventType,
+): Promise<UsageEventResult> {
   try {
     const userId = await getCurrentUserId();
 
@@ -405,9 +412,9 @@ export async function recordUsageEvent(eventType: UsageEventType): Promise<Usage
     return { success: true };
   } catch (error) {
     console.error(`Error recording ${eventType} event:`, error);
-    return { 
-      success: false, 
-      error: `Failed to record ${eventType} event` 
+    return {
+      success: false,
+      error: `Failed to record ${eventType} event`,
     };
   }
 }

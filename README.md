@@ -12,6 +12,7 @@ This template now works seamlessly on **Windows**, **macOS**, and **Linux** with
 - ✅ **Node.js based**: Uses familiar JavaScript instead of complex shell scripts
 
 **Quick Start** (any platform):
+
 ```bash
 npm run setup   # Install everything
 npm run dev     # Start development
@@ -31,6 +32,7 @@ This is a **polyglot monorepo** containing two main applications:
 ### Technology Stack
 
 **Frontend (Next.js)**:
+
 - Next.js 14 with App Router
 - Supabase Auth & Database (PostgreSQL with pgvector)
 - Stripe for payments and billing
@@ -38,6 +40,7 @@ This is a **polyglot monorepo** containing two main applications:
 - TypeScript
 
 **Backend (Python)**:
+
 - Google Cloud Storage for document storage
 - Google Cloud Run for serverless processing
 - Vertex AI for embeddings and chat completions
@@ -47,6 +50,7 @@ This is a **polyglot monorepo** containing two main applications:
 ## 🔄 Data Flow
 
 ### Document Upload & Processing
+
 1. User uploads document via web interface
 2. Frontend generates signed URL for direct upload to Google Cloud Storage
 3. File upload triggers Google Cloud Storage event
@@ -55,6 +59,7 @@ This is a **polyglot monorepo** containing two main applications:
 6. Embeddings stored in Supabase with pgvector extension
 
 ### Chat & Query
+
 1. User sends question via chat interface
 2. Frontend calls Next.js API route
 3. API generates embedding for user query
@@ -83,6 +88,7 @@ npm run setup
 ### 2. Environment Setup
 
 **Web Application (.env.local in apps/web/)**:
+
 ```bash
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
@@ -104,6 +110,7 @@ NEXTAUTH_URL=http://localhost:3000
 ```
 
 **RAG Processor (.env in apps/rag-processor/)**:
+
 ```bash
 GOOGLE_CLOUD_PROJECT_ID=your-project-id
 GOOGLE_CLOUD_REGION=us-central1
@@ -198,6 +205,7 @@ npm run stop
 ```
 
 **Alternative: Click-to-run**
+
 - **Windows**: Double-click `dev.bat`
 - **macOS/Linux**: Double-click `dev.sh`
 
@@ -225,16 +233,19 @@ rag-saas/
 ## 🔧 Available Scripts
 
 ### Root Level
+
 - `npm run dev` - Start web development server
 - `npm run build` - Build all applications
 - `npm run lint` - Lint all workspaces
 
 ### Web Application
+
 - `npm run web` - Start Next.js dev server
 - `npm run web:build` - Build Next.js app
 - `npm run web:start` - Start production server
 
 ### RAG Processor
+
 - `npm run rag-processor:install` - Install Python dependencies
 - `npm run rag-processor:dev` - Start development server
 - `npm run rag-processor:lint` - Format and lint Python code
@@ -247,6 +258,7 @@ rag-saas/
 The template now includes streamlined deployment scripts in the `deploy/` directory for better accessibility:
 
 #### 🚀 Deploy RAG Processor
+
 ```bash
 # Complete deployment pipeline (idempotent)
 uv run deploy-rag-processor
@@ -259,12 +271,14 @@ FORCE_DEPLOY=true uv run deploy-rag-processor
 ```
 
 #### 📦 Deploy Queue Handler
+
 ```bash
 # Deploy Cloud Function with EventArc triggers
 uv run deploy-queue-handler
 ```
 
 **Features:**
+
 - **Idempotent**: Safe to run multiple times
 - **Model Auto-Download**: Downloads standard Docling model suite if needed
 - **Optimized Builds**: CPU-only PyTorch, layer caching, parallel build steps
@@ -313,29 +327,34 @@ gcloud eventarc triggers create rag-processor-trigger \
 ## 📚 Key Features
 
 ### 🔐 Authentication & Authorization
+
 - Supabase Auth with email/password and social logins
 - Row Level Security (RLS) for data isolation
 - User profile management
 
 ### 💳 Billing & Subscriptions
+
 - Stripe integration for payments
 - Multiple subscription tiers
 - Usage tracking and limits
 - Billing management interface
 
 ### 📄 Document Processing
+
 - Support for PDFs and other document formats
 - Intelligent text chunking with overlap
 - High-quality embeddings using Vertex AI
 - Scalable processing with Cloud Run
 
 ### 💬 RAG Chat Interface
+
 - Real-time chat with streaming responses
 - Context-aware responses using retrieved documents
 - Chat history and conversation management
 - Responsive design for mobile and desktop
 
 ### 🎛️ Admin Features
+
 - Admin dashboard for managing AI models
 - User management and analytics
 - System monitoring and health checks
@@ -343,16 +362,19 @@ gcloud eventarc triggers create rag-processor-trigger \
 ## 🔄 Customization
 
 ### Adding New Document Types
+
 1. Update the document parser in `apps/rag-processor/rag_processor/main.py`
 2. Add MIME type support in the web upload component
 3. Test processing pipeline with new format
 
 ### Changing AI Models
+
 1. Update embedding model in RAG processor config
 2. Modify chat completion model in web API routes
 3. Update vector dimensions if needed
 
 ### Scaling Considerations
+
 - Use Cloud Run autoscaling for variable workloads
 - Consider Cloud SQL for larger datasets
 - Implement caching for frequently accessed embeddings
@@ -373,10 +395,11 @@ This template is provided as-is for educational and commercial use. See individu
 ## 📞 Support
 
 For issues and questions:
+
 - Check the README files in each app directory
 - Review the deployment guides
 - Open an issue in the repository
 
 ---
 
-**Built with ❤️ using Next.js, Supabase, Google Cloud, and modern web technologies.** 
+**Built with ❤️ using Next.js, Supabase, Google Cloud, and modern web technologies.**

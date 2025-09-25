@@ -129,7 +129,7 @@ export function BulkUploadDialog({
             `Proceeding with ${allowedCount} file${allowedCount !== 1 ? "s" : ""} that can be uploaded.`,
           {
             duration: 5000,
-          }
+          },
         );
 
         // Proceed with only the allowed files
@@ -137,7 +137,7 @@ export function BulkUploadDialog({
       } else {
         // No files can be uploaded, show upgrade warning
         toast.warning(
-          "Selected files would exceed your usage limits. Please upgrade to continue or try uploading smaller files."
+          "Selected files would exceed your usage limits. Please upgrade to continue or try uploading smaller files.",
         );
       }
       return;
@@ -158,7 +158,7 @@ export function BulkUploadDialog({
           toast.error(`${invalidFile.file.name}: ${invalidFile.error}`, {
             duration: 6000,
           });
-        }
+        },
       );
 
       // Also keep the validation error dialog for detailed view
@@ -184,7 +184,7 @@ export function BulkUploadDialog({
     setActiveTab("upload");
 
     console.log(
-      "🧹 [BulkUpload] All assets cleared - dialog reset to initial state"
+      "🧹 [BulkUpload] All assets cleared - dialog reset to initial state",
     );
   };
 
@@ -192,13 +192,13 @@ export function BulkUploadDialog({
     // Check if there are active uploads
     const hasActiveUploads = queue.items.some(
       (item: { status: string }) =>
-        item.status === "uploading" || item.status === "pending"
+        item.status === "uploading" || item.status === "pending",
     );
 
     if (hasActiveUploads) {
       // Show warning that uploads are in progress but don't allow cancellation
       toast.warning(
-        "Uploads are in progress. Please wait for them to complete before closing."
+        "Uploads are in progress. Please wait for them to complete before closing.",
       );
       return;
     } else {
@@ -217,7 +217,7 @@ export function BulkUploadDialog({
     queue.items.length === 0 ||
     !queue.items.some(
       (item: { status: string }) =>
-        item.status === "uploading" || item.status === "pending"
+        item.status === "uploading" || item.status === "pending",
     );
 
   const handleOpenChange = (newOpen: boolean) => {
@@ -229,7 +229,7 @@ export function BulkUploadDialog({
       } else {
         // Show warning that uploads are in progress
         toast.warning(
-          "Uploads are in progress. Please wait for them to complete before closing."
+          "Uploads are in progress. Please wait for them to complete before closing.",
         );
       }
     } else {
@@ -260,7 +260,7 @@ export function BulkUploadDialog({
               onClick={handleDialogClose}
               className={cn(
                 "h-8 w-8 p-0 flex-shrink-0",
-                !canClose && "opacity-50 cursor-not-allowed"
+                !canClose && "opacity-50 cursor-not-allowed",
               )}
               disabled={!canClose}
             >

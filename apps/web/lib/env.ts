@@ -37,7 +37,7 @@ export const env = createEnv({
   runtimeEnv: {
     // Server variables
     DATABASE_URL: process.env.DATABASE_URL,
-    
+
     // Supabase (server-only)
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,

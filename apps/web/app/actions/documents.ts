@@ -30,7 +30,7 @@ export type CheckFilenameError = {
  * @returns Conflict information if a duplicate exists, or confirmation if no conflict
  */
 export async function checkFilenameExists(
-  filename: string
+  filename: string,
 ): Promise<CheckFilenameResult | CheckFilenameError> {
   try {
     // Authenticate user
@@ -67,8 +67,8 @@ export async function checkFilenameExists(
       .where(
         and(
           eq(documents.user_id, user.id),
-          eq(documents.original_filename, trimmedFilename)
-        )
+          eq(documents.original_filename, trimmedFilename),
+        ),
       )
       .limit(1);
 

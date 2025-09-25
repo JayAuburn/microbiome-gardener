@@ -66,7 +66,7 @@ export function BillingManagementCard({
 
       if (result.error?.includes("Customer portal not configured")) {
         alert(
-          `${errorMessage}\n\nAs a temporary workaround, you can manage your subscription directly through Stripe at billing.stripe.com.`
+          `${errorMessage}\n\nAs a temporary workaround, you can manage your subscription directly through Stripe at billing.stripe.com.`,
         );
       } else {
         alert(errorMessage);
@@ -203,7 +203,8 @@ export function BillingManagementCard({
                 </p>
                 <p className="text-orange-700 dark:text-orange-300">
                   Your subscription will end on {formatDate(currentPeriodEnd)}.
-                  You&rsquo;ll still have access to your plan&rsquo;s features until then.
+                  You&rsquo;ll still have access to your plan&rsquo;s features
+                  until then.
                 </p>
               </div>
             </div>
@@ -273,7 +274,7 @@ export function BillingManagementCard({
                 onClick={() => {
                   // Scroll to the plan comparison section
                   const plansSection = document.querySelector(
-                    '[data-section="plans"]'
+                    '[data-section="plans"]',
                   );
                   if (plansSection) {
                     plansSection.scrollIntoView({

@@ -20,7 +20,7 @@ export function ConversationTable({
 
   const handleConversationRenamed = (
     conversationId: string,
-    newTitle: string
+    newTitle: string,
   ) => {
     setConversations((prev) => {
       // Find which category contains the conversation and update only that one
@@ -29,14 +29,14 @@ export function ConversationTable({
       for (const category of categories) {
         const categoryConversations = prev[category];
         const conversationIndex = categoryConversations.findIndex(
-          (conv) => conv.id === conversationId
+          (conv) => conv.id === conversationId,
         );
 
         if (conversationIndex !== -1) {
           return {
             ...prev,
             [category]: categoryConversations.map((conv, index) =>
-              index === conversationIndex ? { ...conv, title: newTitle } : conv
+              index === conversationIndex ? { ...conv, title: newTitle } : conv,
             ),
           };
         }
@@ -55,14 +55,14 @@ export function ConversationTable({
       for (const category of categories) {
         const categoryConversations = prev[category];
         const conversationIndex = categoryConversations.findIndex(
-          (conv) => conv.id === conversationId
+          (conv) => conv.id === conversationId,
         );
 
         if (conversationIndex !== -1) {
           return {
             ...prev,
             [category]: categoryConversations.filter(
-              (conv) => conv.id !== conversationId
+              (conv) => conv.id !== conversationId,
             ),
           };
         }

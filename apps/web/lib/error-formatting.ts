@@ -5,7 +5,7 @@ import { ParsedUploadError } from "./types/upload-errors";
  * Format storage limit error message for user display
  */
 export function formatStorageLimitError(
-  storageLimitDetails: NonNullable<ParsedUploadError["storageLimitDetails"]>
+  storageLimitDetails: NonNullable<ParsedUploadError["storageLimitDetails"]>,
 ): {
   title: string;
   message: string;
@@ -45,7 +45,7 @@ export function formatStorageLimitError(
  */
 export function formatGenericUploadError(
   type: ParsedUploadError["type"],
-  message: string
+  message: string,
 ): {
   title: string;
   message: string;

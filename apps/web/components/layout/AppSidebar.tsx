@@ -85,7 +85,7 @@ export default function AppSidebar() {
       isActive
         ? "bg-primary text-primary-foreground"
         : "text-muted-foreground hover:bg-muted",
-      renderContentAsOpen ? "px-3 py-2" : "h-9 w-9 justify-center p-0"
+      renderContentAsOpen ? "px-3 py-2" : "h-9 w-9 justify-center p-0",
     );
   };
 
@@ -96,7 +96,7 @@ export default function AppSidebar() {
           "flex items-center gap-2 h-14 border-b",
           renderContentAsOpen
             ? "flex-row justify-between px-4"
-            : "justify-center px-2"
+            : "justify-center px-2",
         )}
       >
         {/* Only show logo when expanded */}
@@ -139,7 +139,7 @@ export default function AppSidebar() {
                 key={item.href}
                 className={cn(
                   "flex justify-center",
-                  renderContentAsOpen && "px-2"
+                  renderContentAsOpen && "px-2",
                 )}
               >
                 <Link
@@ -151,7 +151,7 @@ export default function AppSidebar() {
                 >
                   <item.icon
                     className={cn(
-                      renderContentAsOpen ? "h-6 w-6 mr-3" : "h-5 w-5"
+                      renderContentAsOpen ? "h-6 w-6 mr-3" : "h-5 w-5",
                     )}
                   />
                   {renderContentAsOpen && <span>{item.label}</span>}
@@ -176,7 +176,7 @@ export default function AppSidebar() {
                     key={item.href}
                     className={cn(
                       "flex justify-center",
-                      renderContentAsOpen && "px-2"
+                      renderContentAsOpen && "px-2",
                     )}
                   >
                     <Link
@@ -186,7 +186,7 @@ export default function AppSidebar() {
                     >
                       <item.icon
                         className={cn(
-                          renderContentAsOpen ? "h-6 w-6 mr-3" : "h-5 w-5"
+                          renderContentAsOpen ? "h-6 w-6 mr-3" : "h-5 w-5",
                         )}
                       />
                       {renderContentAsOpen && <span>{item.label}</span>}
@@ -213,7 +213,7 @@ export default function AppSidebar() {
         <div
           className={cn(
             "flex w-full",
-            renderContentAsOpen ? "justify-start px-3" : "justify-center"
+            renderContentAsOpen ? "justify-start px-3" : "justify-center",
           )}
         >
           <SidebarThemeSwitcher />
@@ -236,7 +236,7 @@ export default function AppSidebar() {
                 "flex items-center transition-colors",
                 renderContentAsOpen
                   ? "w-full justify-start px-3"
-                  : "h-9 w-9 justify-center mx-auto rounded-md text-muted-foreground hover:bg-muted"
+                  : "h-9 w-9 justify-center mx-auto rounded-md text-muted-foreground hover:bg-muted",
               )}
             >
               <LogIn

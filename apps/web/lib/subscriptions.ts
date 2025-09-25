@@ -46,7 +46,7 @@ export const USAGE_LIMITS = {
 } as const;
 
 export function getUsageLimitsForTier(
-  tier: "free" | "basic" | "pro"
+  tier: "free" | "basic" | "pro",
 ): SubscriptionLimits {
   return USAGE_LIMITS[tier] || USAGE_LIMITS[SUBSCRIPTION_TIERS.FREE];
 }

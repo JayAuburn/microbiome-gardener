@@ -2,7 +2,11 @@
 
 import { getUserUsageStatsForUI } from "@/lib/usage-tracking";
 import type { UsageStats } from "@/lib/usage-tracking-client";
-import { SUBSCRIPTION_TIERS, type SubscriptionTier, getUsageLimitsForTier } from "@/lib/subscriptions";
+import {
+  SUBSCRIPTION_TIERS,
+  type SubscriptionTier,
+  getUsageLimitsForTier,
+} from "@/lib/subscriptions";
 import { getCurrentUserId } from "@/lib/auth";
 
 /**
@@ -21,10 +25,12 @@ export type GetCurrentUserUsageResult =
 /**
  * Create default usage stats for new users
  */
-function createDefaultUsageStats(subscriptionTier: SubscriptionTier = SUBSCRIPTION_TIERS.FREE): UsageStats {
+function createDefaultUsageStats(
+  subscriptionTier: SubscriptionTier = SUBSCRIPTION_TIERS.FREE,
+): UsageStats {
   const limits = getUsageLimitsForTier(subscriptionTier);
   const now = new Date();
-  
+
   // Calculate next reset time for default stats
   let nextReset: Date | undefined;
   if (limits.requestResetPeriod === "daily") {
@@ -55,7 +61,10 @@ function createDefaultUsageStats(subscriptionTier: SubscriptionTier = SUBSCRIPTI
       requests: {
         used: 0,
         limit: limits.requests,
-        resetPeriod: limits.requestResetPeriod as "daily" | "monthly" | "unlimited",
+        resetPeriod: limits.requestResetPeriod as
+          | "daily"
+          | "monthly"
+          | "unlimited",
         nextReset,
       },
     },

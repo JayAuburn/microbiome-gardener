@@ -77,7 +77,7 @@ export function DocumentItem({
     <div
       className={cn(
         "py-5 px-6 border-b border-border last:border-b-0",
-        "hover:bg-muted/50 transition-colors duration-200"
+        "hover:bg-muted/50 transition-colors duration-200",
       )}
     >
       <div className="flex items-start justify-between">
@@ -121,7 +121,7 @@ export function DocumentItem({
                     retryCount={document.processingJob.retryCount}
                     isRetry={document.processingJob.retryCount > 0}
                     fileType={getContentTypeFromMimeType(
-                      document.processingJob.fileType
+                      document.processingJob.fileType,
                     )}
                   />
                 </div>

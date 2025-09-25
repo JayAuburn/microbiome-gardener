@@ -86,7 +86,9 @@ export class MultimodalEmbeddingService {
    * Extract embedding from API response, handling different field types
    * based on content type (text, image, video)
    */
-  private extractEmbeddingFromResponse(prediction: GoogleCloudPrediction): number[] {
+  private extractEmbeddingFromResponse(
+    prediction: GoogleCloudPrediction,
+  ): number[] {
     const fields = prediction.structValue?.fields;
     if (!fields) {
       throw new EmbeddingServiceError("No fields found in prediction response");
@@ -110,12 +112,12 @@ export class MultimodalEmbeddingService {
     if (!embeddingField) {
       const availableFields = Object.keys(fields);
       throw new EmbeddingServiceError(
-        `No embedding field found in response. Available fields: ${availableFields.join(', ')}`
+        `No embedding field found in response. Available fields: ${availableFields.join(", ")}`,
       );
     }
 
     const embedding = embeddingField.values?.map(
-      (value: GoogleCloudValue) => value.numberValue || 0
+      (value: GoogleCloudValue) => value.numberValue || 0,
     );
 
     if (!embedding || embedding.length === 0) {
@@ -124,7 +126,7 @@ export class MultimodalEmbeddingService {
 
     console.log(`✅ Extracted embedding from ${fieldType} field:`, {
       dimensions: embedding.length,
-      fieldType
+      fieldType,
     });
 
     return embedding;
@@ -133,13 +135,13 @@ export class MultimodalEmbeddingService {
   constructor() {
     if (!env.GOOGLE_CLOUD_PROJECT_ID) {
       throw new EmbeddingServiceError(
-        "GOOGLE_CLOUD_PROJECT_ID environment variable is required for Vertex AI multimodal embeddings"
+        "GOOGLE_CLOUD_PROJECT_ID environment variable is required for Vertex AI multimodal embeddings",
       );
     }
 
     if (!env.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY) {
       throw new EmbeddingServiceError(
-        "GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY environment variable is required for Vertex AI multimodal embeddings"
+        "GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY environment variable is required for Vertex AI multimodal embeddings",
       );
     }
 
@@ -151,12 +153,12 @@ export class MultimodalEmbeddingService {
     try {
       const decodedKey = Buffer.from(
         env.GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY,
-        "base64"
+        "base64",
       ).toString("utf8");
       serviceAccountKey = JSON.parse(decodedKey);
     } catch (error) {
       throw new EmbeddingServiceError(
-        `Invalid GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY format. Must be valid base64-encoded JSON: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Invalid GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY format. Must be valid base64-encoded JSON: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
 
@@ -175,14 +177,14 @@ export class MultimodalEmbeddingService {
    */
   async generateMultimodalEmbedding(
     text: string,
-    options: MultimodalEmbeddingOptions = {}
+    options: MultimodalEmbeddingOptions = {},
   ): Promise<number[]> {
     const { contextualText = "" } = options;
     // Note: dimension parameter is not supported by multimodal-embedding-001, it always returns 1408 dimensions
 
     if (!text.trim()) {
       throw new EmbeddingServiceError(
-        "Cannot generate embedding for empty text"
+        "Cannot generate embedding for empty text",
       );
     }
 
@@ -266,7 +268,7 @@ export class MultimodalEmbeddingService {
       // Include timeout information in error message for better debugging
       const errorPrefix = isTimeoutError ? "Timeout error" : "API error";
       throw new EmbeddingServiceError(
-        `${errorPrefix} - Failed to generate multimodal embedding: ${error instanceof Error ? error.message : "Unknown error"}`
+        `${errorPrefix} - Failed to generate multimodal embedding: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -434,7 +436,7 @@ export class MultimodalEmbeddingService {
       // Include timeout information in error message for better debugging
       const errorPrefix = isTimeoutError ? "Timeout error" : "API error";
       throw new EmbeddingServiceError(
-        `${errorPrefix} - Failed to generate media embedding: ${error instanceof Error ? error.message : "Unknown error"}`
+        `${errorPrefix} - Failed to generate media embedding: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -444,7 +446,7 @@ export class MultimodalEmbeddingService {
    */
   async generateImageEmbedding(
     imageData: { data: string; mimeType: string } | { url: string },
-    textContext?: string
+    textContext?: string,
   ): Promise<number[]> {
     return await this.generateMediaEmbedding({
       image: imageData,
@@ -457,7 +459,7 @@ export class MultimodalEmbeddingService {
    */
   async generateVideoEmbedding(
     videoUrl: string,
-    textContext?: string
+    textContext?: string,
   ): Promise<number[]> {
     return await this.generateMediaEmbedding({
       video: { url: videoUrl },

@@ -107,13 +107,7 @@ export function ImageModal({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [
-    isOpen,
-    goToPrevious,
-    goToNext,
-    onOpenChange,
-    images.length,
-  ]);
+  }, [isOpen, goToPrevious, goToNext, onOpenChange, images.length]);
 
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -188,7 +182,7 @@ export function ImageModal({
                     setIsLoading(true);
                     setHasError(false);
                     const img = document.querySelector(
-                      `img[alt="${currentImage.alt || currentImage.name}"]`
+                      `img[alt="${currentImage.alt || currentImage.name}"]`,
                     ) as HTMLImageElement;
                     if (img) {
                       img.src = currentImage.url;
@@ -209,7 +203,7 @@ export function ImageModal({
             height={1200}
             className={cn(
               "max-w-full max-h-full w-auto h-auto object-contain cursor-pointer transition-opacity duration-300",
-              isLoading || hasError ? "opacity-0" : "opacity-100"
+              isLoading || hasError ? "opacity-0" : "opacity-100",
             )}
             onLoad={handleImageLoad}
             onError={handleImageError}

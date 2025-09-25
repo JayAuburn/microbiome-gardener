@@ -65,7 +65,7 @@ export async function getDocumentsWithProcessingStatus(
   options: {
     offset?: number;
     status?: "uploading" | "processing" | "completed" | "error";
-  } = {}
+  } = {},
 ): Promise<{
   documents?: DocumentWithProcessingJob[];
   pagination?: {
@@ -115,12 +115,12 @@ export async function getDocumentsWithProcessingStatus(
       .from(documents)
       .leftJoin(
         documentProcessingJobs,
-        eq(documents.id, documentProcessingJobs.documentId)
+        eq(documents.id, documentProcessingJobs.documentId),
       )
       .where(
         whereConditions.length === 1
           ? whereConditions[0]
-          : and(...whereConditions)
+          : and(...whereConditions),
       )
       .orderBy(desc(documents.created_at))
       .offset(offset);
@@ -160,7 +160,7 @@ export async function getDocumentsWithProcessingStatus(
               filePath: doc.filePath!,
             }
           : null,
-      })
+      }),
     );
 
     return {
@@ -187,7 +187,7 @@ export async function getDocumentsWithProcessingStatus(
  */
 export async function getActiveAndRecentProcessingJobs(
   userId: string,
-  recentWindowSeconds: number = 60
+  recentWindowSeconds: number = 60,
 ): Promise<{
   success: boolean;
   activeJobs?: DocumentWithProcessingJob[];
@@ -238,7 +238,7 @@ export async function getActiveAndRecentProcessingJobs(
       .from(documents)
       .innerJoin(
         documentProcessingJobs,
-        eq(documents.id, documentProcessingJobs.documentId)
+        eq(documents.id, documentProcessingJobs.documentId),
       )
       .where(
         and(
@@ -246,9 +246,9 @@ export async function getActiveAndRecentProcessingJobs(
           inArray(documentProcessingJobs.status, recentlyCompletedStates),
           gte(
             documentProcessingJobs.updatedAt,
-            new Date(Date.now() - recentWindowSeconds * 1000)
-          )
-        )
+            new Date(Date.now() - recentWindowSeconds * 1000),
+          ),
+        ),
       )
       .orderBy(desc(documentProcessingJobs.updatedAt));
 
@@ -287,7 +287,7 @@ export async function getActiveAndRecentProcessingJobs(
   } catch (error) {
     console.error(
       "❌ Error fetching active and recent processing jobs:",
-      error
+      error,
     );
     return {
       success: false,
@@ -344,13 +344,13 @@ export async function getActiveProcessingJobs(userId: string): Promise<{
       .from(documents)
       .innerJoin(
         documentProcessingJobs,
-        eq(documents.id, documentProcessingJobs.documentId)
+        eq(documents.id, documentProcessingJobs.documentId),
       )
       .where(
         and(
           eq(documents.user_id, userId),
-          inArray(documentProcessingJobs.status, activeProcessingStates)
-        )
+          inArray(documentProcessingJobs.status, activeProcessingStates),
+        ),
       )
       .orderBy(desc(documents.created_at));
 
@@ -402,7 +402,7 @@ export async function getActiveProcessingJobs(userId: string): Promise<{
  */
 export async function getDocumentProcessingDetails(
   documentId: string,
-  userId: string
+  userId: string,
 ): Promise<{
   success: boolean;
   data?: DocumentWithProcessingJob | null;
@@ -437,7 +437,7 @@ export async function getDocumentProcessingDetails(
       .from(documents)
       .leftJoin(
         documentProcessingJobs,
-        eq(documents.id, documentProcessingJobs.documentId)
+        eq(documents.id, documentProcessingJobs.documentId),
       )
       .where(and(eq(documents.id, documentId), eq(documents.user_id, userId)))
       .limit(1);

@@ -17,30 +17,30 @@ The richer and clearer this document, the smoother every subsequent development 
 
 ## 🌟 **Role & Voice Guidelines**
 
-| Guideline | Details |
-| --- | --- |
-| Tone | Friendly, concise, proactive. Draft-first approach (learner mainly edits). |
-| Style Bans | Never use em dashes (—). |
-| Step Rhythm | **Explain → AI Draft → Your Turn → Reflect & Segue → Next Step** |
-| Alignment Guard | Everything must clearly support the End Goal. |
-| Follow-up Cap | Maximum 2 clarifying questions only when essential info is missing. |
+| Guideline       | Details                                                                    |
+| --------------- | -------------------------------------------------------------------------- |
+| Tone            | Friendly, concise, proactive. Draft-first approach (learner mainly edits). |
+| Style Bans      | Never use em dashes (—).                                                   |
+| Step Rhythm     | **Explain → AI Draft → Your Turn → Reflect & Segue → Next Step**           |
+| Alignment Guard | Everything must clearly support the End Goal.                              |
+| Follow-up Cap   | Maximum 2 clarifying questions only when essential info is missing.        |
 
 ---
 
 ## 📌 **Process Overview**
 
-| # | Step Name |
-| --- | --- |
-| 0 | Kickoff & Quick Context |
-| 1 | Clearly Define End Goal |
-| 2 | Clearly Document Core Problem |
-| 3 | Clearly Define All User Types |
-| 4 | Business Model & Revenue Strategy |
-| 5 | MVP Functionalities by Role |
-| 6 | Full User Stories |
-| 7 | Value-Adding Feature Opportunities |
-| 8 | Alignment Check |
-| ✓ | Final Assembly |
+| #   | Step Name                          |
+| --- | ---------------------------------- |
+| 0   | Kickoff & Quick Context            |
+| 1   | Clearly Define End Goal            |
+| 2   | Clearly Document Core Problem      |
+| 3   | Clearly Define All User Types      |
+| 4   | Business Model & Revenue Strategy  |
+| 5   | MVP Functionalities by Role        |
+| 6   | Full User Stories                  |
+| 7   | Value-Adding Feature Opportunities |
+| 8   | Alignment Check                    |
+| ✓   | Final Assembly                     |
 
 ---
 
@@ -109,11 +109,11 @@ Rough wording is perfectly fine. Once provided, we'll move to Step 1.
 - Avoid vague verbs; use specific, active verbs.
 
 **AI Draft (editable)**
-“My app helps **{who}** achieve **{outcome}** using **{ai\_capability}**.”
+“My app helps **{who}** achieve **{outcome}** using **{ai_capability}**.”
 
-*Example*
+_Example_
 
-- ✅ Good: “My app helps *educational YouTube creators* generate *recurring revenue* using *GPT-powered personalized chat*.”
+- ✅ Good: “My app helps _educational YouTube creators_ generate _recurring revenue_ using _GPT-powered personalized chat_.”
 - ❌ Vague: “My app helps creators do better using AI.”
 
 ---
@@ -131,7 +131,7 @@ Rough wording is perfectly fine. Once provided, we'll move to Step 1.
 **AI Draft (editable)**
 “{Who} are stuck because **\[ROOT PAIN]**, leading to **\[QUANTIFIED CONSEQUENCE]**.”
 
-*Example*
+_Example_
 “Educational YouTube creators struggle to monetize beyond ads and courses, losing approximately \$1k-\$3k/month due to lack of scalable, personalized viewer engagement.”
 
 ---
@@ -151,46 +151,51 @@ Rough wording is perfectly fine. Once provided, we'll move to Step 1.
 Based on your app helping **{who}** achieve **{outcome}**, you likely have these user types:
 
 **Primary Users:** {who}
+
 - **Who:** \[ROLE, INDUSTRY, SIZE METRIC from previous steps]
 - **Frustrations:**
-    - \[Frustration 1]
-    - \[Frustration 2]
+  - \[Frustration 1]
+  - \[Frustration 2]
 - **Urgent Goals:**
-    - \[Urgent Goal 1]  
-    - \[Urgent Goal 2]
+  - \[Urgent Goal 1]
+  - \[Urgent Goal 2]
 
 **System Administrators:** (Recommended to include)
+
 - **Who:** Technical team members or power users who configure and manage the system
 - **Frustrations:**
-    - No way to control costs or monitor usage
-    - Cannot configure features or manage user access
-    - Difficult to troubleshoot issues or optimize performance
+  - No way to control costs or monitor usage
+  - Cannot configure features or manage user access
+  - Difficult to troubleshoot issues or optimize performance
 - **Urgent Goals:**
-    - Configure available features and set usage limits
-    - Monitor system health and user activity
-    - Control costs and scale operations efficiently
+  - Configure available features and set usage limits
+  - Monitor system health and user activity
+  - Control costs and scale operations efficiently
 
 **Your Turn**
+
 1. Should we include system administrators, or is this purely for end users?
 2. Are there other user types we should consider (billing managers, content moderators, etc.)?
 
-*Example*
+_Example_
 
 **Primary Users:** Educational YouTube creators with 10k-200k subscribers
-- **Frustrations:**
-    - Revenue plateaus quickly beyond ad monetization
-    - Viewer engagement difficult to maintain manually
-- **Urgent Goals:**
-    - Launch scalable recurring revenue stream within 30 days
-    - Automate personalized viewer interactions
 
-**System Administrators:** Platform managers or technical leads  
 - **Frustrations:**
-    - Cannot control which AI models are available or costly
-    - No visibility into usage patterns or cost optimization
+  - Revenue plateaus quickly beyond ad monetization
+  - Viewer engagement difficult to maintain manually
 - **Urgent Goals:**
-    - Configure AI model access to control costs
-    - Monitor creator success and platform growth
+  - Launch scalable recurring revenue stream within 30 days
+  - Automate personalized viewer interactions
+
+**System Administrators:** Platform managers or technical leads
+
+- **Frustrations:**
+  - Cannot control which AI models are available or costly
+  - No visibility into usage patterns or cost optimization
+- **Urgent Goals:**
+  - Configure AI model access to control costs
+  - Monitor creator success and platform growth
 
 ---
 
@@ -209,6 +214,7 @@ Based on your app helping **{who}** achieve **{outcome}**, you likely have these
 Based on your app helping **{who}** achieve **{outcome}** using **{AI capability}**, here's the most logical business model:
 
 **Recommended Model: Subscription Tiers**
+
 - **Why this fits:** Your target users have ongoing needs and your solution provides continuous value
 - **Free Tier:** Basic access to demonstrate value and build trust (limited usage/features)
 - **Basic Tier ($9.99-19.99/month):** Enhanced features, higher usage limits, core functionality
@@ -218,12 +224,14 @@ Based on your app helping **{who}** achieve **{outcome}** using **{AI capability
 **Alternative considered:** Pay-per-use - but subscription provides predictable revenue for ongoing AI costs and development
 
 **Your Turn**
+
 1. Does subscription tiers make sense for your users?
 2. Should we explore pay-per-use, one-time purchase, or enterprise pricing instead?
 
-*Example*
+_Example_
 
 **For YouTube Creator AI Assistant:**
+
 - **Free:** 5 AI conversations per month with basic models
 - **Basic ($19.99/month):** 100 conversations, access to GPT-4 and Claude
 - **Pro ($49.99/month):** Unlimited conversations, all premium models, custom training
@@ -241,25 +249,23 @@ Based on your app helping **{who}** achieve **{outcome}** using **{AI capability
 - Use clear verbs in “Role can…” format.
 - Include only must-have features for launch.
 
-**AI Draft (editable)** *(dynamic, flexible for any roles)*
+**AI Draft (editable)** _(dynamic, flexible for any roles)_
 
 ```markdown
 - **[Role 1]**
   - [Clearly defined ability 1]
   - [Clearly defined ability 2]
 
-- **[Role 2]** *(if applicable)*
+- **[Role 2]** _(if applicable)_
   - [Clearly defined ability 1]
   - [Clearly defined ability 2]
 
-*[Add additional roles as needed]*
-
+_[Add additional roles as needed]_
 ```
 
 If unclear on roles, ask explicitly:
 
 > “Could you list all user roles your app has?”
-> 
 
 ---
 
@@ -269,30 +275,31 @@ If unclear on roles, ask explicitly:
 
 **Mini-Tips**
 
-- Follow the format: *As a \<role>, I want \<action>, so that \<value>*.
+- Follow the format: _As a \<role>, I want \<action>, so that \<value>_.
 - Write at least 2 stories per defined role.
 - Add System/Background stories for backend tasks if needed.
 
-**AI Draft (editable)** *(dynamic for roles defined previously)*
+**AI Draft (editable)** _(dynamic for roles defined previously)_
 
 ```markdown
 #### [Role 1] Stories
+
 1. **[Story title]**
-   *As a* [Role 1],
-   *I want* [action clearly stated],
-   *So that* [value clearly described].
+   _As a_ [Role 1],
+   _I want_ [action clearly stated],
+   _So that_ [value clearly described].
 
-#### [System/Background] Stories *(if needed)*
+#### [System/Background] Stories _(if needed)_
+
 1. **[Background Job]** — When [event], then [task clearly stated].
-
 ```
 
 Example:
 
 - **Creator Story**
-“As a creator, I want to easily upload video transcripts, so that my viewers can instantly get personalized AI answers.”
+  “As a creator, I want to easily upload video transcripts, so that my viewers can instantly get personalized AI answers.”
 - **Viewer Story**
-“As a viewer, I want to browse available assistants before subscribing, so that I can confirm value upfront.”
+  “As a viewer, I want to browse available assistants before subscribing, so that I can confirm value upfront.”
 
 ---
 
@@ -311,27 +318,30 @@ Example:
 Given your **{specific app type}** for **{specific users}** with **{business model}**, consider these differentiating features:
 
 **Recommended Advanced Features:**
+
 - **\[Feature 1]** - \[Brief explanation of user value]  
-  *Why relevant:* Your target users often need this capability based on their frustrations
+  _Why relevant:_ Your target users often need this capability based on their frustrations
 - **\[Feature 2]** - \[Brief explanation of user value]
-  *Why relevant:* This supports your subscription model by providing clear upgrade value
+  _Why relevant:_ This supports your subscription model by providing clear upgrade value
 - **\[Feature 3]** - \[Brief explanation of user value]  
-  *Why relevant:* This addresses the core problem in a way competitors don't
+  _Why relevant:_ This addresses the core problem in a way competitors don't
 
 **Your Turn**
+
 1. Which of these features resonate with your vision?
 2. Which would you include in MVP vs. save for later versions?
 3. Any features you definitely want to add or remove?
 
-*Example*
+_Example_
 
 **For AI Chat Platform:**
+
 - **Image Analysis** - Upload images and ask AI questions about them
-  *Why relevant:* Power users often work with visual content and need AI to understand context
+  _Why relevant:_ Power users often work with visual content and need AI to understand context
 - **Usage-Based Access** - Different AI model access based on subscription tier  
-  *Why relevant:* Allows sustainable free tier while creating clear upgrade incentive
+  _Why relevant:_ Allows sustainable free tier while creating clear upgrade incentive
 - **Conversation Templates** - Pre-built prompt templates for common use cases
-  *Why relevant:* Saves time for power users and improves results quality
+  _Why relevant:_ Saves time for power users and improves results quality
 
 ---
 
@@ -355,60 +365,72 @@ When learner types **all aligned**, save the following content to `ai_docs/prep/
 ## Master Idea Document
 
 ### End Goal
+
 [Clearly defined sentence]
 
 ### Specific Problem
+
 [Clearly stated root pain and consequence]
 
 ### All User Types
+
 #### Primary Users
+
 - **Who:** …
 - **Frustrations:** …
 - **Urgent Goals:** …
 
-#### System Administrators *(if applicable)*
+#### System Administrators _(if applicable)_
+
 - **Who:** …
 - **Frustrations:** …
 - **Urgent Goals:** …
 
-#### [Additional User Types] *(if applicable)*
+#### [Additional User Types] _(if applicable)_
+
 - **Who:** …
 - **Frustrations:** …
 - **Urgent Goals:** …
 
 ### Business Model & Revenue Strategy
+
 - **Model Type:** [Subscription Tiers/Pay-per-use/etc.]
-- **Pricing Structure:** 
+- **Pricing Structure:**
   - **Free Tier:** [Description and limits]
   - **[Tier Name] ($X.99/month):** [Features and limits]
   - **[Tier Name] ($Y.99/month):** [Features and limits]
 - **Revenue Rationale:** [Why this model fits the users and problem]
 
 ### Core Functionalities by Role (MVP)
+
 - **[Primary User Role]**
   - …
   - …
-- **[Admin Role]** *(if applicable)*
+- **[Admin Role]** _(if applicable)_
   - …
   - …
 
 ### Key User Stories
+
 #### [Primary User Role]
+
 1. …
 2. …
 
-#### [Admin Role] *(if applicable)*
+#### [Admin Role] _(if applicable)_
+
 1. …
 2. …
 
-#### System/Background *(if applicable)*
+#### System/Background _(if applicable)_
+
 1. …
 
-### Value-Adding Features *(Advanced)*
+### Value-Adding Features _(Advanced)_
+
 - **[Feature 1]:** [Description and user value]
 - **[Feature 2]:** [Description and user value]
 - **[Feature 3]:** [Description and user value]
-
 ```
 
 **Close:**

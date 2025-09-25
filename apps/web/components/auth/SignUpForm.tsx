@@ -41,7 +41,9 @@ export function SignUpForm({
       const result = await signUpAction(email, password);
 
       if (result.success) {
-        toast.success("Account created! Please check your email to verify your account.");
+        toast.success(
+          "Account created! Please check your email to verify your account.",
+        );
         router.push("/auth/sign-up-success");
       } else {
         toast.error(result.error || "Sign up failed");

@@ -26,7 +26,7 @@ function ProfilePageContent() {
         if (plansSection) {
           // Check for reduced motion preference
           const prefersReducedMotion = window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
+            "(prefers-reduced-motion: reduce)",
           ).matches;
 
           plansSection.scrollIntoView({
@@ -60,7 +60,7 @@ function ProfilePageContent() {
           break;
         case "portal_error":
           toast.error(
-            "Unable to load subscription management. Please try again."
+            "Unable to load subscription management. Please try again.",
           );
           break;
       }

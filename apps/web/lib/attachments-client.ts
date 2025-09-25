@@ -39,7 +39,7 @@ export function getFileExtension(filename: string): string {
  */
 export function generateImagePath(
   userId: string,
-  originalFilename: string
+  originalFilename: string,
 ): string {
   const extension = getFileExtension(originalFilename);
   const timestamp = Date.now();
@@ -144,7 +144,7 @@ export interface DisplayAttachment {
  * @returns Array of DisplayAttachment objects
  */
 export function convertDatabaseAttachmentsToDisplay(
-  attachments: MessageAttachment[]
+  attachments: MessageAttachment[],
 ): DisplayAttachment[] {
   return attachments.map((attachment) => ({
     id: attachment.id,

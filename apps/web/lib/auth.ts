@@ -76,7 +76,7 @@ export async function getCurrentUserId(): Promise<string | null> {
  */
 export async function requireUserId(): Promise<string> {
   const userId = await getCurrentUserId();
-  
+
   if (!userId) {
     redirect("/auth/login");
   }
@@ -99,7 +99,7 @@ export async function requireAdminAccess(): Promise<void> {
 
   if (!userWithRole.isAdmin) {
     console.warn(
-      `Non-admin user ${userWithRole.user.id} attempted admin access`
+      `Non-admin user ${userWithRole.user.id} attempted admin access`,
     );
     redirect("/unauthorized");
   }

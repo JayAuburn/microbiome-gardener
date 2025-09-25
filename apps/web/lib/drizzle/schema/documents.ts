@@ -57,7 +57,7 @@ export const documents = pgTable(
     index("documents_file_category_idx").on(table.file_category),
     index("documents_created_at_idx").on(table.created_at),
     unique("documents_gcs_path_unique").on(table.gcs_path),
-  ]
+  ],
 );
 
 export const insertDocumentSchema = createInsertSchema(documents);

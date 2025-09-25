@@ -5,7 +5,5 @@ export default async function ProfilePage() {
   // Only verify authentication, don't fetch user data (already in UserContext)
   await requireUserId();
 
-  return (
-    <ProfilePageClient />
-  );
+  return <ProfilePageClient />;
 }

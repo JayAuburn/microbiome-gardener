@@ -1,6 +1,6 @@
 /**
  * Usage Enforcement Client Utilities
- * 
+ *
  * Client-safe utilities for usage enforcement UI components.
  * Contains types, formatters, and helper functions that can be safely imported by client components.
  */
@@ -71,7 +71,7 @@ export interface DocumentUploadCheckResult extends UsageCheckResult {
   rejectedFiles?: Array<{
     fileName: string;
     reason: string;
-  }>; 
+  }>;
 }
 
 export interface MessageCheckResult extends UsageCheckResult {
@@ -97,7 +97,7 @@ export function formatBytes(bytes: number): string {
 export function calculateUsagePercentage(used: number, limit: number): number {
   if (limit === -1) return 0; // Unlimited
   if (limit === 0) return 100; // No limit means 100% used
-  
+
   return Math.min(Math.round((used / limit) * 100), 100);
 }
 
@@ -191,8 +191,10 @@ export function validateMessageUsage(usageStats: UsageStats | null): {
   }
 
   // Check document limit
-  if (!isUnlimited(usageStats.usage.documents.limit) && 
-      usageStats.usage.documents.used > usageStats.usage.documents.limit) {
+  if (
+    !isUnlimited(usageStats.usage.documents.limit) &&
+    usageStats.usage.documents.used > usageStats.usage.documents.limit
+  ) {
     return {
       canSend: false,
       reason: "Delete documents to continue sending messages",
@@ -201,8 +203,10 @@ export function validateMessageUsage(usageStats: UsageStats | null): {
   }
 
   // Check storage limit
-  if (!isUnlimited(usageStats.usage.storage.limit) && 
-      usageStats.usage.storage.used > usageStats.usage.storage.limit) {
+  if (
+    !isUnlimited(usageStats.usage.storage.limit) &&
+    usageStats.usage.storage.used > usageStats.usage.storage.limit
+  ) {
     return {
       canSend: false,
       reason: "Delete documents to free up storage space",
@@ -246,11 +250,13 @@ export function validateFileAgainstLimits(
   accumulatedUsage?: {
     documentsUsed: number;
     storageUsed: number;
-  }
+  },
 ): FileValidationResult {
   // Use accumulated usage if provided (for batch processing), otherwise use current
-  const documentsUsed = accumulatedUsage?.documentsUsed ?? currentUsage.documents.used;
-  const storageUsed = accumulatedUsage?.storageUsed ?? currentUsage.storage.used;
+  const documentsUsed =
+    accumulatedUsage?.documentsUsed ?? currentUsage.documents.used;
+  const storageUsed =
+    accumulatedUsage?.storageUsed ?? currentUsage.storage.used;
 
   // Check if unlimited
   const isUnlimitedDocs = isUnlimited(currentUsage.documents.limit);
@@ -271,10 +277,15 @@ export function validateFileAgainstLimits(
   }
 
   // Check storage limit (if not unlimited)
-  if (!isUnlimitedStorage && storageUsed + fileSize > currentUsage.storage.limit) {
+  if (
+    !isUnlimitedStorage &&
+    storageUsed + fileSize > currentUsage.storage.limit
+  ) {
     const storageUsedMB = (storageUsed / (1024 * 1024)).toFixed(1);
-    const storageLimitMB = (currentUsage.storage.limit / (1024 * 1024)).toFixed(1);
-    
+    const storageLimitMB = (currentUsage.storage.limit / (1024 * 1024)).toFixed(
+      1,
+    );
+
     return {
       canAdd: false,
       reason: `Storage limit would be exceeded (${storageUsedMB}MB/${storageLimitMB}MB used)`,

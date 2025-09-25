@@ -28,10 +28,13 @@ export async function GET(request: NextRequest) {
       const result = await getActiveAndRecentProcessingJobs(user.id, 60);
 
       if (!result.success) {
-        console.error("❌ Failed to fetch active and recent processing jobs:", result.error);
+        console.error(
+          "❌ Failed to fetch active and recent processing jobs:",
+          result.error,
+        );
         return NextResponse.json(
           { error: result.error || "Failed to fetch processing status" },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -48,10 +51,13 @@ export async function GET(request: NextRequest) {
       const activeResult = await getActiveProcessingJobs(user.id);
 
       if (!activeResult.success) {
-        console.error("❌ Failed to fetch active processing jobs:", activeResult.error);
+        console.error(
+          "❌ Failed to fetch active processing jobs:",
+          activeResult.error,
+        );
         return NextResponse.json(
           { error: activeResult.error || "Failed to fetch processing status" },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -67,7 +73,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching processing status:", error);
     return NextResponse.json(
       { error: "Failed to fetch processing status" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

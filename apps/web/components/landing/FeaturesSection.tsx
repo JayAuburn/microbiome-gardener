@@ -63,7 +63,7 @@ const FeaturesSection = () => {
               key={index}
               className={cn(
                 "group p-8 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-primary/30 dark:hover:border-primary/30 hover:shadow-lg dark:hover:shadow-primary/10 transition-all duration-300 animate-fade-in",
-                "hover:bg-gradient-to-br hover:from-primary/5 hover:to-primary/10"
+                "hover:bg-gradient-to-br hover:from-primary/5 hover:to-primary/10",
               )}
             >
               <div className="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">

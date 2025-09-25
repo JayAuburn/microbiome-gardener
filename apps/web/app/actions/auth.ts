@@ -15,7 +15,7 @@ export type AuthResult = {
  */
 export async function loginAction(
   email: string,
-  password: string
+  password: string,
 ): Promise<AuthResult> {
   const supabase = await createClient();
 
@@ -39,7 +39,7 @@ export async function loginAction(
 export async function signUpAction(
   email: string,
   password: string,
-  fullName?: string
+  fullName?: string,
 ): Promise<AuthResult> {
   const supabase = await createClient();
 
@@ -100,7 +100,7 @@ export async function resetPasswordAction(email: string): Promise<AuthResult> {
  * Updates user's password when authenticated
  */
 export async function updatePasswordAction(
-  password: string
+  password: string,
 ): Promise<AuthResult> {
   const supabase = await createClient();
 

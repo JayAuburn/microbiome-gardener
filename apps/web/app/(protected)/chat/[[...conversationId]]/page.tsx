@@ -37,8 +37,8 @@ export default async function ChatPage({ params }: ChatPageProps) {
         .where(
           and(
             eq(conversations.id, conversationId),
-            eq(conversations.user_id, userId)
-          )
+            eq(conversations.user_id, userId),
+          ),
         )
         .limit(1);
     } catch (error) {
@@ -57,13 +57,16 @@ export default async function ChatPage({ params }: ChatPageProps) {
     try {
       const messagesResult = await fetchAndFormatConversationMessages(
         conversationId,
-        userId
+        userId,
       );
 
       if (messagesResult.success && messagesResult.messages) {
         messages = messagesResult.messages;
       } else {
-        console.error("❌ Failed to fetch conversation messages:", messagesResult.error);
+        console.error(
+          "❌ Failed to fetch conversation messages:",
+          messagesResult.error,
+        );
         messages = [];
       }
     } catch (error) {
@@ -73,10 +76,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
   }
 
   return (
-    <ChatStateProvider
-      conversation={conversation}
-      initialMessages={messages}
-    >
+    <ChatStateProvider conversation={conversation} initialMessages={messages}>
       <div className="h-full w-full flex flex-col">
         <ChatContainer />
       </div>

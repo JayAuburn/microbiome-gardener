@@ -35,7 +35,6 @@ const RAGDemoSection = () => {
     };
   }, []);
 
-
   const steps = [
     {
       id: "upload",
@@ -124,7 +123,10 @@ const RAGDemoSection = () => {
         {/* Steps Flow - Unified (auto-advancing, responsive layout) */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 mb-16">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <div
+              key={step.id}
+              className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto"
+            >
               <div
                 className={cn(
                   "relative p-4 md:p-6 rounded-2xl border-2 transition-all duration-300",
@@ -132,7 +134,7 @@ const RAGDemoSection = () => {
                   "min-h-[180px] md:min-h-[220px]",
                   activeStep === index
                     ? "border-primary bg-primary/5 dark:bg-primary/10 shadow-lg"
-                    : "border-gray-200 dark:border-gray-700"
+                    : "border-gray-200 dark:border-gray-700",
                 )}
               >
                 <div
@@ -140,7 +142,7 @@ const RAGDemoSection = () => {
                     "w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-colors",
                     activeStep === index
                       ? "bg-primary text-white"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
                   )}
                 >
                   <step.icon className="w-6 h-6 md:w-8 md:h-8" />
@@ -182,7 +184,7 @@ const RAGDemoSection = () => {
                       "p-4 rounded-lg border transition-all duration-200",
                       file.status === "completed"
                         ? "border-primary/20 bg-primary/5"
-                        : "border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
+                        : "border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700",
                     )}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -201,7 +203,7 @@ const RAGDemoSection = () => {
                         className={cn(
                           file.status === "completed"
                             ? "text-primary"
-                            : "text-gray-500"
+                            : "text-gray-500",
                         )}
                       >
                         {file.status === "completed"

@@ -36,7 +36,7 @@ async function getCurrentMigration(): Promise<MigrationRecord | null> {
   } catch (e) {
     if (e instanceof PostgresError && e.code === "42P01") {
       console.log(
-        "ℹ️  Could not find 'drizzle.__drizzle_migrations' table. Assuming no migrations have been applied."
+        "ℹ️  Could not find 'drizzle.__drizzle_migrations' table. Assuming no migrations have been applied.",
       );
       return null;
     }
@@ -53,7 +53,7 @@ async function findMigrationFolder(hash: string): Promise<string | null> {
     "drizzle",
     "migrations",
     "meta",
-    "_journal.json"
+    "_journal.json",
   );
 
   if (!fs.existsSync(journalPath)) {
@@ -75,12 +75,12 @@ async function findMigrationFolder(hash: string): Promise<string | null> {
 
   const journal = JSON.parse(fs.readFileSync(journalPath, "utf8"));
   const entry = journal.entries?.find(
-    (e: JournalEntry) => e.when === timestamp
+    (e: JournalEntry) => e.when === timestamp,
   );
 
   if (!entry) {
     console.error(
-      `❌ Could not find migration entry for timestamp: ${timestamp}`
+      `❌ Could not find migration entry for timestamp: ${timestamp}`,
     );
     return null;
   }
@@ -91,7 +91,7 @@ async function findMigrationFolder(hash: string): Promise<string | null> {
     process.cwd(),
     "drizzle",
     "migrations",
-    entry.tag
+    entry.tag,
   );
 
   if (fs.existsSync(migrationPath)) {
@@ -150,7 +150,7 @@ async function rollback(): Promise<void> {
 
   if (!currentMigration) {
     console.log(
-      "✅ No applied migrations found in the database. Nothing to roll back."
+      "✅ No applied migrations found in the database. Nothing to roll back.",
     );
     return;
   }

@@ -34,7 +34,7 @@ vbnet
 Copy
 Edit
 
-**Close:**  
-Great job! You've successfully defined a clear, practical, senior-level engineering architecture blueprint.  
+**Close:**
+Great job! You've successfully defined a clear, practical, senior-level engineering architecture blueprint.
 Use this blueprint as your clear development and implementation roadmap.
 ```

@@ -1,7 +1,11 @@
 "use server";
 
 import { db } from "@/lib/drizzle/db";
-import { documents, USAGE_EVENT_TYPES, userUsageEvents } from "@/lib/drizzle/schema";
+import {
+  documents,
+  USAGE_EVENT_TYPES,
+  userUsageEvents,
+} from "@/lib/drizzle/schema";
 import { sql, eq, and, gte } from "drizzle-orm";
 import { requireAdminAccess } from "@/lib/auth";
 
@@ -30,7 +34,9 @@ export async function getRAGStatsForAdmin(): Promise<
     const documentStats = await db
       .select({
         total: sql<number>`count(*)`.as("total"),
-        totalStorage: sql<number>`sum(${documents.file_size})`.as("totalStorage"),
+        totalStorage: sql<number>`sum(${documents.file_size})`.as(
+          "totalStorage",
+        ),
       })
       .from(documents);
 
@@ -56,8 +62,8 @@ export async function getRAGStatsForAdmin(): Promise<
       .where(
         and(
           eq(userUsageEvents.eventType, USAGE_EVENT_TYPES.MESSAGE),
-          gte(userUsageEvents.createdAt, sevenDaysAgo)
-        )
+          gte(userUsageEvents.createdAt, sevenDaysAgo),
+        ),
       );
 
     // Get AI request count from usage events (30 days)
@@ -69,8 +75,8 @@ export async function getRAGStatsForAdmin(): Promise<
       .where(
         and(
           eq(userUsageEvents.eventType, USAGE_EVENT_TYPES.MESSAGE),
-          gte(userUsageEvents.createdAt, thirtyDaysAgo)
-        )
+          gte(userUsageEvents.createdAt, thirtyDaysAgo),
+        ),
       );
 
     const docStat = documentStats[0];

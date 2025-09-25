@@ -6,8 +6,8 @@
   "description": "AI RAG app with document Q&A and Stripe billing",
   "features": [
     "supabase-auth",
-    "drizzle-orm", 
-    "next-app-router",  
+    "drizzle-orm",
+    "next-app-router",
     "openrouter-ai",
     "tailwind-ui",
     "stripe-billing",
@@ -18,4 +18,4 @@
   "changelog": {
     "1.0.0": "Initial release with chat + billing functionality"
   }
-} 
+}

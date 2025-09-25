@@ -9,10 +9,7 @@ interface UploadQueueProps {
   className?: string;
 }
 
-export function UploadQueue({
-  queue,
-  className,
-}: UploadQueueProps) {
+export function UploadQueue({ queue, className }: UploadQueueProps) {
   if (queue.items.length === 0) {
     return null;
   }

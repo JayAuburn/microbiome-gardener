@@ -43,7 +43,7 @@ export function MessageImages({ attachments, className }: MessageImagesProps) {
 
   // Filter out failed images
   const validAttachments = attachments.filter(
-    (attachment) => !failedImages.has(attachment.signedUrl)
+    (attachment) => !failedImages.has(attachment.signedUrl),
   );
 
   if (validAttachments.length === 0) {
@@ -55,7 +55,7 @@ export function MessageImages({ attachments, className }: MessageImagesProps) {
       "relative overflow-hidden rounded-lg bg-muted cursor-pointer transition-all duration-200",
       // Smaller thumbnails on mobile, scale up from sm+
       "w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0",
-      "hover:scale-105 hover:shadow-md hover:ring-2 hover:ring-primary/20"
+      "hover:scale-105 hover:shadow-md hover:ring-2 hover:ring-primary/20",
     );
   };
 
@@ -65,7 +65,7 @@ export function MessageImages({ attachments, className }: MessageImagesProps) {
       <div
         className={cn(
           "flex flex-wrap gap-1.5 sm:gap-2 max-w-sm",
-          validAttachments.length === 1 ? "justify-start" : "justify-start"
+          validAttachments.length === 1 ? "justify-start" : "justify-start",
         )}
       >
         {validAttachments.map((attachment, index) => (
@@ -97,7 +97,7 @@ export function MessageImages({ attachments, className }: MessageImagesProps) {
                 "object-cover transition-opacity",
                 loadedImages.has(attachment.signedUrl)
                   ? "opacity-100"
-                  : "opacity-0"
+                  : "opacity-0",
               )}
               onLoad={() => handleImageLoad(attachment.signedUrl)}
               onError={() => handleImageError(attachment.signedUrl)}

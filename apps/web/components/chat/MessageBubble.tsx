@@ -54,20 +54,20 @@ export function MessageBubble({ message }: { message: ExtendedMessage }) {
   // Priority 1: Database attachments (most reliable)
   if (message.attachments?.length) {
     attachmentsToDisplay = convertDatabaseAttachmentsToDisplay(
-      message.attachments
+      message.attachments,
     );
   }
   // Priority 2: v5 file parts
   else if (message.parts?.some((part) => part.type === "file")) {
     const fileParts = message.parts.filter(
       (
-        part
+        part,
       ): part is {
         type: "file";
         mediaType: string;
         url: string;
         filename?: string;
-      } => part.type === "file"
+      } => part.type === "file",
     );
     attachmentsToDisplay = fileParts
       .filter((part) => part.url) // Only include parts with valid URLs
@@ -83,7 +83,8 @@ export function MessageBubble({ message }: { message: ExtendedMessage }) {
   const textContent = message.parts
     ? message.parts
         .filter(
-          (part): part is { type: "text"; text: string } => part.type === "text"
+          (part): part is { type: "text"; text: string } =>
+            part.type === "text",
         )
         .map((part) => part.text)
         .join("")
@@ -149,7 +150,7 @@ export function MessageBubble({ message }: { message: ExtendedMessage }) {
               isUser
                 ? "bg-primary text-primary-foreground ml-auto"
                 : "bg-muted",
-              isLastAssistantMessage && !isCurrentlyStreaming && "mb-4"
+              isLastAssistantMessage && !isCurrentlyStreaming && "mb-4",
             )}
           >
             <div className="flex items-start gap-2 min-w-0">

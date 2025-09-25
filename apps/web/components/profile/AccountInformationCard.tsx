@@ -7,7 +7,7 @@ import { useUser } from "@/contexts/UserContext";
 
 export function AccountInformationCard() {
   const user = useUser();
-  
+
   // Format dates
   const formatDate = (date: Date | null): string => {
     if (!date) return "N/A";

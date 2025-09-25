@@ -23,7 +23,8 @@ export default async function HistoryPage() {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load conversation history: {result.error || "Unknown error"}
+            Failed to load conversation history:{" "}
+            {result.error || "Unknown error"}
           </AlertDescription>
         </Alert>
       </div>
@@ -54,7 +55,10 @@ export default async function HistoryPage() {
         <ConversationTable conversations={conversations} />
       ) : (
         <div className="flex flex-col items-center justify-center text-center py-12">
-          <div className="mb-4 rounded-full bg-primary/10 p-3" aria-hidden="true">
+          <div
+            className="mb-4 rounded-full bg-primary/10 p-3"
+            aria-hidden="true"
+          >
             <MessageSquare className="h-6 w-6 text-primary" />
           </div>
           <h2 className="text-xl font-semibold mb-2">No conversations yet</h2>

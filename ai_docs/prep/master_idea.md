@@ -1,14 +1,17 @@
 ## Master Idea Document
 
 ### End Goal
+
 My app helps **knowledge workers and researchers** achieve **instant, intelligent access to insights from their documents** using **RAG-powered AI that understands their uploaded content**.
 
 ### Specific Problem
+
 Knowledge workers and researchers are stuck because **finding specific information across multiple documents is time-consuming and inefficient**, leading to **lost productivity, missed insights, and approximately 3-5 hours per week wasted manually searching through documents**.
 
 ### All User Types
 
 #### Primary Users: Knowledge Workers & Researchers
+
 - **Who:** Professionals who work with extensive documentation (researchers, analysts, consultants, students, legal professionals, medical professionals, content creators)
 - **Frustrations:**
   - Cannot quickly find specific information across multiple documents
@@ -21,6 +24,7 @@ Knowledge workers and researchers are stuck because **finding specific informati
   - Never miss critical information buried in documentation
 
 #### System Administrators: IT Managers & Platform Admins
+
 - **Who:** Technical team members who manage organizational document processing systems
 - **Frustrations:**
   - Cannot control processing costs or monitor system usage
@@ -36,6 +40,7 @@ Knowledge workers and researchers are stuck because **finding specific informati
 **Model Type:** Subscription Tiers (SaaS)
 
 **Pricing Structure:**
+
 - **Free Tier:** 10 documents, 100MB storage, 10 AI queries per day
 - **Basic Tier ($19.99/month):** 1,000 documents, 5GB storage, 1,000 queries per month
 - **Pro Tier ($49.99/month):** Unlimited documents, 50GB storage, unlimited queries
@@ -60,38 +65,41 @@ Knowledge workers and researchers are stuck because **finding specific informati
 ### Key User Stories
 
 #### Primary User Stories
+
 1. **Intelligent Document Query**
-   *As a knowledge worker,*
-   *I want to ask natural language questions about my uploaded documents,*
-   *So that I can instantly find specific information without manual searching.*
+   _As a knowledge worker,_
+   _I want to ask natural language questions about my uploaded documents,_
+   _So that I can instantly find specific information without manual searching._
 
 2. **Multi-Format Document Support**
-   *As a researcher,*
-   *I want to upload PDFs, videos, audio files, and images,*
-   *So that I can work with all my research materials in one place.*
+   _As a researcher,_
+   _I want to upload PDFs, videos, audio files, and images,_
+   _So that I can work with all my research materials in one place._
 
 3. **Source Citation and Context**
-   *As a legal professional,*
-   *I want to see exactly which document and section provided each answer,*
-   *So that I can verify accuracy and provide proper references.*
+   _As a legal professional,_
+   _I want to see exactly which document and section provided each answer,_
+   _So that I can verify accuracy and provide proper references._
 
 4. **Document Collection Management**
-   *As a consultant,*
-   *I want to organize documents into collections and maintain separate chat histories,*
-   *So that I can keep different client projects organized.*
+   _As a consultant,_
+   _I want to organize documents into collections and maintain separate chat histories,_
+   _So that I can keep different client projects organized._
 
 #### System Administrator Stories
+
 1. **Usage Monitoring**
-   *As a system administrator,*
-   *I want to monitor document processing costs and user activity,*
-   *So that I can optimize system performance and control expenses.*
+   _As a system administrator,_
+   _I want to monitor document processing costs and user activity,_
+   _So that I can optimize system performance and control expenses._
 
 2. **User Access Management**
-   *As an IT manager,*
-   *I want to configure user subscription levels and usage limits,*
-   *So that I can ensure fair resource allocation and prevent abuse.*
+   _As an IT manager,_
+   _I want to configure user subscription levels and usage limits,_
+   _So that I can ensure fair resource allocation and prevent abuse._
 
 #### System/Background Stories
+
 1. **Automated Document Processing** — When a user uploads a document, the system automatically extracts text, generates embeddings, and stores them for retrieval.
 
 2. **Real-time Processing Status** — When processing begins, the system provides live updates on processing status until completion.
@@ -99,16 +107,16 @@ Knowledge workers and researchers are stuck because **finding specific informati
 ### Value-Adding Features (Advanced)
 
 - **Bulk Document Upload** - Upload and process multiple documents simultaneously
-  *Why relevant:* Power users often work with large document sets and need efficient batch processing
+  _Why relevant:_ Power users often work with large document sets and need efficient batch processing
 
 - **Advanced Document Analytics** - Document similarity analysis, topic extraction, and content summaries
-  *Why relevant:* Helps users understand document relationships and find patterns in their collections
+  _Why relevant:_ Helps users understand document relationships and find patterns in their collections
 
 - **Team Collaboration Features** - Shared document collections and collaborative annotations
-  *Why relevant:* Many knowledge workers operate in teams and need shared access to insights
+  _Why relevant:_ Many knowledge workers operate in teams and need shared access to insights
 
 - **Custom AI Model Selection** - Choose between different AI models for specialized use cases
-  *Why relevant:* Different industries benefit from models optimized for their specific domains
+  _Why relevant:_ Different industries benefit from models optimized for their specific domains
 
 - **API Access for Integration** - Programmatic access for workflow integration
-  *Why relevant:* Enterprise users want to integrate document intelligence into existing workflows
+  _Why relevant:_ Enterprise users want to integrate document intelligence into existing workflows

@@ -141,7 +141,7 @@ export function WelcomeCard() {
                   }}
                   className={cn(
                     "flex items-center gap-2 p-2 rounded-md bg-background/50 hover:bg-background/80 transition-colors group",
-                    !isSendDisabled && "cursor-pointer"
+                    !isSendDisabled && "cursor-pointer",
                   )}
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0"></div>

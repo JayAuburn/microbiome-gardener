@@ -10,7 +10,11 @@ import React, {
   useRef,
 } from "react";
 import { getCurrentUserUsage } from "@/app/actions/usage";
-import { type UsageStats, validateMessageUsage, isUnlimited } from "@/lib/usage-tracking-client";
+import {
+  type UsageStats,
+  validateMessageUsage,
+  isUnlimited,
+} from "@/lib/usage-tracking-client";
 import { useUser } from "@/contexts/UserContext";
 import { toast } from "sonner";
 
@@ -75,7 +79,7 @@ export function UsageProvider({ children }: UsageProviderProps) {
       setIsRefreshing(true);
       setError(null);
       const result = await getCurrentUserUsage();
-      
+
       if (result.success && result.data) {
         setUsageStats(result.data);
       } else if (!result.success) {
@@ -112,7 +116,7 @@ export function UsageProvider({ children }: UsageProviderProps) {
       if (isUnlimited(limit)) return 0;
       return limit > 0 ? (used / limit) * 100 : 0;
     },
-    []
+    [],
   );
 
   // Memoized calculations for usage stats and limits
@@ -135,11 +139,11 @@ export function UsageProvider({ children }: UsageProviderProps) {
 
     const documentsUsagePercentage = calculateUsagePercentage(
       usageStats.usage.documents.used,
-      usageStats.usage.documents.limit
+      usageStats.usage.documents.limit,
     );
     const storageUsagePercentage = calculateUsagePercentage(
       usageStats.usage.storage.used,
-      usageStats.usage.storage.limit
+      usageStats.usage.storage.limit,
     );
 
     return {
@@ -178,9 +182,7 @@ export function UsageProvider({ children }: UsageProviderProps) {
   };
 
   return (
-    <UsageContext.Provider value={value}>
-      {children}
-    </UsageContext.Provider>
+    <UsageContext.Provider value={value}>{children}</UsageContext.Provider>
   );
 }
 

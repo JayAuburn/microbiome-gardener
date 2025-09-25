@@ -21,7 +21,7 @@ interface DocumentListProps {
 
 export interface DocumentListRef {
   addOptimisticDocument: (
-    document: Omit<DocumentWithProcessingJob, "id"> & { id?: string }
+    document: Omit<DocumentWithProcessingJob, "id"> & { id?: string },
   ) => void;
 }
 
@@ -69,11 +69,11 @@ export const DocumentList = forwardRef<DocumentListRef, DocumentListProps>(
       () => ({
         addOptimisticDocument,
       }),
-      [addOptimisticDocument]
+      [addOptimisticDocument],
     );
 
     const handleErrorInspection = (
-      document: DocumentWithProcessingJob
+      document: DocumentWithProcessingJob,
     ): void => {
       setErrorInspectionDoc(document);
       setErrorModalOpen(true);
@@ -185,5 +185,5 @@ export const DocumentList = forwardRef<DocumentListRef, DocumentListProps>(
         />
       </>
     );
-  }
+  },
 );

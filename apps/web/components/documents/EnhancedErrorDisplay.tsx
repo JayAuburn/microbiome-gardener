@@ -110,7 +110,7 @@ export function EnhancedErrorDisplay({
         className={cn(
           "flex items-start space-x-2 p-2 rounded-md",
           theme.container,
-          className
+          className,
         )}
       >
         <IconComponent
@@ -157,7 +157,7 @@ export function EnhancedErrorDisplay({
                 <h4
                   className={cn(
                     "text-base font-semibold leading-tight",
-                    theme.message
+                    theme.message,
                   )}
                 >
                   {error.userMessage}
@@ -252,7 +252,7 @@ export function EnhancedErrorDisplay({
                     <pre
                       className={cn(
                         "text-xs p-2 bg-black/5 dark:bg-white/5 rounded border overflow-x-auto whitespace-pre-wrap break-words",
-                        theme.technicalDetails
+                        theme.technicalDetails,
                       )}
                     >
                       {error.technicalDetails}

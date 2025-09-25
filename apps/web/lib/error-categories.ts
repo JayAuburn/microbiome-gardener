@@ -73,7 +73,8 @@ export const ERROR_PATTERNS: ErrorPattern[] = [
   {
     pattern: /invalid file format/i,
     userMessage: "File format is invalid or corrupted",
-    guidance: "Please delete the failed file from your documents and try uploading again with a valid file format.",
+    guidance:
+      "Please delete the failed file from your documents and try uploading again with a valid file format.",
     category: "validation",
     severity: "medium",
     canRetry: true,
@@ -93,7 +94,8 @@ export const ERROR_PATTERNS: ErrorPattern[] = [
   {
     pattern: /failed to upload|upload error/i,
     userMessage: "Failed to upload your document",
-    guidance: "Please delete the failed file from your documents and try uploading again. Check your internet connection if the issue persists.",
+    guidance:
+      "Please delete the failed file from your documents and try uploading again. Check your internet connection if the issue persists.",
     category: "storage",
     severity: "medium",
     canRetry: true,

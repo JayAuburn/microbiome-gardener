@@ -142,13 +142,13 @@ export const documentChunks = pgTable(
     // Separate indexes for each embedding type
     index("document_chunks_text_embedding_idx").using(
       "hnsw",
-      table.text_embedding.op("vector_cosine_ops")
+      table.text_embedding.op("vector_cosine_ops"),
     ),
     index("document_chunks_multimodal_embedding_idx").using(
       "hnsw",
-      table.multimodal_embedding.op("vector_cosine_ops")
+      table.multimodal_embedding.op("vector_cosine_ops"),
     ),
-  ]
+  ],
 );
 
 export const insertDocumentChunkSchema = createInsertSchema(documentChunks);
@@ -169,25 +169,25 @@ export type NewTypedDocumentChunk = Omit<NewDocumentChunk, "metadata"> & {
 
 // Type guards for metadata discrimination
 export function isVideoMetadata(
-  metadata: ChunkMetadata
+  metadata: ChunkMetadata,
 ): metadata is VideoChunkMetadata {
   return metadata.content_type === CONTENT_TYPES.VIDEO;
 }
 
 export function isAudioMetadata(
-  metadata: ChunkMetadata
+  metadata: ChunkMetadata,
 ): metadata is AudioChunkMetadata {
   return metadata.content_type === CONTENT_TYPES.AUDIO;
 }
 
 export function isImageMetadata(
-  metadata: ChunkMetadata
+  metadata: ChunkMetadata,
 ): metadata is ImageChunkMetadata {
   return metadata.content_type === CONTENT_TYPES.IMAGE;
 }
 
 export function isDocumentMetadata(
-  metadata: ChunkMetadata
+  metadata: ChunkMetadata,
 ): metadata is DocumentChunkMetadata {
   return metadata.content_type === CONTENT_TYPES.DOCUMENT;
 }

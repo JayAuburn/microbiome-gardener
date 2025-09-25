@@ -65,7 +65,7 @@ export function BulkUploadArea({
   // Validate filenames for conflicts
   const validateFilenames = useCallback(
     async (
-      files: File[]
+      files: File[],
     ): Promise<{
       validFiles: File[];
       conflicts: FilenameConflict[];
@@ -97,7 +97,7 @@ export function BulkUploadArea({
 
       return { validFiles, conflicts, errors };
     },
-    []
+    [],
   );
 
   const handleFileSelection = useCallback(
@@ -178,7 +178,7 @@ export function BulkUploadArea({
         setSelectedFiles([]);
       }
     },
-    [maxFiles, onFilesSelected, validateFilenames]
+    [maxFiles, onFilesSelected, validateFilenames],
   );
 
   const handleConflictResolution = useCallback(
@@ -203,7 +203,7 @@ export function BulkUploadArea({
       setPendingFiles([]);
       setShowConflictDialog(false);
     },
-    [pendingFiles, conflicts, onFilesSelected, onConflictCancelled]
+    [pendingFiles, conflicts, onFilesSelected, onConflictCancelled],
   );
 
   const handleDrop = useCallback(
@@ -215,7 +215,7 @@ export function BulkUploadArea({
 
       handleFileSelection(e.dataTransfer.files);
     },
-    [disabled, isValidating, handleFileSelection]
+    [disabled, isValidating, handleFileSelection],
   );
 
   const handleDragOver = useCallback(
@@ -225,7 +225,7 @@ export function BulkUploadArea({
         setIsDragOver(true);
       }
     },
-    [disabled, isValidating]
+    [disabled, isValidating],
   );
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
@@ -239,7 +239,7 @@ export function BulkUploadArea({
         handleFileSelection(e.target.files);
       }
     },
-    [handleFileSelection, isValidating]
+    [handleFileSelection, isValidating],
   );
 
   const handleBrowseClick = (): void => {
@@ -280,7 +280,7 @@ export function BulkUploadArea({
               isDragOver && !disabled && !isValidating
                 ? "border-primary bg-primary/5"
                 : "border-gray-300 dark:border-gray-700",
-              (disabled || isValidating) && "opacity-50 cursor-not-allowed"
+              (disabled || isValidating) && "opacity-50 cursor-not-allowed",
             )}
           >
             <div className="space-y-3 sm:space-y-4">

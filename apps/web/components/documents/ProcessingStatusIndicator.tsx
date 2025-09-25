@@ -34,7 +34,7 @@ function RetryExhaustedDisplay({
     <div
       className={cn(
         "border border-red-200 dark:border-red-800 rounded-lg p-3 bg-red-50 dark:bg-red-900/20",
-        className
+        className,
       )}
     >
       <div className="flex items-center space-x-2">
@@ -83,7 +83,7 @@ function RetryInProgressDisplay({
       className={cn(
         "border border-orange-200 dark:border-orange-800 rounded-lg p-3",
         stageInfo.bgColor,
-        className
+        className,
       )}
     >
       <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ function NormalProcessingDisplay({
         <div
           className={cn(
             "w-8 h-8 rounded-full flex items-center justify-center animate-pulse flex-shrink-0",
-            stageInfo.bgColor
+            stageInfo.bgColor,
           )}
         >
           {stageInfo.isDynamic ? (
@@ -241,7 +241,7 @@ function NormalProcessingDisplay({
             className={cn(
               "border-transparent text-xs animate-pulse",
               stageInfo.color,
-              stageInfo.bgColor
+              stageInfo.bgColor,
             )}
           >
             {stageInfo.label}
@@ -288,7 +288,7 @@ export function ProcessingStatusIndicator({
     processingStage,
     retryCount,
     isRetry,
-    fileType
+    fileType,
   );
 
   // Handle retry exhaustion

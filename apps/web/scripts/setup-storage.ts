@@ -11,12 +11,12 @@ async function setupChatImageStorage(): Promise<void> {
     const { data: existingBuckets } = await supabase.storage.listBuckets();
     const bucketExists = existingBuckets?.some(
       (bucket: { id: string }) =>
-        bucket.id === IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME
+        bucket.id === IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME,
     );
 
     if (bucketExists) {
       console.log(
-        `✅ Storage bucket '${IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME}' already exists`
+        `✅ Storage bucket '${IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME}' already exists`,
       );
     } else {
       // Create the storage bucket - PRIVATE for security
@@ -26,7 +26,7 @@ async function setupChatImageStorage(): Promise<void> {
           public: false, // PRIVATE bucket - files accessed via signed URLs
           allowedMimeTypes: ["image/jpeg", "image/png"],
           fileSizeLimit: 10485760, // 10MB in bytes
-        }
+        },
       );
 
       if (bucketError) {
@@ -35,19 +35,19 @@ async function setupChatImageStorage(): Promise<void> {
       }
 
       console.log(
-        `✅ Storage bucket '${IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME}' created successfully (PRIVATE)`
+        `✅ Storage bucket '${IMAGE_UPLOAD_CONSTRAINTS.BUCKET_NAME}' created successfully (PRIVATE)`,
       );
     }
 
     // RLS policies will be handled via database migration
     console.log(
-      "🔒 Note: RLS policies need to be created via database migration"
+      "🔒 Note: RLS policies need to be created via database migration",
     );
     console.log("📋 Run the following command to create storage policies:");
     console.log("   npm run db:migrate");
     console.log("");
     console.log(
-      "💡 The storage policies will be created in the next migration file."
+      "💡 The storage policies will be created in the next migration file.",
     );
 
     console.log("🎉 Chat image storage setup complete!");

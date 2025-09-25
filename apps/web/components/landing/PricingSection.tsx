@@ -78,7 +78,7 @@ const PricingSection = () => {
                   : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600",
                 index === 0 && "[animation-delay:0s]",
                 index === 1 && "[animation-delay:0.2s]",
-                index === 2 && "[animation-delay:0.4s]"
+                index === 2 && "[animation-delay:0.4s]",
               )}
             >
               {plan.popular && (

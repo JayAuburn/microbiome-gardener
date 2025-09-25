@@ -29,7 +29,7 @@ export function useDocumentDeletion({
   const [deleteDocumentId, setDeleteDocumentId] = useState<string | null>(null);
   const [deleteDocumentName, setDeleteDocumentName] = useState<string>("");
   const [deletingDocumentId, setDeletingDocumentId] = useState<string | null>(
-    null
+    null,
   );
 
   // Handle clicking delete button on a document
@@ -39,7 +39,7 @@ export function useDocumentDeletion({
       setDeleteDocumentName(documentName);
       setDeleteDialogOpen(true);
     },
-    []
+    [],
   );
 
   // Handle confirming document deletion
@@ -85,7 +85,7 @@ export function useDocumentDeletion({
       // Show error toast for network/other errors
       if (err instanceof Error && err.message.includes("fetch")) {
         toast.error(
-          "Connection failed. Please check your internet connection and try again."
+          "Connection failed. Please check your internet connection and try again.",
         );
       } else if (
         !(err instanceof Error) ||

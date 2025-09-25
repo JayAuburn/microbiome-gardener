@@ -18,18 +18,21 @@ The RAG Processor is a **background worker service** designed to automatically p
 ### Architecture Clarification
 
 **What rag-processor IS:**
+
 - ✅ Background worker triggered by GCS events
 - ✅ File processing and embedding generation
 - ✅ Database storage via direct connection
 - ✅ Job status updates in database
 
 **What rag-processor is NOT:**
+
 - ❌ API service with HTTP endpoints
-- ❌ WebSocket server for real-time updates  
+- ❌ WebSocket server for real-time updates
 - ❌ Search or query service for frontend
 - ❌ User-facing service
 
 **Frontend Integration:**
+
 - Frontend uploads files → GCS → triggers rag-processor
 - Frontend queries database directly via Supabase RPC functions
 - Frontend polls database for job status (not rag-processor APIs)
@@ -58,7 +61,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 - **Platform**: Google Cloud Run (serverless background worker containers)
 - **Scaling**: Auto-scale from 0 to N instances based on GCS events
 - **No HTTP endpoints**: Pure event-driven processing (no web server)
-- **Resource allocation**: 
+- **Resource allocation**:
   - CPU: 2-4 vCPU per instance
   - Memory: 4-8 GB per instance
   - Timeout: 60 minutes (for large video files)
@@ -71,6 +74,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 - **Monitoring**: Job completion tracking via database status
 
 **Deployment Script Components:**
+
 - Docker build with multi-stage optimization
 - Cloud Build integration
 - Environment variable management
@@ -103,12 +107,13 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 
 **Input**: MP4, AVI, MOV, MKV, WebM
 **Steps:**
-1. **Video Splitting**: 
+
+1. **Video Splitting**:
    - Split into chunks (30-60 second segments)
    - Extract keyframes for thumbnails
    - Preserve temporal metadata
 2. **Audio Extraction**: Extract audio track for transcription
-3. **Transcription**: 
+3. **Transcription**:
    - Use Whisper API or similar
    - Generate timestamped transcripts
    - Handle multiple languages
@@ -118,6 +123,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 5. **Storage**: Save to Supabase with video-specific schema
 
 **Schema Fields:**
+
 - `content_type`: 'video'
 - `content_text`: Transcribed text
 - `embedding`: Vector embedding
@@ -130,10 +136,11 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 **Input**: MP3, WAV, FLAC, AAC, OGG
 **File Size Limits**: 1GB maximum (from system limit)
 **Steps:**
-1. **Audio Splitting**: 
+
+1. **Audio Splitting**:
    - Split into manageable chunks (2-minute segments, matching video strategy)
    - Maintain audio quality for transcription
-2. **Transcription**: 
+2. **Transcription**:
    - Use Whisper API or Google Speech-to-Text
    - Generate timestamped transcripts
 3. **Embedding Generation**:
@@ -142,6 +149,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 4. **Storage**: Save to Supabase with audio-specific schema
 
 **Schema Fields:**
+
 - `content_type`: 'audio'
 - `content_text`: Transcribed text
 - `embedding`: Vector embedding
@@ -153,6 +161,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 
 **Input**: JPG, PNG, GIF, WebP, TIFF, BMP
 **Steps:**
+
 1. **Image Analysis**:
    - Extract EXIF metadata
    - Generate image description using vision models (optional)
@@ -163,6 +172,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 3. **Storage**: Save to Supabase with image-specific schema
 
 **Schema Fields:**
+
 - `content_type`: 'image'
 - `content_text`: Image description or OCR text
 - `embedding`: Vector embedding
@@ -173,6 +183,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 ### 5.4 Document Processing Pipeline
 
 **Input**: Based on Docling support:
+
 - **Office Formats**: PDF, DOCX, XLSX, PPTX
 - **Web Formats**: HTML, XHTML, Markdown
 - **Data Formats**: CSV, AsciiDoc
@@ -180,6 +191,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 - **Specialized**: USPTO XML, JATS XML
 
 **Steps:**
+
 1. **Document Parsing**:
    - Use Docling for unified document processing
    - Extract structured content (headings, paragraphs, tables, lists)
@@ -194,6 +206,7 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 4. **Storage**: Save to Supabase with document-specific schema
 
 **Schema Fields:**
+
 - `content_type`: 'document'
 - `content_text`: Chunk text content
 - `embedding`: Vector embedding
@@ -223,86 +236,95 @@ Frontend (Next.js) ←------- Direct Database Queries (Supabase RPC) -----------
 ### 6.2 Job Tracking Integration
 
 **Upload Flow:**
+
 ```typescript
 // 1. User uploads file to GCS
 const uploadFile = async (file: File, userId: string, workspaceId: string) => {
   // Atomic transaction: Create document + job
   const { document, job } = await db.transaction(async (tx) => {
-    const document = await tx.insert(documents).values({
-      userId,
-      workspaceId,
-      fileName: file.name,
-      filePath: `uploads/${userId}/${workspaceId}/${file.name}`,
-      fileSize: file.size,
-      mimeType: file.type,
-      status: 'uploading'
-    }).returning();
+    const document = await tx
+      .insert(documents)
+      .values({
+        userId,
+        workspaceId,
+        fileName: file.name,
+        filePath: `uploads/${userId}/${workspaceId}/${file.name}`,
+        fileSize: file.size,
+        mimeType: file.type,
+        status: "uploading",
+      })
+      .returning();
 
-    const job = await tx.insert(artifactProcessingJobs).values({
-      artifactId: document[0].id,
-      fileType: file.type,
-      filePath: document[0].filePath,
-      fileSize: file.size,
-      status: 'pending'
-    }).returning();
+    const job = await tx
+      .insert(artifactProcessingJobs)
+      .values({
+        artifactId: document[0].id,
+        fileType: file.type,
+        filePath: document[0].filePath,
+        fileSize: file.size,
+        status: "pending",
+      })
+      .returning();
 
     return { document: document[0], job: job[0] };
   });
 
   // Upload to GCS (triggers processing)
   await uploadToGCS(file, document.filePath);
-  
+
   return { document, job };
 };
 ```
 
 **Processing Flow:**
+
 ```python
 # rag-processor updates job status throughout
 async def process_file(job_id: str, file_path: str):
     # Update to processing
     await update_job_status(job_id, 'processing', progress=0)
-    
+
     # Download file
     file_data = await download_from_gcs(file_path)
     await update_job_status(job_id, 'processing', progress=10)
-    
+
     # Process based on file type
     if file_type == 'video':
         chunks = await process_video(file_data)
         await update_job_status(job_id, 'processing', progress=50)
-        
+
         embeddings = await generate_embeddings(chunks)
         await update_job_status(job_id, 'processing', progress=75)
-        
+
         await save_chunks_to_supabase(chunks, embeddings)
         await update_job_status(job_id, 'processed', progress=100)
-    
+
     # Handle errors with retry logic
     except Exception as e:
         await handle_processing_error(job_id, e)
 ```
 
 **Frontend Polling:**
+
 ```typescript
 // React hook for job status polling
 const useJobStatus = (jobId: string) => {
   const [status, setStatus] = useState<JobStatus>();
-  
+
   useEffect(() => {
     const pollInterval = setInterval(async () => {
       const job = await fetchJobStatus(jobId);
       setStatus(job);
-      
+
       // Stop polling when complete
-      if (['processed', 'error', 'cancelled'].includes(job.status)) {
+      if (["processed", "error", "cancelled"].includes(job.status)) {
         clearInterval(pollInterval);
       }
     }, 2000); // Poll every 2 seconds
-    
+
     return () => clearInterval(pollInterval);
   }, [jobId]);
-  
+
   return status;
 };
 ```
@@ -310,6 +332,7 @@ const useJobStatus = (jobId: string) => {
 ### 6.3 Error Handling & Retry Logic
 
 **Retry Strategy:**
+
 ```python
 # Different retry strategies based on error type
 RETRY_STRATEGIES = {
@@ -324,46 +347,48 @@ async def handle_processing_error(job_id: str, error: Exception):
     job = await get_job(job_id)
     error_type = classify_error(error)
     strategy = RETRY_STRATEGIES.get(error_type, {'max_retries': 3, 'backoff_ms': 2000})
-    
+
     if job.retry_count < strategy['max_retries']:
         # Update job for retry
         await update_job_status(
-            job_id, 
-            'retry_pending', 
+            job_id,
+            'retry_pending',
             retry_count=job.retry_count + 1,
             error_message=str(error),
             error_details={'error_type': error_type, 'stack_trace': traceback.format_exc()}
         )
-        
+
         # Schedule retry with exponential backoff
         delay = strategy['backoff_ms'] * (2 ** job.retry_count)
         await schedule_retry(job_id, delay)
     else:
         # Mark as failed
         await update_job_status(
-            job_id, 
-            'error', 
+            job_id,
+            'error',
             error_message=str(error),
             error_details={'error_type': error_type, 'final_attempt': True}
         )
 ```
 
 **Job Recovery System:**
+
 ```python
 # Periodic job recovery for stuck jobs
 async def recover_stuck_jobs():
     # Find jobs stuck in processing for > 30 minutes
     stuck_jobs = await db.query("""
-        SELECT * FROM artifact_processing_jobs 
-        WHERE status = 'processing' 
+        SELECT * FROM artifact_processing_jobs
+        WHERE status = 'processing'
         AND processing_started_at < NOW() - INTERVAL '30 minutes'
     """)
-    
+
     for job in stuck_jobs:
         await handle_processing_error(job.id, Exception("Job timeout"))
 ```
 
 **Error Monitoring:**
+
 - **Cloud Logging**: Structured error logging with correlation IDs
 - **Alerting**: Slack/email notifications for high error rates
 - **Dead Letter Queue**: Failed jobs for manual review
@@ -372,6 +397,7 @@ async def recover_stuck_jobs():
 ### 6.4 Data Storage Schema
 
 **Job Tracking Table**: `artifact_processing_jobs`
+
 ```sql
 CREATE TYPE artifact_processing_job_status AS ENUM (
     'pending', 'processing', 'processed', 'error', 'retry_pending', 'cancelled', 'partially_processed'
@@ -379,34 +405,34 @@ CREATE TYPE artifact_processing_job_status AS ENUM (
 
 CREATE TABLE artifact_processing_jobs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    
+
     -- Reference to the document being processed
     artifact_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
-    
+
     -- Job status and progress tracking
     status artifact_processing_job_status DEFAULT 'pending' NOT NULL,
     processing_progress INTEGER DEFAULT 0 NOT NULL, -- 0-100 percentage
-    
+
     -- File metadata for processing estimates
     file_size BIGINT,
     file_type TEXT NOT NULL,
     file_path TEXT NOT NULL,
-    
+
     -- Retry logic
     retry_count INTEGER DEFAULT 0 NOT NULL,
     max_retry_count INTEGER DEFAULT 3 NOT NULL,
-    
+
     -- Error handling
     error_message TEXT,
     error_details JSONB, -- Structured error information
-    
+
     -- Processing metadata
     processing_metadata JSONB, -- Store processing-specific info
-    
+
     -- Timing information
     processing_started_at TIMESTAMP WITH TIME ZONE,
     completed_at TIMESTAMP WITH TIME ZONE,
-    
+
     -- Audit fields
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
@@ -419,6 +445,7 @@ CREATE INDEX idx_processing_jobs_retry ON artifact_processing_jobs(retry_count, 
 ```
 
 **Document Chunks Table**: `document_chunks`
+
 ```sql
 CREATE TABLE document_chunks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -428,18 +455,18 @@ CREATE TABLE document_chunks (
     chunk_index INTEGER NOT NULL,
     metadata JSONB NOT NULL,
     embedding_type VARCHAR(20) DEFAULT 'text' NOT NULL,
-    
+
     -- Multi-modal embedding support
     text_embedding VECTOR(768), -- text-embedding-004 (Vertex AI)
     multimodal_embedding VECTOR(1408), -- multimodalembedding@001
-    
+
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );
 
 -- Vector similarity indexes
-CREATE INDEX document_chunks_text_embedding_idx ON document_chunks 
+CREATE INDEX document_chunks_text_embedding_idx ON document_chunks
     USING hnsw (text_embedding vector_cosine_ops);
-CREATE INDEX document_chunks_multimodal_embedding_idx ON document_chunks 
+CREATE INDEX document_chunks_multimodal_embedding_idx ON document_chunks
     USING hnsw (multimodal_embedding vector_cosine_ops);
 
 -- Performance indexes
@@ -453,6 +480,7 @@ CREATE INDEX document_chunks_embedding_type_idx ON document_chunks(embedding_typ
 ### 7.1 Frontend Job Status UI
 
 **Upload Interface:**
+
 ```typescript
 interface UploadStatus {
   document: Document;
@@ -464,11 +492,11 @@ interface UploadStatus {
 
 const FileUploadComponent = () => {
   const [uploads, setUploads] = useState<UploadStatus[]>([]);
-  
+
   const handleFileUpload = async (file: File) => {
     // Create document + job
     const { document, job } = await uploadFile(file, userId, workspaceId);
-    
+
     // Add to tracking list
     setUploads(prev => [...prev, {
       document,
@@ -477,12 +505,12 @@ const FileUploadComponent = () => {
       status: 'pending'
     }]);
   };
-  
+
   return (
     <div>
       {uploads.map(upload => (
-        <UploadProgressCard 
-          key={upload.job.id} 
+        <UploadProgressCard
+          key={upload.job.id}
           upload={upload}
           onStatusUpdate={setUploads}
         />
@@ -493,10 +521,11 @@ const FileUploadComponent = () => {
 ```
 
 **Progress Indicators:**
+
 ```typescript
 const UploadProgressCard = ({ upload }: { upload: UploadStatus }) => {
   const jobStatus = useJobStatus(upload.job.id);
-  
+
   const getProgressColor = (status: JobStatus) => {
     switch (status) {
       case 'processing': return 'blue';
@@ -506,15 +535,15 @@ const UploadProgressCard = ({ upload }: { upload: UploadStatus }) => {
       default: return 'gray';
     }
   };
-  
+
   return (
     <Card className="p-4">
       <div className="flex items-center space-x-4">
         <FileIcon type={upload.document.mimeType} />
         <div className="flex-1">
           <h3>{upload.document.fileName}</h3>
-          <Progress 
-            value={jobStatus?.processingProgress || 0} 
+          <Progress
+            value={jobStatus?.processingProgress || 0}
             className={getProgressColor(jobStatus?.status || 'pending')}
           />
           <p className="text-sm text-gray-600">
@@ -535,31 +564,32 @@ const UploadProgressCard = ({ upload }: { upload: UploadStatus }) => {
 ### 7.2 Real-Time Notifications
 
 **Database Polling Strategy:**
+
 ```typescript
 // Frontend polls database directly for job status (NOT through rag-processor)
 const useJobStatus = (jobId: string) => {
   const [status, setStatus] = useState<JobStatus>();
-  
+
   useEffect(() => {
     const pollInterval = setInterval(async () => {
       // Query Supabase directly for job status
       const job = await supabase
-        .from('processing_jobs')
-        .select('*')
-        .eq('id', jobId)
+        .from("processing_jobs")
+        .select("*")
+        .eq("id", jobId)
         .single();
-      
+
       setStatus(job.data);
-      
+
       // Stop polling when complete
-      if (['processed', 'error', 'cancelled'].includes(job.data.status)) {
+      if (["processed", "error", "cancelled"].includes(job.data.status)) {
         clearInterval(pollInterval);
       }
     }, 2000);
-    
+
     return () => clearInterval(pollInterval);
   }, [jobId]);
-  
+
   return status;
 };
 ```
@@ -567,15 +597,18 @@ const useJobStatus = (jobId: string) => {
 **Note**: The rag-processor does NOT provide WebSocket or any real-time APIs. Real-time updates come from the frontend polling the database directly.
 
 **Toast Notifications:**
+
 ```typescript
 const useJobNotifications = (jobId: string) => {
   const jobStatus = useJobStatus(jobId);
-  
+
   useEffect(() => {
-    if (jobStatus?.status === 'processed') {
+    if (jobStatus?.status === "processed") {
       toast.success(`${jobStatus.fileName} processed successfully!`);
-    } else if (jobStatus?.status === 'error') {
-      toast.error(`Error processing ${jobStatus.fileName}: ${jobStatus.errorMessage}`);
+    } else if (jobStatus?.status === "error") {
+      toast.error(
+        `Error processing ${jobStatus.fileName}: ${jobStatus.errorMessage}`,
+      );
     }
   }, [jobStatus?.status]);
 };
@@ -584,6 +617,7 @@ const useJobNotifications = (jobId: string) => {
 ### 7.3 Bulk Operations
 
 **Batch Upload Tracking:**
+
 ```typescript
 interface BatchUpload {
   id: string;
@@ -597,19 +631,19 @@ interface BatchUpload {
 const useBatchUpload = () => {
   const uploadBatch = async (files: File[]) => {
     const jobs = await Promise.all(
-      files.map(file => uploadFile(file, userId, workspaceId))
+      files.map((file) => uploadFile(file, userId, workspaceId)),
     );
-    
+
     return {
       id: uuid(),
       files,
-      jobs: jobs.map(j => j.job),
+      jobs: jobs.map((j) => j.job),
       totalProgress: 0,
       completedCount: 0,
-      errorCount: 0
+      errorCount: 0,
     };
   };
-  
+
   return { uploadBatch };
 };
 ```
@@ -760,18 +794,20 @@ const useBatchUpload = () => {
 ### 14.1 Critical Implementation Details ✅
 
 **1. Job ID Propagation Strategy**
+
 ```python
 # RESOLVED: Query database using GCS path to find job
 async def find_job_by_file_path(gcs_path: str) -> str:
     cursor.execute("""
         SELECT dpj.id FROM document_processing_jobs dpj
-        JOIN documents d ON dpj.document_id = d.id  
+        JOIN documents d ON dpj.document_id = d.id
         WHERE d.gcs_path = %s AND dpj.status IN ('pending', 'processing')
     """, (gcs_path,))
     return cursor.fetchone()[0]
 ```
 
 **2. Database Connection**
+
 ```python
 # RESOLVED: Direct connection using environment variable
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -779,11 +815,13 @@ conn = psycopg2.connect(DATABASE_URL)
 ```
 
 **3. Schema Requirements**
+
 - ✅ No workspace_id needed (keeping it simple)
 - ✅ Documents table has all required fields: user_id, gcs_path, filename, file_size, mime_type
 - ✅ Existing documents.ts schema is sufficient
 
 **4. Embedding Strategy Logic**
+
 ```python
 # RESOLVED: Clear logic for embedding types
 def get_embedding_strategy(file_type: str) -> str:
@@ -798,11 +836,12 @@ def get_embedding_strategy(file_type: str) -> str:
 ```
 
 **5. Retry Strategy**
+
 ```python
 # RESOLVED: Option A - Same execution retries (simplest)
 async def process_with_retry(job_id: str, max_retries: int = 3):
     backoff_seconds = [1, 5, 15]  # 1s, 5s, 15s delays
-    
+
     for attempt in range(max_retries):
         try:
             await process_document(...)
@@ -818,6 +857,7 @@ async def process_with_retry(job_id: str, max_retries: int = 3):
 ```
 
 **6. File Management**
+
 ```python
 # RESOLVED: Filename strategy with timestamp
 def generate_unique_filename(original_name: str, extension: str) -> str:
@@ -830,17 +870,19 @@ MAX_CONCURRENT_JOBS_PER_USER = 2
 ```
 
 **7. Processing Strategy**
+
 ```python
 # RESOLVED: Chunking strategy for all media types
 CHUNKING_STRATEGY = {
     'video': '2-minute chunks → transcribe → multimodal embeddings',
-    'audio': '2-minute chunks → transcribe → text embeddings', 
+    'audio': '2-minute chunks → transcribe → text embeddings',
     'images': 'no chunking → direct multimodal embeddings',
     'documents': 'docling chunking → text embeddings'
 }
 ```
 
 **8. Cloud Run Scaling**
+
 ```python
 # RESOLVED: Cloud Run with GPU auto-scaling
 # - Auto-scales based on demand
@@ -849,6 +891,7 @@ CHUNKING_STRATEGY = {
 ```
 
 **9. Cleanup Policy**
+
 ```python
 # RESOLVED: 1-day retention for temporary files
 TEMP_FILE_RETENTION = 24 * 60 * 60  # 1 day in seconds
@@ -861,19 +904,19 @@ TEMP_FILE_RETENTION = 24 * 60 * 60  # 1 day in seconds
 async def process_document_with_status_updates(job_id: str):
     await update_job_status(job_id, "processing", stage="downloading")
     file_path = await download_file_from_gcs(...)
-    
+
     await update_job_status(job_id, "processing", stage="analyzing")
     file_type = detect_file_type(file_path)
-    
+
     await update_job_status(job_id, "processing", stage="chunking")
     chunks = await chunk_file(file_path, file_type)
-    
+
     await update_job_status(job_id, "processing", stage="embedding")
     embeddings = await generate_embeddings(chunks)
-    
+
     await update_job_status(job_id, "processing", stage="storing")
     await store_embeddings(embeddings)
-    
+
     await update_job_status(job_id, "processed")
 ```
 
@@ -897,4 +940,4 @@ except Exception as e:
 
 ---
 
-This system design provides a comprehensive foundation for building a scalable, reliable RAG processing system that can handle diverse file types while maintaining high performance and cost efficiency. All critical implementation details have been resolved and documented above. 
+This system design provides a comprehensive foundation for building a scalable, reliable RAG processing system that can handle diverse file types while maintaining high performance and cost efficiency. All critical implementation details have been resolved and documented above.

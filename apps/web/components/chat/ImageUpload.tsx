@@ -88,7 +88,7 @@ export function ImageUpload({
         }
       }
     },
-    [canUpload, remainingSlots, onImagesSelected]
+    [canUpload, remainingSlots, onImagesSelected],
   );
 
   const handleFileSelect = useCallback(
@@ -98,7 +98,7 @@ export function ImageUpload({
         processFiles(files);
       }
     },
-    [processFiles]
+    [processFiles],
   );
 
   const handleDragEnter = useCallback(
@@ -108,7 +108,7 @@ export function ImageUpload({
         setIsDragOver(true);
       }
     },
-    [canUpload, dragSupported]
+    [canUpload, dragSupported],
   );
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
@@ -125,7 +125,7 @@ export function ImageUpload({
       // Set the dropEffect to indicate this is a valid drop zone
       e.dataTransfer.dropEffect = canUpload ? "copy" : "none";
     },
-    [canUpload]
+    [canUpload],
   );
 
   const handleDrop = useCallback(
@@ -140,7 +140,7 @@ export function ImageUpload({
         processFiles(files);
       }
     },
-    [canUpload, processFiles]
+    [canUpload, processFiles],
   );
 
   const handleButtonClick = useCallback(() => {
@@ -192,7 +192,7 @@ export function ImageUpload({
             "absolute inset-0 z-10 flex items-center justify-center rounded-md border-2 border-dashed transition-all",
             isDragOver && canUpload
               ? "border-primary bg-primary/5 opacity-100"
-              : "border-transparent opacity-0 pointer-events-none"
+              : "border-transparent opacity-0 pointer-events-none",
           )}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}

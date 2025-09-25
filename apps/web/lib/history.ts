@@ -78,7 +78,10 @@ export async function getConversationsGrouped(): Promise<{
     console.error("❌ Error fetching conversations:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to fetch conversations",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch conversations",
     };
   }
 }

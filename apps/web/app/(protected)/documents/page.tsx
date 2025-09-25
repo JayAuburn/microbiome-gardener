@@ -12,36 +12,38 @@ import { toast } from "sonner";
 
 export default function DocumentsPage() {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-  const {
-    refreshUsage,
-    canUpload,
-  } = useUsage();
+  const { refreshUsage, canUpload } = useUsage();
 
   // Replace refreshKey with direct refresh mechanism
   const documentListRef = useRef<DocumentListRef | null>(null);
 
-  const handleUploadComplete = useCallback((documentData: {
-    id: string;
-    originalFilename: string;
-    fileSize: number;
-    mimeType: string;
-  }) => {
-    console.log("Upload completed:", documentData);
+  const handleUploadComplete = useCallback(
+    (documentData: {
+      id: string;
+      originalFilename: string;
+      fileSize: number;
+      mimeType: string;
+    }) => {
+      console.log("Upload completed:", documentData);
 
-    // Add optimistic document immediately with required properties
-    documentListRef.current?.addOptimisticDocument({
-      ...documentData,
-      status: "processing" as const,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
+      // Add optimistic document immediately with required properties
+      documentListRef.current?.addOptimisticDocument({
+        ...documentData,
+        status: "processing" as const,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
 
-    // Refresh usage stats from server for accuracy
-    refreshUsage();
+      // Refresh usage stats from server for accuracy
+      refreshUsage();
 
-    // Show success toast for upload completion
-    toast.success(`"${documentData.originalFilename}" uploaded successfully. Processing started.`);
-  }, [refreshUsage]);
+      // Show success toast for upload completion
+      toast.success(
+        `"${documentData.originalFilename}" uploaded successfully. Processing started.`,
+      );
+    },
+    [refreshUsage],
+  );
 
   const handleUploadError = useCallback((error: string) => {
     // Storage limit errors are handled gracefully with UI dialogs, so log as warnings

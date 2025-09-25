@@ -1,10 +1,5 @@
 import { getRAGStatsForAdmin } from "@/app/actions/admin";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   FileText,
   HardDrive,
@@ -25,22 +20,30 @@ async function AdminStats() {
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Documents
+                </CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-muted-foreground">--</div>
+                <div className="text-2xl font-bold text-muted-foreground">
+                  --
+                </div>
                 <p className="text-xs text-muted-foreground">Loading...</p>
               </CardContent>
             </Card>
 
             <Card className="hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Requests
+                </CardTitle>
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-muted-foreground">--</div>
+                <div className="text-2xl font-bold text-muted-foreground">
+                  --
+                </div>
                 <p className="text-xs text-muted-foreground">Loading...</p>
               </CardContent>
             </Card>
@@ -69,7 +72,9 @@ async function AdminStats() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Documents
+              </CardTitle>
               <FileText className="h-4 w-4 text-blue-600" />
             </CardHeader>
             <CardContent>
@@ -82,7 +87,9 @@ async function AdminStats() {
 
           <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Total Requests
+              </CardTitle>
               <MessageSquare className="h-4 w-4 text-teal-600" />
             </CardHeader>
             <CardContent>
@@ -98,20 +105,26 @@ async function AdminStats() {
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Storage Used
+              </CardTitle>
               <HardDrive className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-purple-600">
                 {formatBytes(totalStorageUsed)}
               </div>
-              <p className="text-xs text-muted-foreground">Total file storage</p>
+              <p className="text-xs text-muted-foreground">
+                Total file storage
+              </p>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">7 Day Activity</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                7 Day Activity
+              </CardTitle>
               <Calendar className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
@@ -124,7 +137,9 @@ async function AdminStats() {
 
           <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">30 Day Activity</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                30 Day Activity
+              </CardTitle>
               <CalendarDays className="h-4 w-4 text-orange-600" />
             </CardHeader>
             <CardContent>

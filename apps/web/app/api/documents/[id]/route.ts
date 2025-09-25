@@ -36,7 +36,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     if (!document) {
       return NextResponse.json(
         { error: "Document not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -79,7 +79,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     console.error("Error deleting document:", error);
     return NextResponse.json(
       { error: "Failed to delete document" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

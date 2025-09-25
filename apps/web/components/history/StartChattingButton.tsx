@@ -7,9 +7,5 @@ export function StartChattingButton() {
     window.location.href = "/chat";
   };
 
-  return (
-    <Button onClick={handleStartChat}>
-      Start Chatting
-    </Button>
-  );
+  return <Button onClick={handleStartChat}>Start Chatting</Button>;
 }

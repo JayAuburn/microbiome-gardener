@@ -197,13 +197,11 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
 - If you get prompted for billing, you can skip it for OAuth-only features
 
 1. **Navigate to Google Cloud Console**
-
    - Go to [https://console.cloud.google.com](https://console.cloud.google.com)
    - Sign in with your Google account
    - You may see terms of service - click **"Accept"** to continue
 
 2. **Create New Project (if needed)**
-
    - Click the project dropdown at the top of the page (next to "Google Cloud" logo)
    - If you already have a project you want to use, select it and skip to next step
    - Click **"New Project"** in the project selector modal
@@ -214,12 +212,10 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
    - Wait for project creation to complete (usually takes seconds to a few minutes)
 
 3. **Select Your Project**
-
    - Once created, ensure your new project is selected in the project dropdown
    - You should see your project name in the top navigation bar
 
    **🚨 Common issues at this step:**
-
    - **"No project dropdown visible"** → Try refreshing the page or wait a few minutes for project creation
    - **"Billing account required"** → For OAuth setup, you can usually click "Skip" or "Cancel" on billing prompts
    - **"Can't find the hamburger menu"** → It's the ☰ icon in the very top-left corner of the page
@@ -230,7 +226,6 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
 **👤 USER TASK - OAuth Consent Setup:**
 
 1. **Navigate to OAuth Consent Screen**
-
    - In the Google Cloud Console, click the hamburger menu (☰) in the top left
    - Navigate to **"APIs & Services"** → **"OAuth consent screen"** (Guide the user to this exact path)
    - You'll see a page indicating that Google OAuth Platform is not configured yet
@@ -239,32 +234,27 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
 2. **Complete the 4-Step Configuration Process**
 
    You'll be redirected to a project configuration page with 4 steps:
-
    - App information
    - Audience
    - Contact information
    - Finish
 
 3. **Step 1: App Information**
-
    - **App name:** Enter your application name (from your prep documents)
    - **User support email:** Your email should already be available in the dropdown - simply select it
      - If you want to use a different support email, click **"Learn more"** for additional information
    - Click **"Next"** to continue
 
 4. **Step 2: Audience**
-
    - Select **"External"** (allows any Google account to sign in to your app)
    - Click **"Next"** to proceed
 
    **🤔 Why "External"?**
-
    - **External:** Any Google user can sign in to your app (recommended for SaaS apps)
    - **Internal:** Only users in your Google Workspace organization can sign in
    - Most ShipKit templates are built for general users, so choose "External"
 
 5. **Step 3: Contact Information**
-
    - **Developer contact information:** Enter your email address
    - This is the email Google will use to notify you about any changes to your project
    - Click **"Next"** to continue
@@ -279,17 +269,14 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
 **👤 USER TASK - Create Google OAuth Application:**
 
 1. **Navigate to Google Cloud Credentials**
-
    - In the Google Cloud Console, click the hamburger menu (☰) in the top left
    - Navigate to **"APIs & Services"** → **"Credentials"** (Guide the user to this exact path)
 
 2. **Create OAuth 2.0 Client ID**
-
    - Click **"Create Credentials"** at the top of the page
    - Select **"OAuth client ID"** from the dropdown
 
 3. **Configure OAuth Application**
-
    - **Application type:** Select **"Web application"**
    - **Name:** Enter a descriptive name (e.g., "My App Google Auth")
 
@@ -300,12 +287,10 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
 4. **Get Supabase Callback URL for Authorized Redirect URIs**
 
    **🎯 Now you need the exact callback URL from Supabase to complete the OAuth setup:**
-
    - Go to [https://supabase.com/dashboard](https://supabase.com/dashboard)
    - Click on your project → Click **"Authentication"** on the left sidebar → Click **"Sign In / Providers"** under "Configuration" → Find and click on **"Google"** provider
 
    **After accessing the Google provider settings on Supabase:**
-
    - Switch **"Enable sign in with Google"** to **ON**
    - Find the **"Callback URL (for OAuth)"** field at the bottom: `https://[your-supabase-project].supabase.co/auth/v1/callback`
    - **Copy this callback URL**
@@ -315,7 +300,6 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
    `https://abcdefghijklmnopqrst.supabase.co/auth/v1/callback`
 
 5. **Complete OAuth Application Setup**
-
    - Return to your Google Cloud Console tab
    - **Authorized redirect URIs:** Click **"Add URI"** and paste the Supabase callback URL:
      `https://[your-supabase-project].supabase.co/auth/v1/callback`
@@ -324,7 +308,6 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
    - Click **"Create"** to generate credentials
 
 6. **Immediately Copy Credentials to Supabase**
-
    - A modal will appear titled "OAuth client created"
    - **DO NOT close this modal yet**
    - **Client ID:** Copy the client ID (starts with numbers and ends in `.apps.googleusercontent.com`)
@@ -342,7 +325,6 @@ Based on my analysis of your prep documents, I'll respond with one of these conf
    **🚨 Critical:** Do this copy-paste process immediately! The client secret won't be visible again after closing the Google modal.
 
    **✅ Success indicators:**
-
    - Supabase shows the "Google" provider as "Enabled"
    - Your credentials are safely saved in Supabase configuration
    - Your Google OAuth client is created and seen in the "Credentials" page
@@ -410,19 +392,16 @@ Ask the user: "Have you successfully configured Google OAuth in Supabase with yo
 - **Trustworthy:** Developers trust GitHub with their code, so they'll trust it with auth
 
 1. **Navigate to GitHub Developer Settings**
-
    - Go to [https://github.com/settings/developers](https://github.com/settings/developers)
    - Sign in to your GitHub account if prompted
    - You should see the "Developer settings" page with options in the left sidebar
 
 2. **Create New OAuth App**
-
    - Click **"OAuth Apps"** in the left sidebar (Guide the user to this exact path)
    - Click **"New OAuth App"** button in the top right
    - You'll see a form titled "Register a new OAuth application"
 
 3. **Configure OAuth Application**
-
    - Fill in the application details:
      - **Application name:** Enter your app name (e.g., "My AI Chat App")
      - **Homepage URL:** `http://localhost:3000` (for development)
@@ -431,12 +410,10 @@ Ask the user: "Have you successfully configured Google OAuth in Supabase with yo
 4. **Get Supabase Callback URL for Authorization Callback**
 
    **🎯 Now you need the exact callback URL from Supabase to complete the GitHub OAuth setup:**
-
    - Go to [https://supabase.com/dashboard](https://supabase.com/dashboard)
    - Click on your project → Click **"Authentication"** on the left sidebar → Click **"Sign In / Providers"** under "Configuration" → Find and click on **"GitHub"** provider
 
    **After accessing the GitHub provider settings on Supabase:**
-
    - Switch **"GitHub Enabled"** to **ON**
    - Find the **"Callback URL (for OAuth)"** field at the bottom: `https://[your-supabase-project].supabase.co/auth/v1/callback`
    - **Copy this callback URL**
@@ -446,7 +423,6 @@ Ask the user: "Have you successfully configured Google OAuth in Supabase with yo
    `https://abcdefghijklmnopqrst.supabase.co/auth/v1/callback`
 
 5. **Complete GitHub Application Setup**
-
    - Return to your GitHub OAuth application form
    - **Authorization callback URL:** Paste the Supabase callback URL:
      `https://[your-supabase-project].supabase.co/auth/v1/callback`
@@ -459,13 +435,11 @@ Ask the user: "Have you successfully configured Google OAuth in Supabase with yo
 **👤 USER TASK - Copy Credentials and Immediately Configure Supabase:**
 
 1. **Confirm App Creation**
-
    - After clicking "Register application", you should see a success message "Application created successfully"
    - You'll be redirected to your new OAuth app's settings page
    - The page title should show your app name
 
 2. **Copy Client ID and Immediately Add to Supabase**
-
    - Under the "General" tab of the sidebar, you should see the "Client ID" value (no generation needed)
    - It's a string of random characters (e.g., `abcd1234efgh5678`)
    - **Copy the exact Client ID value**
@@ -473,7 +447,6 @@ Ask the user: "Have you successfully configured Google OAuth in Supabase with yo
    - **Paste the Client ID** into the **"Client ID"** field in the GitHub provider settings
 
 3. **Generate Client Secret and Immediately Add to Supabase**
-
    - **Return to your GitHub tab**
    - Right under the "Client ID" value, you should see the "Client secret" section
    - Click **"Generate a new client secret"** button
@@ -588,7 +561,7 @@ import { createClient } from "@/lib/supabase/server";
  * Handles OAuth authentication securely on the server
  */
 export async function oAuthSignInAction(
-  provider: "google" | "github"
+  provider: "google" | "github",
 ): Promise<{ success: boolean; url?: string; error?: string }> {
   const supabase = await createClient();
 
@@ -740,7 +713,7 @@ import { toast } from "sonner";
 // Existing imports and component setup...
 
 const handleOAuthSignUp = async (
-  provider: "google" | "github"
+  provider: "google" | "github",
 ): Promise<void> => {
   setIsLoading(true);
 
@@ -758,7 +731,7 @@ const handleOAuthSignUp = async (
     toast.error(
       error instanceof Error
         ? error.message
-        : `${provider} authentication failed`
+        : `${provider} authentication failed`,
     );
     setIsLoading(false);
   }
@@ -797,7 +770,6 @@ const handleOAuthSignUp = async (
    `npm run dev`
 
 2. **Navigate to Authentication Pages**
-
    - Open [http://localhost:3000](http://localhost:3000) in your browser
    - Navigate to the login page (usually via "Sign In" button or `/auth/login`)
    - Navigate to the sign-up page (usually via "Sign Up" button or `/auth/sign-up`)
@@ -834,7 +806,6 @@ Ask the user: "Can you see the OAuth login buttons (Google and/or GitHub) on you
 **👤 USER TASK - Test Google Authentication:**
 
 1. **Test Google Sign-Up Flow**
-
    - On your sign-up page ([http://localhost:3000/auth/sign-up](http://localhost:3000/auth/sign-up))
    - Click **"Continue with Google"** button
    - You should be redirected to Google's OAuth consent screen
@@ -843,7 +814,6 @@ Ask the user: "Can you see the OAuth login buttons (Google and/or GitHub) on you
    - **Expected behavior:** Automatically signed in and redirected to your main app (usually `/chat`)
 
 2. **Test Google Login Flow**
-
    - Sign out of your application
    - Navigate to login page ([http://localhost:3000/auth/login](http://localhost:3000/auth/login))
    - Click **"Continue with Google"** button
@@ -863,7 +833,6 @@ Ask the user: "Can you see the OAuth login buttons (Google and/or GitHub) on you
 **👤 USER TASK - Test GitHub Authentication:**
 
 1. **Test GitHub Sign-Up Flow**
-
    - Create a test account or use a different browser/incognito mode
    - On your sign-up page, click **"Continue with GitHub"** button
    - You should be redirected to GitHub's OAuth authorization page
@@ -871,7 +840,6 @@ Ask the user: "Can you see the OAuth login buttons (Google and/or GitHub) on you
    - You should be redirected back to your application and automatically signed in
 
 2. **Test GitHub Login Flow**
-
    - Sign out and return to login page
    - Click **"Continue with GitHub"** button
    - Should quickly sign you in without additional authorization (already granted)
@@ -889,7 +857,6 @@ Ask the user: "Can you see the OAuth login buttons (Google and/or GitHub) on you
 **👤 USER TASK - Test Error Scenarios:**
 
 1. **Test OAuth Cancellation**
-
    - Start OAuth flow but click "Cancel" or "Deny" on the provider consent screen
    - Verify you're redirected back to login with an appropriate error message
    - The application should handle this gracefully without breaking
@@ -930,7 +897,6 @@ Before completing OAuth setup, verify:
 **👤 USER TASK - Production Google Config:**
 
 1. **Update Google Cloud Console Settings**
-
    - Return to Google Cloud Console → **APIs & Services** → **Credentials** (Guide the user to this exact path)
    - Click on your OAuth 2.0 Client ID to edit it
 
@@ -971,7 +937,6 @@ Based on production setups, your final configuration should look like:
 **👤 USER TASK - Production GitHub Config:**
 
 1. **Update GitHub OAuth Application**
-
    - Go to [https://github.com/settings/developers](https://github.com/settings/developers)
    - Click **"OAuth Apps"** → Click on your application (Guide the user to this exact path)
    - Update application settings for production:
@@ -981,14 +946,12 @@ Based on production setups, your final configuration should look like:
    - Click **"Update application"** to save changes
 
    **💡 Important GitHub OAuth Note:**
-
    - **Standard Supabase setup**: No callback URL change needed - GitHub OAuth uses the same Supabase callback for both environments
    - **Custom domain setup**: If you configured a custom domain for Supabase, get the new callback URL from Supabase → **Authentication** → **Providers** → **GitHub** provider settings
    - Only the homepage URL changes to your production domain
    - The same GitHub OAuth app works for both environments
 
    **✅ Real-world example:**
-
    - **Homepage URL:** `https://shipkit.ai`
    - **Callback URL:** `https://abcdefghijklmnopqrst.supabase.co/auth/v1/callback` (unchanged)
 

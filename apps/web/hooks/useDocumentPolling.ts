@@ -49,7 +49,7 @@ export function useDocumentPolling({
     try {
       // Use enhanced API endpoint that includes recently completed jobs
       const response = await fetch(
-        "/api/documents/processing-status?includeRecent=true"
+        "/api/documents/processing-status?includeRecent=true",
       );
 
       if (!response.ok) {
@@ -136,7 +136,10 @@ export function useDocumentPolling({
 
           // Create a map of ALL job updates (active + completed) by ID for quick lookup
           const processingMap = new Map(
-            allJobUpdates.map((doc: DocumentWithProcessingJob) => [doc.id, doc])
+            allJobUpdates.map((doc: DocumentWithProcessingJob) => [
+              doc.id,
+              doc,
+            ]),
           );
 
           // Track which documents changed status
@@ -173,11 +176,11 @@ export function useDocumentPolling({
         if (allJobUpdates.length > 0) {
           const serverFilenames = new Set(
             allJobs.map(
-              (doc: DocumentWithProcessingJob) => doc.originalFilename
-            )
+              (doc: DocumentWithProcessingJob) => doc.originalFilename,
+            ),
           );
           setOptimisticDocuments((prev) =>
-            prev.filter((doc) => !serverFilenames.has(doc.originalFilename))
+            prev.filter((doc) => !serverFilenames.has(doc.originalFilename)),
           );
         }
       }
@@ -269,8 +272,8 @@ export function useDocumentPolling({
         doc.status === "processing" ||
         (doc.processingJob &&
           ["pending", "processing", "retry_pending"].includes(
-            doc.processingJob.status
-          ))
+            doc.processingJob.status,
+          )),
     );
 
     if (processingDocs.length > 0 && !isPolling) {

@@ -14,9 +14,7 @@ import { env } from "@/lib/env";
 import { MODEL_CONFIG } from "@/lib/app-utils";
 import { EmbeddingServiceError } from "@/lib/embeddings/types";
 import { USAGE_EVENT_TYPES } from "@/lib/drizzle/schema/usage-events";
-import {
-  handleAssistantMessage,
-} from "@/app/actions/chat";
+import { handleAssistantMessage } from "@/app/actions/chat";
 
 // Use AI SDK UI message parts for request/response UI messages
 type UiPart = TextUIPart | FileUIPart;
@@ -67,7 +65,7 @@ export async function POST(req: Request): Promise<Response> {
       return new Response(
         usageCheck.reason ||
           "Usage limit exceeded. Please upgrade to continue.",
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -93,7 +91,11 @@ export async function POST(req: Request): Promise<Response> {
       for (const part of lastMessage.parts as UiPart[]) {
         if (isTextPart(part) && part.text) {
           userText += part.text;
-        } else if (isFilePart(part) && part.mediaType?.startsWith("image/") && part.url) {
+        } else if (
+          isFilePart(part) &&
+          part.mediaType?.startsWith("image/") &&
+          part.url
+        ) {
           images.push({
             name: part.filename || "image",
             url: part.url,
@@ -106,7 +108,7 @@ export async function POST(req: Request): Promise<Response> {
     if (userText.trim() === "" && images.length === 0) {
       return new Response(
         "Invalid message: Please provide either text or images",
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -137,7 +139,7 @@ export async function POST(req: Request): Promise<Response> {
       } else {
         return new Response(
           "Unable to search your documents. Please try again.",
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
@@ -183,7 +185,9 @@ Only include the Sources section when you actually use information from the prov
           parts: [
             {
               type: "text",
-              text: "Context from the user's documents:\n" + ragContext.join("\n\n"),
+              text:
+                "Context from the user's documents:\n" +
+                ragContext.join("\n\n"),
             },
           ],
         });
@@ -197,7 +201,7 @@ Only include the Sources section when you actually use information from the prov
     if (!Array.isArray(processedMessages) || processedMessages.length === 0) {
       return new Response("No valid messages to process", { status: 400 });
     }
-    
+
     // Track if there was an error during streaming
     let hasStreamError = false;
 
@@ -218,7 +222,7 @@ Only include the Sources section when you actually use information from the prov
             trigger,
             conversationId,
             content: "Something went wrong and please try again",
-            status: "error"
+            status: "error",
           });
         } catch (saveError) {
           console.error("⚠️ Failed to save error message:", saveError);
@@ -232,7 +236,7 @@ Only include the Sources section when you actually use information from the prov
             trigger,
             conversationId,
             content: finishResult.text,
-            status: "success"
+            status: "success",
           });
         } catch (saveError) {
           console.error("⚠️ Failed to save assistant message:", saveError);
@@ -264,7 +268,7 @@ Only include the Sources section when you actually use information from the prov
                 trigger,
                 conversationId,
                 content: partialContent,
-                status: "success"
+                status: "success",
               });
             } else {
               // No partial content to save, so we'll save an error message
@@ -272,7 +276,7 @@ Only include the Sources section when you actually use information from the prov
                 trigger,
                 conversationId,
                 content: "Something went wrong and please try again",
-                status: "error"
+                status: "error",
               });
             }
           }
@@ -283,14 +287,18 @@ Only include the Sources section when you actually use information from the prov
         // Only record usage event if there was no stream error (successful or aborted operations only)
         if (!hasStreamError) {
           try {
-            const usageResult = await recordUsageEvent(USAGE_EVENT_TYPES.MESSAGE);
+            const usageResult = await recordUsageEvent(
+              USAGE_EVENT_TYPES.MESSAGE,
+            );
             if (!usageResult.success) {
               console.error(
                 "⚠️ Failed to record message usage event:",
-                usageResult.error
+                usageResult.error,
               );
             } else {
-              console.log(`✅ Recorded message usage event ${isAborted ? '(aborted)' : '(completed)'}`);
+              console.log(
+                `✅ Recorded message usage event ${isAborted ? "(aborted)" : "(completed)"}`,
+              );
             }
           } catch (usageError) {
             console.error("⚠️ Error recording usage event:", usageError);
@@ -320,7 +328,7 @@ Only include the Sources section when you actually use information from the prov
     if (errorMessage.includes("429") || errorMessage.includes("rate_limit")) {
       return new Response(
         "Google AI API rate limit exceeded. Please try again later.",
-        { status: 429 }
+        { status: 429 },
       );
     }
 

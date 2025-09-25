@@ -19,7 +19,8 @@ export default function NotFound() {
               Page Not Found
             </h2>
             <p className="text-muted-foreground">
-              The page you&rsquo;re looking for doesn&rsquo;t exist. It might have been deleted or the link is incorrect.
+              The page you&rsquo;re looking for doesn&rsquo;t exist. It might
+              have been deleted or the link is incorrect.
             </p>
           </div>
         </div>

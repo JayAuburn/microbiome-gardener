@@ -25,7 +25,7 @@ interface UseUploadQueueProps {
   onUploadError?: (
     error: string,
     file: File,
-    uploadError?: UploadError
+    uploadError?: UploadError,
   ) => void;
   onAllUploadsComplete?: () => void;
 }
@@ -75,7 +75,7 @@ export function useUploadQueue({
   const uploadSingleFile = useCallback(
     async (
       item: UploadQueueItem,
-      onProgress: (progress: number) => void
+      onProgress: (progress: number) => void,
     ): Promise<string> => {
       const abortController = new AbortController();
       abortControllers.current.set(item.id, abortController);
@@ -111,7 +111,7 @@ export function useUploadQueue({
 
             console.warn(
               "⚠️ [BulkUpload] Storage limit exceeded:",
-              errorMessage
+              errorMessage,
             );
 
             onUploadErrorRef.current?.(errorMessage, item.file, uploadError);
@@ -141,63 +141,67 @@ export function useUploadQueue({
         onProgress(10);
 
         // Step 2: Upload file to GCS with real-time progress tracking
-        const uploadResponse = await new Promise<Response>((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          
-          // Handle abort controller
-          abortController.signal.addEventListener('abort', () => {
-            xhr.abort();
-            reject(new Error('Upload aborted'));
-          });
-          
-          // Track upload progress
-          xhr.upload.onprogress = (event) => {
-            if (event.lengthComputable) {
-              // Map real progress (0-100%) to our range (10-90%)
-              const realProgress = (event.loaded / event.total) * 100;
-              const mappedProgress = 10 + (realProgress * 0.8); // 10% + (0-100% * 80%)
-              onProgress(Math.round(mappedProgress));
-            }
-          };
-          
-          // Handle successful upload
-          xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              // Create a Response-like object for compatibility
-              const response = new Response(xhr.response, {
-                status: xhr.status,
-                statusText: xhr.statusText,
-                headers: new Headers(),
-              });
-              Object.defineProperty(response, 'ok', {
-                value: xhr.status >= 200 && xhr.status < 300,
-                writable: false
-              });
-              resolve(response);
-            } else {
-              reject(new Error(`Failed to upload file to GCS: ${xhr.status}`));
-            }
-          };
-          
-          // Handle network errors
-          xhr.onerror = () => {
-            reject(new Error(`Network error during upload to GCS`));
-          };
-          
-          // Handle abort
-          xhr.onabort = () => {
-            reject(new Error('Upload aborted'));
-          };
-          
-          // Configure and send request
-          xhr.open("PUT", uploadUrl);
-          xhr.setRequestHeader("Content-Type", item.file.type);
-          xhr.send(item.file);
-        });
+        const uploadResponse = await new Promise<Response>(
+          (resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+
+            // Handle abort controller
+            abortController.signal.addEventListener("abort", () => {
+              xhr.abort();
+              reject(new Error("Upload aborted"));
+            });
+
+            // Track upload progress
+            xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                // Map real progress (0-100%) to our range (10-90%)
+                const realProgress = (event.loaded / event.total) * 100;
+                const mappedProgress = 10 + realProgress * 0.8; // 10% + (0-100% * 80%)
+                onProgress(Math.round(mappedProgress));
+              }
+            };
+
+            // Handle successful upload
+            xhr.onload = () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                // Create a Response-like object for compatibility
+                const response = new Response(xhr.response, {
+                  status: xhr.status,
+                  statusText: xhr.statusText,
+                  headers: new Headers(),
+                });
+                Object.defineProperty(response, "ok", {
+                  value: xhr.status >= 200 && xhr.status < 300,
+                  writable: false,
+                });
+                resolve(response);
+              } else {
+                reject(
+                  new Error(`Failed to upload file to GCS: ${xhr.status}`),
+                );
+              }
+            };
+
+            // Handle network errors
+            xhr.onerror = () => {
+              reject(new Error(`Network error during upload to GCS`));
+            };
+
+            // Handle abort
+            xhr.onabort = () => {
+              reject(new Error("Upload aborted"));
+            };
+
+            // Configure and send request
+            xhr.open("PUT", uploadUrl);
+            xhr.setRequestHeader("Content-Type", item.file.type);
+            xhr.send(item.file);
+          },
+        );
 
         if (!uploadResponse.ok) {
           throw new Error(
-            `Failed to upload file to GCS: ${uploadResponse.status}`
+            `Failed to upload file to GCS: ${uploadResponse.status}`,
           );
         }
 
@@ -215,7 +219,7 @@ export function useUploadQueue({
               {
                 method: "POST",
                 signal: abortController.signal,
-              }
+              },
             );
 
             if (completeResponse.ok) {
@@ -233,10 +237,10 @@ export function useUploadQueue({
                 retryCount++;
                 if (retryCount < maxRetries) {
                   console.log(
-                    `🔄 [BulkUpload] Retrying completion for ${item.file.name} (attempt ${retryCount + 1}/${maxRetries})`
+                    `🔄 [BulkUpload] Retrying completion for ${item.file.name} (attempt ${retryCount + 1}/${maxRetries})`,
                   );
                   await new Promise((resolve) =>
-                    setTimeout(resolve, 1000 * retryCount)
+                    setTimeout(resolve, 1000 * retryCount),
                   ); // Exponential backoff
                   continue;
                 }
@@ -249,10 +253,10 @@ export function useUploadQueue({
             retryCount++;
             if (retryCount < maxRetries) {
               console.log(
-                `🔄 [BulkUpload] Retrying completion for ${item.file.name} due to fetch error (attempt ${retryCount + 1}/${maxRetries})`
+                `🔄 [BulkUpload] Retrying completion for ${item.file.name} due to fetch error (attempt ${retryCount + 1}/${maxRetries})`,
               );
               await new Promise((resolve) =>
-                setTimeout(resolve, 1000 * retryCount)
+                setTimeout(resolve, 1000 * retryCount),
               );
               continue;
             }
@@ -349,12 +353,12 @@ export function useUploadQueue({
           if (error.isStorageLimitError()) {
             console.warn(
               "⚠️ [BulkUpload] Storage limit exceeded:",
-              errorMessage
+              errorMessage,
             );
           } else if (error.isFileTypeError() || error.isFileSizeError()) {
             console.warn(
               "⚠️ [BulkUpload] File validation error:",
-              errorMessage
+              errorMessage,
             );
           } else {
             console.error("💥 [BulkUpload] Upload failed:", errorMessage);
@@ -373,7 +377,7 @@ export function useUploadQueue({
         abortControllers.current.delete(item.id);
       }
     },
-    []
+    [],
   );
 
   // Process upload queue
@@ -404,7 +408,7 @@ export function useUploadQueue({
         items: prev.items.map((item) =>
           nextItems.find((nextItem) => nextItem.id === item.id)
             ? { ...item, status: "uploading" as const, startTime: new Date() }
-            : item
+            : item,
         ),
       }));
 
@@ -418,7 +422,7 @@ export function useUploadQueue({
               items: prev.items.map((queueItem) =>
                 queueItem.id === item.id
                   ? { ...queueItem, progress }
-                  : queueItem
+                  : queueItem,
               ),
             }));
           });
@@ -435,7 +439,7 @@ export function useUploadQueue({
                     progress: 100,
                     documentId: documentId,
                   }
-                : queueItem
+                : queueItem,
             ),
           }));
 
@@ -452,7 +456,7 @@ export function useUploadQueue({
                       ...queueItem,
                       status: "cancelled" as const,
                     }
-                  : queueItem
+                  : queueItem,
               ),
             }));
             console.log(`🚫 [BulkUpload] Upload cancelled: ${item.file.name}`);
@@ -479,7 +483,7 @@ export function useUploadQueue({
                           ? 0
                           : queueItem.retryCount,
                     }
-                  : queueItem
+                  : queueItem,
               ),
             }));
 
@@ -487,7 +491,7 @@ export function useUploadQueue({
             if (errorMessage.includes("Storage limit exceeded")) {
               console.warn(
                 `⚠️ [BulkUpload] Storage limit exceeded: ${item.file.name}`,
-                errorMessage
+                errorMessage,
               );
             } else if (
               errorMessage.includes("Unsupported file type") ||
@@ -495,12 +499,12 @@ export function useUploadQueue({
             ) {
               console.warn(
                 `⚠️ [BulkUpload] File validation error: ${item.file.name}`,
-                errorMessage
+                errorMessage,
               );
             } else {
               console.error(
                 `❌ [BulkUpload] Upload failed: ${item.file.name}`,
-                error
+                error,
               );
             }
           }
@@ -554,7 +558,7 @@ export function useUploadQueue({
     // Abort any ongoing uploads
     abortControllers.current.forEach((controller) => controller.abort());
     abortControllers.current.clear();
-    
+
     // Reset queue state
     setQueue({
       items: [],
@@ -565,7 +569,7 @@ export function useUploadQueue({
       completedFiles: 0,
       failedFiles: 0,
     });
-    
+
     // Reset progress state
     setProgress({
       totalFiles: 0,
@@ -573,7 +577,7 @@ export function useUploadQueue({
       failedFiles: 0,
       overallProgress: 0,
     });
-    
+
     // Reset processing lock
     isProcessing.current = false;
   }, []);

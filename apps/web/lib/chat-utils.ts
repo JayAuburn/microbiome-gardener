@@ -47,7 +47,7 @@ export interface ExtendedMessage extends UIMessage {
  */
 export async function fetchAndFormatConversationMessages(
   conversationId: string,
-  userId: string
+  userId: string,
 ): Promise<{
   success: boolean;
   messages?: ExtendedMessage[];
@@ -72,12 +72,12 @@ export async function fetchAndFormatConversationMessages(
       .orderBy(asc(dbMessages.created_at));
 
     console.log(
-      `📋 Processing ${dbMessagesResult.length} messages from conversation`
+      `📋 Processing ${dbMessagesResult.length} messages from conversation`,
     );
 
     const hasAttachments = dbMessagesResult.some(
       (msg) =>
-        msg.attachments && (msg.attachments as MessageAttachment[]).length > 0
+        msg.attachments && (msg.attachments as MessageAttachment[]).length > 0,
     );
 
     let finalMessages: Message[] = dbMessagesResult;
@@ -88,18 +88,18 @@ export async function fetchAndFormatConversationMessages(
 
       const refreshResult = await refreshConversationAttachments(
         dbMessagesResult,
-        userId
+        userId,
       );
 
       if (refreshResult.success && refreshResult.refreshedCount > 0) {
         console.log(
-          `✅ Refreshed ${refreshResult.refreshedCount} expired attachment URLs`
+          `✅ Refreshed ${refreshResult.refreshedCount} expired attachment URLs`,
         );
         // Use the updated messages from the refresh result
         finalMessages = refreshResult.updatedMessages as Message[];
       } else if (refreshResult.failedCount > 0) {
         console.error(
-          `❌ Failed to refresh ${refreshResult.failedCount} attachment URLs`
+          `❌ Failed to refresh ${refreshResult.failedCount} attachment URLs`,
         );
       } else {
         console.log("✅ All attachment URLs are still valid");
@@ -122,15 +122,20 @@ export async function fetchAndFormatConversationMessages(
       }
 
       // Add file attachments as file parts
-      if (msg.attachments && (msg.attachments as MessageAttachment[]).length > 0) {
-        (msg.attachments as MessageAttachment[]).forEach((attachment: MessageAttachment) => {
-          parts.push({
-            type: "file",
-            mediaType: attachment.contentType,
-            url: attachment.signedUrl,
-            filename: attachment.name,
-          });
-        });
+      if (
+        msg.attachments &&
+        (msg.attachments as MessageAttachment[]).length > 0
+      ) {
+        (msg.attachments as MessageAttachment[]).forEach(
+          (attachment: MessageAttachment) => {
+            parts.push({
+              type: "file",
+              mediaType: attachment.contentType,
+              url: attachment.signedUrl,
+              filename: attachment.name,
+            });
+          },
+        );
       }
 
       const message: ExtendedMessage = {
@@ -140,7 +145,10 @@ export async function fetchAndFormatConversationMessages(
       };
 
       // Add database attachments for display
-      if (msg.attachments && (msg.attachments as MessageAttachment[]).length > 0) {
+      if (
+        msg.attachments &&
+        (msg.attachments as MessageAttachment[]).length > 0
+      ) {
         message.attachments = msg.attachments as MessageAttachment[];
       }
 
@@ -157,10 +165,16 @@ export async function fetchAndFormatConversationMessages(
       messages,
     };
   } catch (error) {
-    console.error("❌ Error fetching and formatting conversation messages:", error);
+    console.error(
+      "❌ Error fetching and formatting conversation messages:",
+      error,
+    );
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to fetch conversation messages",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch conversation messages",
     };
   }
 }

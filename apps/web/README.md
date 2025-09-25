@@ -107,22 +107,25 @@ This application includes Stripe subscription integration that requires webhook 
 ### Setting up Webhooks
 
 1. **Forward webhook events to your local server:**
+
    ```bash
    stripe listen --forward-to localhost:3000/api/webhooks/stripe
    ```
 
 2. **Copy the webhook signing secret** from the CLI output (starts with `whsec_`) and add it to your `.env.local`:
+
    ```bash
    STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
    ```
 
 3. **Add other required Stripe environment variables** to your `.env.local`:
+
    ```bash
    # Stripe Configuration
    STRIPE_SECRET_KEY=sk_test_your_secret_key_here
    STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
    STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
-   
+
    # Stripe Product IDs (configure these in your Stripe Dashboard)
    STRIPE_BASIC_PRICE_ID=price_your_basic_price_id_here
    STRIPE_PRO_PRICE_ID=price_your_pro_price_id_here
@@ -139,7 +142,7 @@ stripe trigger customer.subscription.created
 # Test a subscription update
 stripe trigger customer.subscription.updated
 
-# Test a subscription cancellation  
+# Test a subscription cancellation
 stripe trigger customer.subscription.deleted
 ```
 

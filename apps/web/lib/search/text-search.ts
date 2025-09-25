@@ -14,7 +14,7 @@ import {
 
 export async function searchTextChunks(
   queryEmbedding: number[],
-  options: SearchOptions
+  options: SearchOptions,
 ): Promise<SearchResult[]> {
   const { limit, similarity_threshold, user_id } = options;
 
@@ -37,7 +37,7 @@ export async function searchTextChunks(
         p_user_id: user_id,
         p_match_threshold: similarity_threshold,
         p_match_count: limit,
-      }
+      },
     );
 
     if (error) {
@@ -49,7 +49,7 @@ export async function searchTextChunks(
       console.log("No results from RPC text search");
       return [];
     }
-    
+
     // Format results to match SearchResult interface
     const formattedResults: SearchResult[] = searchResults.map(
       (result: RpcSearchResult) => ({
@@ -61,9 +61,9 @@ export async function searchTextChunks(
         metadata: result.metadata as ChunkMetadata,
         document_filename: result.document_filename,
         document_id: result.document_id,
-      })
+      }),
     );
-    
+
     console.log("Text search completed via RPC:", {
       resultCount: formattedResults.length,
       avgSimilarity:

@@ -11,7 +11,7 @@ import { SearchResult, SearchResultsDict, CombinedSearchResult } from "./types";
  */
 export function combineAndRankResults(
   searchResults: SearchResultsDict,
-  maxResults: number = 10
+  maxResults: number = 10,
 ): CombinedSearchResult {
   console.log("📊 Search results received:", {
     textCount: searchResults["text"]?.length || 0,
@@ -23,7 +23,7 @@ export function combineAndRankResults(
   const textResults = searchResults["text"] || [];
   const multimodalResults = [
     ...(searchResults["text-multimodal"] || []),
-    ...(searchResults["image-multimodal"] || [])
+    ...(searchResults["image-multimodal"] || []),
   ];
 
   console.log("Extracted results:", {
@@ -33,26 +33,26 @@ export function combineAndRankResults(
 
   // Strategy: Take top results from each embedding type separately
   // This ensures balanced representation regardless of similarity score scales
-  
+
   const maxPerType = Math.floor(maxResults / 2); // 5 for each type when maxResults = 10
-  
+
   // Sort and take top results from each type separately
   const topTextResults = textResults
     .sort((a: SearchResult, b: SearchResult) => b.similarity - a.similarity)
     .slice(0, maxPerType);
-    
+
   const topMultimodalResults = multimodalResults
     .sort((a: SearchResult, b: SearchResult) => b.similarity - a.similarity)
     .slice(0, maxPerType);
 
   // Remove duplicates based on chunk_id (if a chunk appears in both searches)
   const uniqueResults = new Map<string, SearchResult>();
-  
+
   // Add text results first
   for (const result of topTextResults) {
     uniqueResults.set(result.chunk_id, result);
   }
-  
+
   // Add multimodal results, keeping higher similarity if duplicate
   for (const result of topMultimodalResults) {
     const existingResult = uniqueResults.get(result.chunk_id);
@@ -72,16 +72,16 @@ export function combineAndRankResults(
 
   // Calculate statistics
   const textResultsCount = combinedResults.filter(
-    (r) => r.embedding_type === "text"
+    (r) => r.embedding_type === "text",
   ).length;
   const multimodalResultsCount = combinedResults.filter(
-    (r) => r.embedding_type === "multimodal"
+    (r) => r.embedding_type === "multimodal",
   ).length;
 
   console.log("Combined search results:", {
     totalResults: combinedResults.length,
     textResultsCount,
-    multimodalResultsCount
+    multimodalResultsCount,
   });
 
   return {

@@ -11,7 +11,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!signature) {
     return NextResponse.json(
       { error: "Missing stripe-signature header" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      env.STRIPE_WEBHOOK_SECRET
+      env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
     console.error("⚠️ Webhook signature verification failed:", err);
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     console.error("❌ Error processing webhook:", error);
     return NextResponse.json(
       { error: "Webhook processing failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -56,7 +56,7 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice): Promise<void> {
 
   console.log(`💰 Payment succeeded for customer: ${customerId}`);
   console.log(
-    `💰 Invoice amount: ${invoice.amount_paid / 100} ${invoice.currency}`
+    `💰 Invoice amount: ${invoice.amount_paid / 100} ${invoice.currency}`,
   );
 
   // Email notification for successful payment
@@ -67,16 +67,16 @@ async function handlePaymentSucceeded(invoice: Stripe.Invoice): Promise<void> {
     // - Send payment confirmation receipt to customer
     // - Notify internal team of subscription activation
     console.log(
-      `📧 Payment success notification logged for customer: ${customerId}`
+      `📧 Payment success notification logged for customer: ${customerId}`,
     );
     console.log(
-      `📧 Production setup: Implement email service integration here`
+      `📧 Production setup: Implement email service integration here`,
     );
   } catch (emailError) {
     // Don't fail webhook processing if email fails
     console.error(
       `📧 Email notification failed for customer ${customerId}:`,
-      emailError
+      emailError,
     );
   }
 }

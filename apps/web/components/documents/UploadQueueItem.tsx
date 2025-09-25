@@ -106,7 +106,7 @@ export function UploadQueueItem({
       className={cn(
         "p-4 transition-colors duration-200",
         getBackgroundColor(),
-        !isLast && "border-b border-border"
+        !isLast && "border-b border-border",
       )}
     >
       <div className="flex items-center justify-between">

@@ -16,12 +16,12 @@ export const IMAGE_UPLOAD_CONSTRAINTS = {
   MAX_FILES_PER_MESSAGE: 4,
   ALLOWED_MIME_TYPES: [
     "image/jpeg",
-    "image/jpg", 
+    "image/jpg",
     "image/png",
   ] as readonly string[],
   BUCKET_NAME: "chat-images",
   CACHE_CONTROL: "3600",
-  EXPIRATION_TIME: 24 * 60 * 60
+  EXPIRATION_TIME: 24 * 60 * 60,
 } as const;
 
 // =============================================================================

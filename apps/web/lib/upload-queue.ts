@@ -102,11 +102,11 @@ export function createQueueItem(file: File): UploadQueueItem {
  * Calculates overall upload progress
  */
 export function calculateProgress(
-  items: UploadQueueItem[]
+  items: UploadQueueItem[],
 ): BulkUploadProgress {
   const totalFiles = items.length;
   const completedFiles = items.filter(
-    (item) => item.status === "completed"
+    (item) => item.status === "completed",
   ).length;
   const failedFiles = items.filter((item) => item.status === "error").length;
 
@@ -129,7 +129,7 @@ export function calculateProgress(
   // Calculate estimated time remaining for bulk uploads
   const completedItems = items.filter(
     (item) =>
-      item.status === "completed" && item.startTime && item.completedTime
+      item.status === "completed" && item.startTime && item.completedTime,
   );
 
   let estimatedTimeRemaining: number | undefined;
@@ -149,7 +149,7 @@ export function calculateProgress(
 
     if (remainingFiles > 0 && avgUploadTime > 0) {
       estimatedTimeRemaining = Math.round(
-        (avgUploadTime * remainingFiles) / 1000
+        (avgUploadTime * remainingFiles) / 1000,
       ); // in seconds
     }
 
@@ -203,7 +203,7 @@ export function formatUploadSpeed(bytesPerSecond: number): string {
  * Gets the next items to upload based on concurrency limits
  */
 export function getNextUploadItems(
-  items: UploadQueueItem[]
+  items: UploadQueueItem[],
 ): UploadQueueItem[] {
   // For single files, skip complex concurrency management
   if (items.length === 1) {
@@ -213,7 +213,7 @@ export function getNextUploadItems(
 
   // For bulk uploads, use full concurrency management
   const uploadingCount = items.filter(
-    (item) => item.status === "uploading"
+    (item) => item.status === "uploading",
   ).length;
   const availableSlots = UPLOAD_CONFIG.maxConcurrentUploads - uploadingCount;
 

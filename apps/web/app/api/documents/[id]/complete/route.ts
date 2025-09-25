@@ -13,7 +13,7 @@ interface RouteParams {
 
 export async function POST(
   _request: NextRequest,
-  { params }: RouteParams
+  { params }: RouteParams,
 ): Promise<NextResponse> {
   try {
     const { id } = await params;
@@ -61,7 +61,7 @@ export async function POST(
       console.error("❌ [complete] Document not found or access denied");
       return NextResponse.json(
         { error: "Document not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -74,7 +74,7 @@ export async function POST(
       // Handle race condition: If EventArc already started processing, that's fine
       if (document.status === "processing") {
         console.log(
-          "✅ [complete] EventArc already started processing - this is expected"
+          "✅ [complete] EventArc already started processing - this is expected",
         );
         return NextResponse.json({
           success: true,
@@ -88,7 +88,7 @@ export async function POST(
       // Handle case where processing already completed
       if (document.status === "completed") {
         console.log(
-          "✅ [complete] Document already completed - this is expected"
+          "✅ [complete] Document already completed - this is expected",
         );
         return NextResponse.json({
           success: true,
@@ -107,7 +107,7 @@ export async function POST(
         {
           error: `Document is in unexpected state: ${document.status}. Please try uploading again.`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -149,14 +149,14 @@ export async function POST(
       console.log("✅ [complete] Document status updated to error");
       return NextResponse.json(
         { error: "File not found in storage" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Upload verified - EventArc will automatically detect the GCS event
     // and transition the document to processing status
     console.log(
-      "✅ [complete] Upload verification complete, EventArc will handle processing"
+      "✅ [complete] Upload verification complete, EventArc will handle processing",
     );
 
     const response = {
@@ -179,7 +179,7 @@ export async function POST(
 
     return NextResponse.json(
       { error: "Failed to complete upload" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
