@@ -113,7 +113,8 @@ Generate a complete `roadmap.md` file saved in **ai_docs/prep/** folder specific
 
 **RAG Processing Infrastructure (PLUG-AND-PLAY):**
 **apps/rag-processor/** - Python FastAPI service for document processing
-**apps/rag-queue-handler/** - Python Cloud Function for EventArc integration
+**apps/rag-gcs-handler/** - Cloud Function triggered by file uploads to initiate processing
+**apps/rag-task-processor/** - Cloud Function that manages and executes document processing jobs
 
 - **🔒 IMPORTANT**: These are plug-and-play infrastructure - modify only if absolutely necessary
 - **Purpose**: Handle document processing, embeddings, vector storage automatically

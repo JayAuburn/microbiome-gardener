@@ -9,8 +9,8 @@ __pycache__/
 
 # Environment files
 .env
-.env.*
 .env*.local
+.env.prod
 
 # IDE and Editor files
 .vscode/

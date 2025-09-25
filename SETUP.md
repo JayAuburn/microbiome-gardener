@@ -98,12 +98,14 @@ This is a **complete fullstack RAG SaaS application** with **cloud-native archit
   ├── 📁 web/                    ← Next.js Frontend (dev: local, prod: deployed)
   │   └── .env.local             ← Environment file to be created
   ├── 📁 rag-processor/          ← Python Processing Service (cloud-native)
-  └── 📁 rag-queue-handler/      ← Cloud Function for scalable processing
+  ├── 📁 rag-gcs-handler/        ← Cloud Function to add new storage items to queue
+  └── 📁 rag-task-processor/     ← Cloud Function to process items in queue
 ```
 
 - **🌐 `apps/web/`** - Next.js frontend with Supabase authentication and Stripe billing
 - **🐍 `apps/rag-processor/`** - Python RAG service for document processing and embeddings
-- **🔄 `apps/rag-queue-handler/`** - Cloud Function for queue management and auto-scaling
+- **☁️ `apps/rag-gcs-handler/`** - Cloud Function triggered by file uploads to initiate processing
+- **⚙️ `apps/rag-task-processor/`** - Cloud Function that manages and executes document processing jobs
 
 **⚠️ IMPORTANT:** This is a **complete RAG SaaS product**. You'll deploy both frontend and backend to create a production-ready document processing platform.
 

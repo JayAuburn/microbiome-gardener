@@ -31,7 +31,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["scripts", "apps/rag-processor/rag_processor", "apps/rag-queue-handler"]
+packages = ["scripts", "apps/rag-processor/rag_processor", "apps/rag-gcs-handler", "apps/rag-task-processor"]
 
 [tool.hatch.metadata]
 allow-direct-references = true

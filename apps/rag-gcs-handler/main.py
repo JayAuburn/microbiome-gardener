@@ -1,4 +1,4 @@
-# rag-queue-handler/main.py
+# rag-gcs-handler/main.py
 
 import json
 import os
