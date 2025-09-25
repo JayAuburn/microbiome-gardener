@@ -532,6 +532,9 @@ I'll now help you set up the project dependencies. First, I need to verify we're
 # Verify we're in the root directory
 pwd
 
+# Install root dependencies
+npm install
+
 # Install web dependencies
 npm run setup
 ```
