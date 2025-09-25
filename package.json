@@ -6,8 +6,7 @@
   ],
   "scripts": {
     "dev": "npm run web",
-    "dev:full": "concurrently \"npm run web\" \"npm run stripe:listen\"",
-    "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",
+    "dev:full": "cd apps/web && npm run dev:full",
     "web": "npm run dev --workspace=web",
     "web:build": "npm run build --workspace=web",
     "web:start": "npm run start --workspace=web",
@@ -16,7 +15,9 @@
     "start": "npm run start --workspace=web",
     "type-check": "npm run type-check --workspace=web",
     "db:generate": "npm run db:generate --workspace=web",
+    "db:generate:prod": "npm run db:generate:prod --workspace=web",
     "db:generate:custom": "npm run db:generate:custom --workspace=web",
+    "db:generate:custom:prod": "npm run db:generate:custom:prod --workspace=web",
     "db:migrate": "npm run db:migrate --workspace=web",
     "db:migrate:prod": "npm run db:migrate:prod --workspace=web",
     "db:rollback": "npm run db:rollback --workspace=web",
@@ -25,6 +26,7 @@
     "db:status:prod": "npm run db:status:prod --workspace=web",
     "db:seed": "npm run db:seed --workspace=web",
     "storage:setup": "npm run storage:setup --workspace=web",
+    "storage:setup:prod": "npm run storage:setup:prod --workspace=web",
     "setup": "npm install --workspace=web",
     "setup:gcp:dev": "uv run python -m scripts.setup_gcp_dev",
     "setup:gcp:prod": "uv run python -m scripts.setup_gcp_prod",
@@ -42,9 +44,9 @@
   },
   "devDependencies": {
     "prettier": "^3.6.2",
-    "eslint": "^9.30.0",
-    "typescript": "^5.8.3",
-    "concurrently": "^8.2.0",
+    "eslint": "^9",
+    "typescript": "^5",
+    "concurrently": "^9.1.0",
     "cross-env": "^7.0.3"
   }
 }
