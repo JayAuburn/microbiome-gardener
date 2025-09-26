@@ -1,6 +1,6 @@
 {
   "templateName": "rag-saas",
-  "version": "1.1.22",
+  "version": "1.1.23",
   "generatedAt": "2024-06-30T19:30:00Z",
   "cliVersion": "1.1.22",
   "description": "AI RAG app with document Q&A and Stripe billing",
@@ -16,6 +16,6 @@
     "admin-panel"
   ],
   "changelog": {
-    "1.0.0": "Initial release with chat + billing functionality"
+    "2.0.0": "Initial release with chat + billing functionality"
   }
 }
