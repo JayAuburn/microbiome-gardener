@@ -1,9 +1,16 @@
+---
+globs: *.ts,*.tsx
+alwaysApply: false
+---
+
 # Never Use `void` to Suppress Unused Variable Warnings
 
 ## Context
+
 Using `void` statements to suppress TypeScript unused variable warnings is a dangerous anti-pattern that masks real code quality issues. This hack bypasses proper code analysis and creates technical debt instead of addressing the root cause.
 
 Examples of this anti-pattern:
+
 ```typescript
 // ❌ FORBIDDEN - Using void to suppress warnings
 const unusedVariable = getValue();
@@ -16,6 +23,7 @@ void isInputFocused;
 ```
 
 This approach:
+
 - **Hides real issues** that should be addressed properly
 - **Creates technical debt** by leaving unused code in place
 - **Bypasses TypeScript's helpful analysis** designed to catch dead code
@@ -23,6 +31,7 @@ This approach:
 - **Violates clean code principles** of removing unused code
 
 ## Rule
+
 1. **NEVER use `void` statements** to suppress unused variable warnings
 2. **NEVER use `void` with variables** to bypass linting rules
 3. **Always fix the root cause** instead of suppressing the warning
@@ -32,17 +41,20 @@ This approach:
 ## Proper Solutions Instead of `void`
 
 ### Solution 1: Remove Unused Variables
+
 | ❌ Bad (void suppression) | ✅ Good (remove unused) |
-|---|---|
-| ```typescript
+| ------------------------- | ----------------------- |
+
+| `typescript
 const [isInputFocused, setIsInputFocused] = useState(false);
 // Suppress lint warning
 void isInputFocused;
-``` | ```typescript
+` | ```typescript
 // Simply remove the unused variable
 const [, setIsInputFocused] = useState(false);
 // OR if setter is also unused, remove entirely
-``` |
+
+````|
 
 ### Solution 2: Use Underscore Prefix for Intentionally Unused
 | ❌ Bad (void suppression) | ✅ Good (underscore prefix) |
@@ -67,7 +79,7 @@ void isInputFocused; // Not actually using it
 const [isInputFocused, setIsInputFocused] = useState(false);
 
 // Pass to component that needs it
-<ChatInput 
+<ChatInput
   onFocus={() => setIsInputFocused(true)}
   onBlur={() => setIsInputFocused(false)}
 />
@@ -93,9 +105,10 @@ return neededProperty;
 const [isInputFocused, setIsInputFocused] = useState(false);
 // Suppress lint warning - isInputFocused is used in ChatInput component
 void isInputFocused;
-```
+````
 
 **The Proper Solution:**
+
 ```typescript
 // ✅ What we should have done
 // Option 1: Remove if truly unused
@@ -112,12 +125,14 @@ const [isInputFocused, setIsInputFocused] = useState(false);
 ## Why This Rule Exists
 
 ### Code Quality Issues
+
 - **Dead Code Detection** - TypeScript's unused variable warnings help identify dead code
 - **Maintenance Problems** - Unused variables make code harder to understand and maintain
 - **Performance Impact** - Unused variables may cause unnecessary computations or memory usage
 - **Refactoring Safety** - Unused variables can indicate incomplete refactoring
 
 ### Development Best Practices
+
 - **Clean Code Principles** - Remove code that doesn't serve a purpose
 - **TypeScript Benefits** - Let the type system help you write better code
 - **Code Review Quality** - Reviewers can focus on real issues, not suppressed warnings
@@ -126,6 +141,7 @@ const [isInputFocused, setIsInputFocused] = useState(false);
 ## Acceptable Alternatives
 
 ### For Function Parameters
+
 ```typescript
 // ✅ Good - Use underscore for intentionally unused parameters
 function handleEvent(_event: Event, data: string): void {
@@ -139,6 +155,7 @@ function handleClick(_: React.MouseEvent): void {
 ```
 
 ### For Destructuring
+
 ```typescript
 // ✅ Good - Use rest operator to ignore unused properties
 const { neededProp, ..._ } = complexObject;
@@ -148,6 +165,7 @@ const [first, , third] = arrayValues;
 ```
 
 ### For Hook Returns
+
 ```typescript
 // ✅ Good - Destructure only what you need
 const { data } = useQuery(); // Don't destructure error, loading if unused
@@ -171,6 +189,7 @@ Ensure your ESLint config catches these patterns:
 ```
 
 ## Checklist for the Assistant
+
 - [ ] Never suggest using `void` to suppress unused variable warnings
 - [ ] Always identify why a variable is unused and address the root cause
 - [ ] Suggest removing unused variables completely when possible
@@ -186,9 +205,3 @@ There are **NO exceptions** to this rule. If you encounter a situation where you
 2. **Analyze the root cause** - Why is the variable unused?
 3. **Apply proper solution** - Remove, refactor, or mark as intentionally unused
 4. **Ask for guidance** if unsure about the best approach
-
-**Remember**: If a variable is truly unused, it should be removed. If it's needed, it should be used properly. There's no middle ground that requires `void` suppression.
-description:
-globs:
-alwaysApply: false
----

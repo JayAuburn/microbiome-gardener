@@ -1,17 +1,18 @@
-
 ---
-description: 
-globs: *.ts,*.tsx,*.py
+globs: *.py,*.ts,*.tsx
 alwaysApply: false
 ---
+
 # Commenting Best Practices - Write Meaningful, Not Noisy Comments
 
 ## Context
+
 Comments should enhance code readability and provide valuable context that isn't obvious from the code itself. The goal is to write self-documenting code with strategic, high-value comments.
 
-**Key Principle**: Comments should explain *why*, not *what*. The code already shows *what* it does.
+**Key Principle**: Comments should explain _why_, not _what_. The code already shows _what_ it does.
 
 ## Rule
+
 1. **Write comments that add value** - explain business logic, decisions, and non-obvious behavior.
 2. **NEVER write migration history comments** - they become outdated clutter.
 3. **Avoid obvious comments** - if the code is self-explanatory, don't comment it.
@@ -22,6 +23,7 @@ Comments should enhance code readability and provide valuable context that isn't
 ## Comments to AVOID
 
 ### ❌ Migration/History Comments
+
 ```typescript
 // ❌ Bad - Migration history clutter
 // =============================================================================
@@ -49,11 +51,12 @@ from .new_db_utils import get_user_data
 ```
 
 ### ❌ Obvious/Redundant Comments
+
 ```typescript
 // ❌ Bad - States the obvious
-user.name = name;  // Set the user's name
-counter++;         // Increment counter by 1
-return result;     // Return the result
+user.name = name; // Set the user's name
+counter++; // Increment counter by 1
+return result; // Return the result
 ```
 
 ```python
@@ -64,6 +67,7 @@ return result       # Return the result
 ```
 
 ### ❌ Outdated/Wrong Comments
+
 ```typescript
 // ❌ Bad - Comment doesn't match code
 // Calculate total with 15% tax
@@ -71,7 +75,7 @@ const total = price * 1.08; // Actually 8% tax
 ```
 
 ```python
-# ❌ Bad - Comment doesn't match code  
+# ❌ Bad - Comment doesn't match code
 # Calculate total with 15% tax
 total = price * 1.08  # Actually 8% tax
 ```
@@ -79,11 +83,12 @@ total = price * 1.08  # Actually 8% tax
 ## Comments to WRITE
 
 ### ✅ Business Logic and Requirements
+
 ```typescript
 function calculateDiscount(orderTotal: number, customerTier: string): number {
   // Premium customers get 15% discount on orders over $100
   // to encourage larger purchases and reward loyalty
-  if (customerTier === 'premium' && orderTotal > 100) {
+  if (customerTier === "premium" && orderTotal > 100) {
     return orderTotal * 0.15;
   }
   return 0;
@@ -100,6 +105,7 @@ def calculate_discount(order_total: float, customer_tier: str) -> float:
 ```
 
 ### ✅ Non-Obvious Technical Decisions
+
 ```typescript
 async function uploadFile(file: File): Promise<UploadResult> {
   // Use chunked upload for files over 10MB to prevent timeout
@@ -121,6 +127,7 @@ async def upload_file(file: File) -> UploadResult:
 ```
 
 ### ✅ Complex Algorithms or Math
+
 ```typescript
 function calculateShippingCost(weight: number, distance: number): number {
   // Shipping cost formula: base rate + (weight factor × distance factor)
@@ -128,7 +135,7 @@ function calculateShippingCost(weight: number, distance: number): number {
   const baseRate = 5.99;
   const weightFactor = weight * 0.1;
   const distanceFactor = distance * 0.05;
-  return baseRate + (weightFactor * distanceFactor);
+  return baseRate + weightFactor * distanceFactor;
 }
 ```
 
@@ -143,6 +150,7 @@ def calculate_shipping_cost(weight: float, distance: float) -> float:
 ```
 
 ### ✅ Important Warnings and Performance Notes
+
 ```typescript
 async function deleteUser(userId: string): Promise<void> {
   // CRITICAL: This permanently deletes user data and cannot be undone.
@@ -161,6 +169,7 @@ async def delete_user(user_id: str) -> None:
 ## Self-Documenting Code Patterns
 
 ### Use Descriptive Names Instead of Comments
+
 ```typescript
 // ❌ Bad - Needs comments
 const d = new Date();
@@ -186,6 +195,7 @@ seconds = milliseconds / 1000
 ```
 
 ### Extract Methods with Clear Names
+
 ```typescript
 // ❌ Bad - Complex logic needs explanation
 function processOrder(order: Order): void {
@@ -196,7 +206,7 @@ function processOrder(order: Order): void {
   // ... more complex logic
 }
 
-// ✅ Good - Extracted methods are self-documenting  
+// ✅ Good - Extracted methods are self-documenting
 function processOrder(order: Order): void {
   validateOrderItems(order);
   order.total = calculateTotalWithTax(order.items);
@@ -222,32 +232,37 @@ def process_order(order: Order) -> None:
 ## Language-Specific Documentation
 
 ### TypeScript - JSDoc for Public APIs
+
 ```typescript
 /**
  * Uploads a file with automatic retry and progress tracking
- * 
+ *
  * @param file - The file to upload
  * @param options - Upload configuration options
  * @returns Promise resolving to upload result with file URL
  * @throws {UploadError} When file size exceeds limit or upload fails
  */
-async function uploadFile(file: File, options: UploadOptions = {}): Promise<UploadResult> {
+async function uploadFile(
+  file: File,
+  options: UploadOptions = {}
+): Promise<UploadResult> {
   // Implementation...
 }
 ```
 
 ### Python - Docstrings for Public APIs
+
 ```python
 async def upload_file(file: File, options: UploadOptions = None) -> UploadResult:
     """Upload a file with automatic retry and progress tracking.
-    
+
     Args:
         file: The file to upload
         options: Upload configuration options
-        
+
     Returns:
         UploadResult: Upload result with file URL
-        
+
     Raises:
         UploadError: When file size exceeds limit or upload fails
     """
@@ -257,16 +272,18 @@ async def upload_file(file: File, options: UploadOptions = None) -> UploadResult
 ## Special Cases
 
 ### TODO Comments - Be Actionable
+
 ```typescript
 // ✅ Good - Actionable TODO with context
 // TODO: Add input validation once user requirements are finalized (Sprint 3)
-function processUserInput(input: string): void { }
+function processUserInput(input: string): void {}
 
 // ❌ Bad - Vague TODO
 // TODO: Fix this
 ```
 
 ### Complex Regex and Patterns
+
 ```typescript
 // ✅ Good - Explain complex regex
 // Match email format: local@domain.tld with basic validation
@@ -274,12 +291,13 @@ const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 ```
 
 ```python
-# ✅ Good - Explain complex regex  
+# ✅ Good - Explain complex regex
 # Match email format: local@domain.tld with basic validation
 email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 ```
 
 ## Checklist for the Assistant
+
 - [ ] Write comments that explain "why" and business logic, not "what" the code does
 - [ ] NEVER add migration history comments or "MOVED TO" comments
 - [ ] Avoid obvious comments that restate what the code clearly shows
@@ -292,6 +310,7 @@ email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 ## Examples from This Project
 
 ### ❌ What NOT to do
+
 ```typescript
 // =============================================================================
 // IMAGE UTILITIES - MOVED TO chat-utils-client.ts
@@ -301,12 +320,12 @@ email_regex = r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 ```
 
 ### ✅ What TO do instead
+
 ```typescript
 // Re-export client-safe utilities for backward compatibility
 export { validateImageFiles, createImagePreview } from "./chat-utils-client";
 ```
 
 **Remember**: Comments should focus on helping future developers understand the current implementation and business logic, not the code's history or migration path.
-
 
 **Remember**: If you need to explain the code's history or migration, the code structure itself should make the current state clear. Comments should focus on helping future developers understand the current implementation and business logic.
