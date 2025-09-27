@@ -56,7 +56,10 @@ export async function signUpAction(
 
   console.log("Signup data:", data);
 
-  console.log("Identities object:", JSON.stringify(data.user?.identities, null, 2));
+  console.log(
+    "Identities object:",
+    JSON.stringify(data.user?.identities, null, 2)
+  );
 
   if (error) {
     console.error("Signup error:", error);
@@ -76,9 +79,9 @@ export async function signUpAction(
   if (data.user && data.user.identities && data.user.identities.length > 0) {
     const identity = data.user.identities[0];
     const emailVerified = identity.identity_data?.email_verified;
-    
+
     console.log("User exists, email verified:", emailVerified);
-    
+
     if (emailVerified === true) {
       // User exists and email is already verified - they should log in instead
       return {
@@ -86,7 +89,7 @@ export async function signUpAction(
         error: "Account already exists and is verified. Please log in instead.",
       };
     }
-    
+
     // If emailVerified is false, this means user exists but hasn't verified email yet
     // This is fine - they can receive another confirmation email
   } else {
