@@ -54,13 +54,6 @@ export async function signUpAction(
     },
   });
 
-  console.log("Signup data:", data);
-
-  console.log(
-    "Identities object:",
-    JSON.stringify(data.user?.identities, null, 2)
-  );
-
   if (error) {
     console.error("Signup error:", error);
     // Provide helpful error messages for common signup issues
