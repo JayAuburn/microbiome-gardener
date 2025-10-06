@@ -17,6 +17,7 @@
   ],
   "changelog": {
     "2.0.0": "Initial release with chat + billing functionality",
-    "2.0.1": "Improved video processing reliability. Incorporated parallel video processing."
+    "2.0.1": "Improved video processing reliability. Incorporated parallel video processing.",
+    "2.0.2": "Fix docling offline model support issue."
   }
 }
