@@ -160,7 +160,7 @@ class DocumentProcessingService:
                     artifacts_path=artifacts_path,
                     # Disable all AI-powered features to avoid model conflicts
                     do_ocr=False,  # No OCR (avoids EasyOCR)
-                    do_table_structure=True,  # No table detection (avoids object detection models)
+                    do_table_structure=True,
                     do_code_enrichment=False,  # No code OCR
                     do_formula_enrichment=False,  # No formula OCR
                     do_picture_classification=False,  # No picture classification
