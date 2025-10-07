@@ -1,5 +1,6 @@
 ---
-trigger: manual
+trigger: glob
+globs: *.tsx
 ---
 
 # Next.js 15 App Router - Redirect Outside Try/Catch
