@@ -176,7 +176,7 @@ export function ChatStateProvider({
       streaming.setIsStopping(false);
       refreshUsage();
     }
-  }, [isStreaming, streaming.isStopping, refreshUsage]);
+  }, [isStreaming, streaming, refreshUsage]);
 
   // Form submission logic
   const handleFormSubmit = async (

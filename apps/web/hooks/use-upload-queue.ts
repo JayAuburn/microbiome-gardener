@@ -551,7 +551,7 @@ export function useUploadQueue({
     if (queue.globalStatus === "uploading") {
       processQueue();
     }
-  }, [queue.globalStatus]);
+  }, [queue.globalStatus, processQueue]);
 
   // Clear/reset the queue
   const clearQueue = useCallback(() => {
@@ -601,9 +601,10 @@ export function useUploadQueue({
 
   // Cleanup on unmount
   useEffect(() => {
+    const controllers = abortControllers.current;
     return () => {
-      abortControllers.current.forEach((controller) => controller.abort());
-      abortControllers.current.clear();
+      controllers.forEach((controller) => controller.abort());
+      controllers.clear();
     };
   }, []);
 
