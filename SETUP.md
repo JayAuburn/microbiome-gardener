@@ -959,7 +959,7 @@ npm run db:status
 
 ```
 🚀 Running migrations...
-🔍 Checking rollback safety: 0 migration found
+🔍 Checking rollback safety: 0 migration found 
 ✅ All migrations have rollback files
 📁 Migration folder: drizzle/migrations
 ✅ Migrations completed successfully!
@@ -1594,7 +1594,7 @@ _Note: We'll test the full authentication flow and document processing after set
 **👤 User will:**
 
 - Create GCP project and enable billing
-- Authenticate to Google Cloud using `gcloud auth application-default login`
+- Authenticate to Google Cloud using `gcloud auth login`
 - Configure gcloud CLI with project from environment file
 - Get Gemini API key and update environment files immediately
 
@@ -1658,7 +1658,7 @@ GOOGLE_CLOUD_PROJECT_ID=your-actual-project-id
 **👤 USER & 🤖 AI ASSISTANT TASK - Authenticate to Google Cloud (via gcloud CLI):**
 **AI ASSISTANT will run the commands, and the USER will interact with the prompts.**
 
-The AI assistant will run the `gcloud auth application-default login` command. Make sure to follow the prompts:
+The AI assistant will run the `gcloud auth login` command. Make sure to follow the prompts:
 
 1. Authenticate in the browser
 2. Grant the necessary permissions
@@ -1666,7 +1666,7 @@ The AI assistant will run the `gcloud auth application-default login` command. M
 
 ```bash
 # Authenticate to Google Cloud (this will open a browser)
-gcloud auth application-default login
+gcloud auth login
 ```
 
 ### Step 5.3: Configure gcloud CLI
@@ -1680,10 +1680,10 @@ gcloud auth application-default login
 
 ```bash
 # Get project ID from environment file
-grep "GOOGLE_CLOUD_PROJECT_ID=" apps/web/.env.local
+python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID
 
 # Set the project (AI will extract the project ID from the environment file)
-PROJECT_ID=$(grep "GOOGLE_CLOUD_PROJECT_ID=" apps/web/.env.local | cut -d'=' -f2)
+PROJECT_ID=$(python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
 gcloud config set project $PROJECT_ID
 ```
 
@@ -1784,11 +1784,7 @@ pwd
 npm run setup:gcp:dev
 ```
 
-### Step 5.6: Update Environment Files with Script Output
-
-**👤 USER TASK - Copy Values from Final Success Summary:**
-
-After the GCP setup script completes successfully, it will display a comprehensive success summary at the END. Look for this section in the final output:
+After the GCP setup script completes successfully, it will display a comprehensive success summary at the END.:
 
 ```
 🎉 DEVELOPMENT INFRASTRUCTURE SETUP SUCCESSFUL! 🎉
@@ -1796,14 +1792,6 @@ After the GCP setup script completes successfully, it will display a comprehensi
 
 📋 Infrastructure Summary:
   • Storage Bucket: gs://your-project-id-rag-documents-dev
-```
-
-**📋 Copy storage bucket name to environment file:**
-
-#### 🌐 **Web App Environment File (`apps/web/.env.local`)**
-
-```bash
-GOOGLE_CLOUD_STORAGE_BUCKET=your-project-id-rag-documents-dev
 ```
 
 **If the script encounters any issues, I'll help troubleshoot and run individual setup commands.**
@@ -1850,10 +1838,10 @@ I'll check if the GCP setup script already updated both environment files with t
 
 ```bash
 # Check RAG processor environment file
-grep "GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY=" apps/rag-processor/.env.local
+python scripts/read_env.py apps/rag-processor/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
 
 # Check web app environment file
-grep "GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY=" apps/web/.env.local
+python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
 ```
 
 **✅ IF both files show a long base64 string (not empty or placeholder values):**
