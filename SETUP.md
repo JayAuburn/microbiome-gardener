@@ -292,7 +292,7 @@ Ask the user: "Are you ready to begin Phase 1: Prerequisites & Environment Setup
 **👤 User will:**
 
 - Configure Cursor terminal to use the same shell as system (Mac/Linux only)
-- Install required development tools (Node.js, Python, gcloud CLI)
+- Install required development tools (Node.js, Python, gcloud CLI, Stripe CLI)
 - Set up development environment
 
 ### Step 1.0: Verify Terminal Shell Environment
@@ -387,7 +387,7 @@ Check each required tool and **tell the user exactly what they need to install**
 
 4. **Check Google Cloud SDK**
    - Run: `gcloud --version`
-   - ✅ If shows version: **"Google Cloud SDK is installed correctly"**
+   - ✅ If shows gcloud version and beta version: **"Google Cloud SDK and Beta component are installed correctly"**
    - ❌ If command fails: **"You need to install Google Cloud SDK"**
 
 5. **Check Stripe CLI (for billing setup)**
@@ -486,6 +486,19 @@ exec -l $SHELL
 gcloud --version  # Should show gcloud SDK version
 ```
 
+2. **Install gcloud beta component** (required for GCP setup scripts)
+   - After installing the Google Cloud SDK, install the beta component:
+
+```bash
+gcloud components install beta
+```
+
+- Verify installation:
+
+```bash
+gcloud --version  # Should show beta version
+```
+
 #### Install Stripe CLI (for billing setup)
 
 1. **Download and install Stripe CLI**
@@ -549,6 +562,7 @@ Before proceeding to Phase 2, verify:
 - ✅ Node.js (18+) and npm installed and verified
 - ✅ Python (3.10+) and UV package manager installed and verified
 - ✅ Google Cloud SDK installed and verified
+- ✅ Google Cloud SDK beta component installed and verified
 - ✅ Stripe CLI installed and verified
 - ✅ Project dependencies installed successfully
 - ✅ All required development tools are properly configured
