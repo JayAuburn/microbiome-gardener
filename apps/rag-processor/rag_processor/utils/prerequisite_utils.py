@@ -37,9 +37,10 @@ def check_gcp_authentication() -> tuple[bool, str]:
         PrerequisiteError: If authentication check fails
     """
     try:
+        gcloud_path = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_path,
                 "auth",
                 "list",
                 "--filter=status:ACTIVE",
@@ -91,9 +92,10 @@ def check_required_gcp_apis(
 
     try:
         # Get list of enabled APIs
+        gcloud_path = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_path,
                 "services",
                 "list",
                 "--enabled",
@@ -149,8 +151,9 @@ def check_gcp_permissions(
 
     try:
         # Get IAM policy for the project
+        gcloud_path = get_gcloud_path()
         result = subprocess.run(
-            ["gcloud", "projects", "get-iam-policy", project_id, "--format=json"],
+            [gcloud_path, "projects", "get-iam-policy", project_id, "--format=json"],
             capture_output=True,
             text=True,
             timeout=60,

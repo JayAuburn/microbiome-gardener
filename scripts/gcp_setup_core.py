@@ -283,12 +283,13 @@ def check_prerequisites_enhanced(
         try:
             gcloud_cmd = get_gcloud_path()
             version_result = subprocess.run(
-                [gcloud_cmd, "--version"],
-                capture_output=True,
-                text=True,
-                timeout=10,
+                [gcloud_cmd, "--version"], capture_output=True, text=True
             )
-            gcloud_version = version_result.stdout.split('\n')[0] if version_result.returncode == 0 else "unknown"
+            gcloud_version = (
+                version_result.stdout.split("\n")[0]
+                if version_result.returncode == 0
+                else "unknown"
+            )
         except Exception:
             gcloud_version = "unknown"
 
@@ -330,8 +331,12 @@ def check_project_billing(project_id: str) -> None:
         gcloud_cmd = get_gcloud_path()
         billing_result = subprocess.run(
             [
-                gcloud_cmd, "billing", "projects", "describe", project_id,
-                "--format=value(billingEnabled)"  # No quotes needed in list format
+                gcloud_cmd,
+                "billing",
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(billingEnabled)",  # No quotes needed in list format
             ],
             capture_output=True,
             text=True,
@@ -1023,7 +1028,13 @@ def enable_apis(config: dict[str, Any]) -> None:
         try:
             gcloud_cmd = get_gcloud_path()
             pn_result = subprocess.run(
-                [gcloud_cmd, "projects", "describe", config['project_id'], "--format=value(projectNumber)"],
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    config["project_id"],
+                    "--format=value(projectNumber)",
+                ],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -1380,7 +1391,13 @@ def create_service_account(config: dict[str, Any]) -> None:
         # Get project number to construct the default compute service account
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", config['project_id'], "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                config["project_id"],
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -1451,7 +1468,13 @@ def create_service_account(config: dict[str, Any]) -> None:
             # Fallback to computed service account
             gcloud_cmd = get_gcloud_path()
             pn_result = subprocess.run(
-                [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    project_id,
+                    "--format=value(projectNumber)",
+                ],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -1765,7 +1788,13 @@ def create_artifact_registry_repository(config: dict[str, Any]) -> None:
         # Get project number for Cloud Build service account
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -1879,7 +1908,13 @@ def create_cloud_functions_artifact_registry(config: dict[str, Any]) -> None:
     try:
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -2106,7 +2141,13 @@ def setup_cloud_tasks_iam_permissions(config: dict[str, Any], main_queue: str) -
         # Get project number for service agents
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,

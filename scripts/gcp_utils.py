@@ -17,7 +17,7 @@ import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from shutil import which
-from typing import TypedDict
+from typing import Any, TypedDict
 
 # Import lightweight utility modules from scripts directory
 from .error_handling import ErrorContext, ServiceError
@@ -160,18 +160,23 @@ class SubprocessStrategy:
     ) -> str:
         """Execute command with standardized error handling
 
-        Uses shlex.split() for cross-platform compatibility:
-        - Handles paths with spaces (C:\\Program Files\\...)
-        - Properly processes quotes on all platforms
-        - Works identically on Windows, Mac, and Linux
+        Cross-platform gcloud handling: Automatically uses full gcloud path
+        for Windows .CMD compatibility and proper quote handling.
         """
         handler = error_handler or self.default_handler
 
         try:
             if isinstance(command, str) and not self.use_shell:
-                # Use shlex.split() for proper cross-platform parsing
-                # Handles quotes, spaces, and escape characters correctly
-                command = shlex.split(command)
+                # CROSS-PLATFORM FIX: Handle gcloud commands for Windows
+                if command.strip().startswith("gcloud"):
+                    # Parse and replace gcloud with full path
+                    gcloud_cmd = get_gcloud_path()
+                    command = shlex.split(command)
+                    command[0] = gcloud_cmd
+                else:
+                    # Use shlex.split() for proper cross-platform parsing
+                    # Handles quotes, spaces, and escape characters correctly
+                    command = shlex.split(command)
 
             result = subprocess.run(
                 command,
@@ -263,8 +268,8 @@ def run_with_user_input(cmd: list[str], input_data: str) -> str:
 
 
 def run_gcp_command(
-    cmd: list[str] | str, capture_output: bool = False, **kwargs
-) -> subprocess.CompletedProcess:
+    cmd: list[str] | str, capture_output: bool = False, **kwargs: Any
+) -> subprocess.CompletedProcess[str]:
     """Execute GCP command and return subprocess result (for compatibility with test scripts)"""
     try:
         if isinstance(cmd, list):
@@ -384,7 +389,9 @@ def run_command(
             ) from e
         except subprocess.CalledProcessError as e:
             error_msg = e.stderr.strip() if e.stderr else "Unknown error"
-            raise ServiceError(f"gcloud command failed: {cmd}\nError: {error_msg}") from e
+            raise ServiceError(
+                f"gcloud command failed: {cmd}\nError: {error_msg}"
+            ) from e
         except Exception as e:
             raise ServiceError(f"Failed to execute gcloud command: {cmd}") from e
 
@@ -641,11 +648,15 @@ def wait_for_cloud_run_service_ready(
             gcloud_cmd = get_gcloud_path()
             result = subprocess.run(
                 [
-                    gcloud_cmd, "run", "services", "describe", service_name,
+                    gcloud_cmd,
+                    "run",
+                    "services",
+                    "describe",
+                    service_name,
                     f"--region={region}",
                     f"--project={project_id}",
                     "--format=value(status.url)",  # No quotes needed in list format
-                    "--quiet"
+                    "--quiet",
                 ],
                 capture_output=True,
                 text=True,
@@ -724,9 +735,13 @@ def ensure_service_agent_exists(
     gcloud_cmd = get_gcloud_path()
     result = subprocess.run(
         [
-            gcloud_cmd, "iam", "service-accounts", "describe", service_agent_email,
+            gcloud_cmd,
+            "iam",
+            "service-accounts",
+            "describe",
+            service_agent_email,
             f"--project={project_id}",
-            "--quiet"
+            "--quiet",
         ],
         capture_output=True,
         text=True,

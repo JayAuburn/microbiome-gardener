@@ -278,7 +278,11 @@ def check_prerequisites_enhanced(
                 text=True,
                 timeout=10,
             )
-            gcloud_version = version_result.stdout.split('\n')[0] if version_result.returncode == 0 else "unknown"
+            gcloud_version = (
+                version_result.stdout.split("\n")[0]
+                if version_result.returncode == 0
+                else "unknown"
+            )
         except Exception:
             gcloud_version = "unknown"
 
@@ -320,8 +324,12 @@ def check_project_billing(project_id: str) -> None:
         gcloud_cmd = get_gcloud_path()
         billing_result = subprocess.run(
             [
-                gcloud_cmd, "billing", "projects", "describe", project_id,
-                "--format=value(billingEnabled)"  # No quotes needed in list format
+                gcloud_cmd,
+                "billing",
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(billingEnabled)",  # No quotes needed in list format
             ],
             capture_output=True,
             text=True,
@@ -1013,7 +1021,13 @@ def enable_apis(config: dict[str, Any]) -> None:
         try:
             gcloud_cmd = get_gcloud_path()
             pn_result = subprocess.run(
-                [gcloud_cmd, "projects", "describe", config['project_id'], "--format=value(projectNumber)"],
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    config["project_id"],
+                    "--format=value(projectNumber)",
+                ],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -1370,7 +1384,13 @@ def create_service_account(config: dict[str, Any]) -> None:
         # Get project number to construct the default compute service account
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", config['project_id'], "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                config["project_id"],
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -1441,7 +1461,13 @@ def create_service_account(config: dict[str, Any]) -> None:
             # Fallback to computed service account
             gcloud_cmd = get_gcloud_path()
             pn_result = subprocess.run(
-                [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    project_id,
+                    "--format=value(projectNumber)",
+                ],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -1786,7 +1812,13 @@ def create_artifact_registry_repository(config: dict[str, Any]) -> None:
         # Get project number for Cloud Build service account
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -1900,7 +1932,13 @@ def create_cloud_functions_artifact_registry(config: dict[str, Any]) -> None:
     try:
         gcloud_cmd = get_gcloud_path()
         pn_result = subprocess.run(
-            [gcloud_cmd, "projects", "describe", project_id, "--format=value(projectNumber)"],
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
             capture_output=True,
             text=True,
             check=True,
@@ -3025,3 +3063,54 @@ def ensure_cloud_tasks_queue(project_id: str, region: str, environment: str) -> 
     else:
         log(f"   ❌ Failed to create queue: {result.stderr}", Colors.RED)
         return False
+
+
+def main() -> None:
+    """Main entry point for production environment setup"""
+    from .deployment_config import get_config_dict
+
+    try:
+        # Production-specific welcome and confirmation
+        log("🚀 RAG SaaS Production Environment Setup", Colors.CYAN + Colors.BOLD)
+        log("=" * 50)
+        log("Setting up production infrastructure for live traffic.")
+        log("")
+        log("Production Environment Features:")
+        log("  ✅ High-performance resources")
+        log("  ✅ Auto-scaling for traffic spikes")
+        log("  ✅ Production-level monitoring")
+        log("  ✅ Optimized for reliability and performance")
+        log("")
+        log(
+            "⚠️  WARNING: This sets up PRODUCTION infrastructure",
+            Colors.YELLOW + Colors.BOLD,
+        )
+        log("   • Higher resource costs than development")
+        log("   • Designed for live user traffic")
+        log("   • Auto-scaling up to 20 instances")
+        log("")
+
+        # Confirmation
+        response = input(
+            f"{Colors.CYAN}Continue with PRODUCTION setup? [y/N]: {Colors.RESET}"
+        )
+        if response.lower() not in ["y", "yes"]:
+            log("Setup cancelled by user")
+            sys.exit(0)
+
+        # Get production config as dict (includes all computed properties)
+        prod_env_config = get_config_dict("production")
+
+        # Call main setup with prod config
+        setup_gcp_environment(prod_env_config)
+
+    except KeyboardInterrupt:
+        log("Setup interrupted by user", Colors.RED)
+        sys.exit(1)
+    except Exception as e:
+        log(f"❌ Production setup failed: {e}", Colors.RED)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
