@@ -24,6 +24,7 @@ from .gcp_utils import (
     Colors,
     check_commands_parallel,
     enable_apis_only,
+    get_gcloud_path,
     log,
     log_error,
     log_step,
@@ -268,10 +269,27 @@ def check_prerequisites_enhanced(
         summary = get_prerequisite_summary(project_id, "development")
 
         # Return essential information
+        # Get gcloud version (cross-platform - process output in Python instead of using Unix pipes)
+        try:
+            gcloud_cmd = get_gcloud_path()
+            version_result = subprocess.run(
+                [gcloud_cmd, "--version"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            gcloud_version = (
+                version_result.stdout.split("\n")[0]
+                if version_result.returncode == 0
+                else "unknown"
+            )
+        except Exception:
+            gcloud_version = "unknown"
+
         return {
             "active_account": summary["authentication"].get("account_email", "unknown"),
             "active_project": project_id,
-            "gcloud_version": run_command("gcloud --version | head -1") or "unknown",
+            "gcloud_version": gcloud_version,
             "overall_status": summary["overall_status"],
         }
     except PrerequisiteError as e:
@@ -303,12 +321,22 @@ def check_project_billing(project_id: str) -> None:
 
     try:
         # Check if billing is enabled for the project
-        result = run_command(
-            f"gcloud billing projects describe {project_id} "
-            "--format='value(billingEnabled)'"
+        gcloud_cmd = get_gcloud_path()
+        billing_result = subprocess.run(
+            [
+                gcloud_cmd,
+                "billing",
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(billingEnabled)",  # No quotes needed in list format
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
         )
 
-        billing_enabled = result.strip().lower() == "true"
+        billing_enabled = billing_result.stdout.strip().lower() == "true"
 
         if billing_enabled:
             log_success("Billing is enabled for this project")
@@ -383,9 +411,14 @@ def select_project_interactive() -> str:
     """Interactive project selection with formatted table and numbered choices"""
     try:
         # Get list of projects
-        projects_output = run_command(
-            'gcloud projects list --format="value(projectId,name)"'
+        gcloud_cmd = get_gcloud_path()
+        result = subprocess.run(
+            [gcloud_cmd, "projects", "list", "--format=value(projectId,name)"],
+            capture_output=True,
+            text=True,
+            check=True,
         )
+        projects_output = result.stdout
 
         # Parse projects into list of tuples
         projects = []
@@ -505,8 +538,9 @@ def load_and_validate_config_for_prod() -> tuple[dict[str, Any], str]:
         raise ConfigurationError(f"Invalid GCP project ID: {project_id}")
 
     # Ensure project is accessible and set as active for subsequent commands
+    gcloud_cmd = get_gcloud_path()
     describe_result = subprocess.run(
-        ["gcloud", "projects", "describe", project_id, "--quiet"],
+        [gcloud_cmd, "projects", "describe", project_id, "--quiet"],
         capture_output=True,
         text=True,
     )
@@ -516,7 +550,7 @@ def load_and_validate_config_for_prod() -> tuple[dict[str, Any], str]:
         )
 
     set_result = subprocess.run(
-        ["gcloud", "config", "set", "project", project_id, "--quiet"],
+        [gcloud_cmd, "config", "set", "project", project_id, "--quiet"],
         capture_output=True,
         text=True,
     )
@@ -564,8 +598,9 @@ def load_and_validate_config_for_dev() -> tuple[dict[str, Any], str]:
         raise ConfigurationError(f"Invalid GCP project ID: {project_id}")
 
     # Ensure project is accessible and set as active for subsequent commands
+    gcloud_cmd = get_gcloud_path()
     describe_result = subprocess.run(
-        ["gcloud", "projects", "describe", project_id, "--quiet"],
+        [gcloud_cmd, "projects", "describe", project_id, "--quiet"],
         capture_output=True,
         text=True,
     )
@@ -575,7 +610,7 @@ def load_and_validate_config_for_dev() -> tuple[dict[str, Any], str]:
         )
 
     set_result = subprocess.run(
-        ["gcloud", "config", "set", "project", project_id, "--quiet"],
+        [gcloud_cmd, "config", "set", "project", project_id, "--quiet"],
         capture_output=True,
         text=True,
     )
@@ -626,8 +661,9 @@ def get_user_configuration(env_config: dict[str, Any]) -> dict[str, Any]:
         if not validate_gcp_project_id(config["project_id"]):
             raise ConfigurationError(f"Invalid project ID: {config['project_id']}")
 
+        gcloud_cmd = get_gcloud_path()
         describe_result = subprocess.run(
-            ["gcloud", "projects", "describe", config["project_id"], "--quiet"],
+            [gcloud_cmd, "projects", "describe", config["project_id"], "--quiet"],
             capture_output=True,
             text=True,
         )
@@ -643,7 +679,7 @@ def get_user_configuration(env_config: dict[str, Any]) -> dict[str, Any]:
             raise ConfigurationError(f"Invalid project ID: {config['project_id']}")
 
         set_result = subprocess.run(
-            ["gcloud", "config", "set", "project", config["project_id"], "--quiet"],
+            [gcloud_cmd, "config", "set", "project", config["project_id"], "--quiet"],
             capture_output=True,
             text=True,
         )
@@ -727,8 +763,9 @@ def get_user_configuration(env_config: dict[str, Any]) -> dict[str, Any]:
                 )
 
             # Check bucket existence without ErrorContext to avoid logging expected failures
+            gcloud_cmd = get_gcloud_path()
             subprocess.run(
-                ["gcloud", "storage", "ls", f"gs://{config['bucket_name']}/"],
+                [gcloud_cmd, "storage", "ls", f"gs://{config['bucket_name']}/"],
                 capture_output=True,
                 text=True,
                 check=True,
@@ -982,17 +1019,29 @@ def enable_apis(config: dict[str, Any]) -> None:
     if not gcs_service_account_exists:
         # Check if GCS service account exists before waiting (optimization)
         try:
-            project_number = run_command(
-                f"gcloud projects describe {config['project_id']} --format='value(projectNumber)'"
-            ).strip()
+            gcloud_cmd = get_gcloud_path()
+            pn_result = subprocess.run(
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    config["project_id"],
+                    "--format=value(projectNumber)",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            project_number = pn_result.stdout.strip()
             gcs_service_sa = (
                 f"service-{project_number}@gs-project-accounts.iam.gserviceaccount.com"
             )
 
             # First check if service account already exists
+            gcloud_cmd = get_gcloud_path()
             check_result = subprocess.run(
                 [
-                    "gcloud",
+                    gcloud_cmd,
                     "iam",
                     "service-accounts",
                     "describe",
@@ -1018,7 +1067,7 @@ def enable_apis(config: dict[str, Any]) -> None:
                 for attempt in range(8):  # wait up to ~2 minutes total
                     wait_result = subprocess.run(
                         [
-                            "gcloud",
+                            gcloud_cmd,
                             "iam",
                             "service-accounts",
                             "describe",
@@ -1086,9 +1135,10 @@ def create_service_account(config: dict[str, Any]) -> None:
             if not validate_gcp_project_id(config["project_id"]):
                 raise ConfigurationError(f"Invalid project ID: {config['project_id']}")
 
+            gcloud_cmd = get_gcloud_path()
             result = subprocess.run(
                 [
-                    "gcloud",
+                    gcloud_cmd,
                     "iam",
                     "service-accounts",
                     "describe",
@@ -1149,9 +1199,10 @@ def create_service_account(config: dict[str, Any]) -> None:
         if not validate_gcp_project_id(config["project_id"]):
             raise ConfigurationError(f"Invalid project ID: {config['project_id']}")
 
+        gcloud_cmd = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_cmd,
                 "iam",
                 "service-accounts",
                 "describe",
@@ -1331,10 +1382,20 @@ def create_service_account(config: dict[str, Any]) -> None:
 
     try:
         # Get project number to construct the default compute service account
-        project_number_result = run_command(
-            f"gcloud projects describe {config['project_id']} --format='value(projectNumber)'"
+        gcloud_cmd = get_gcloud_path()
+        pn_result = subprocess.run(
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                config["project_id"],
+                "--format=value(projectNumber)",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
         )
-        project_number = project_number_result.strip()
+        project_number = pn_result.stdout.strip()
         default_compute_sa = f"{project_number}-compute@developer.gserviceaccount.com"
 
         # Grant Secret Manager access to default compute service account
@@ -1398,9 +1459,20 @@ def create_service_account(config: dict[str, Any]) -> None:
             log(f"   ✅ Found GCS service account: {gcs_service_account}")
         except Exception:
             # Fallback to computed service account
-            project_number = run_command(
-                f"gcloud projects describe {project_id} --format='value(projectNumber)'"
-            ).strip()
+            gcloud_cmd = get_gcloud_path()
+            pn_result = subprocess.run(
+                [
+                    gcloud_cmd,
+                    "projects",
+                    "describe",
+                    project_id,
+                    "--format=value(projectNumber)",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            project_number = pn_result.stdout.strip()
             gcs_service_account = (
                 f"service-{project_number}@gs-project-accounts.iam.gserviceaccount.com"
             )
@@ -1699,9 +1771,10 @@ def create_artifact_registry_repository(config: dict[str, Any]) -> None:
         if not validate_gcp_region(region):
             raise ConfigurationError(f"Invalid region: {region}")
 
+        gcloud_cmd = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_cmd,
                 "artifacts",
                 "repositories",
                 "describe",
@@ -1737,10 +1810,20 @@ def create_artifact_registry_repository(config: dict[str, Any]) -> None:
     # Grant Cloud Build service account permission to push images
     try:
         # Get project number for Cloud Build service account
-        project_number_result = run_command(
-            f"gcloud projects describe {project_id} --format='value(projectNumber)'"
+        gcloud_cmd = get_gcloud_path()
+        pn_result = subprocess.run(
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
         )
-        project_number = project_number_result.strip()
+        project_number = pn_result.stdout.strip()
         cloud_build_sa = f"{project_number}@cloudbuild.gserviceaccount.com"
 
         log("Granting artifactregistry.writer role to Cloud Build SA...")
@@ -1810,9 +1893,10 @@ def create_cloud_functions_artifact_registry(config: dict[str, Any]) -> None:
         if not validate_gcp_region(region):
             raise ConfigurationError(f"Invalid region: {region}")
 
+        gcloud_cmd = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_cmd,
                 "artifacts",
                 "repositories",
                 "describe",
@@ -1846,9 +1930,20 @@ def create_cloud_functions_artifact_registry(config: dict[str, Any]) -> None:
 
     # Grant writer to build identities (Cloud Build, Compute default, GCF service agent)
     try:
-        project_number = run_command(
-            f"gcloud projects describe {project_id} --format='value(projectNumber)'"
-        ).strip()
+        gcloud_cmd = get_gcloud_path()
+        pn_result = subprocess.run(
+            [
+                gcloud_cmd,
+                "projects",
+                "describe",
+                project_id,
+                "--format=value(projectNumber)",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        project_number = pn_result.stdout.strip()
         cloud_build_sa = f"{project_number}@cloudbuild.gserviceaccount.com"
         compute_sa = f"{project_number}-compute@developer.gserviceaccount.com"
         gcf_service_agent = (
@@ -1900,9 +1995,10 @@ def setup_cloud_tasks_infrastructure(config: dict[str, Any]) -> None:
             if not validate_gcp_region(region):
                 raise ConfigurationError(f"Invalid region: {region}")
 
+            gcloud_cmd = get_gcloud_path()
             check_result = subprocess.run(
                 [
-                    "gcloud",
+                    gcloud_cmd,
                     "tasks",
                     "queues",
                     "describe",
@@ -1946,9 +2042,10 @@ def setup_cloud_tasks_infrastructure(config: dict[str, Any]) -> None:
         if not validate_gcp_region(region):
             raise ConfigurationError(f"Invalid region: {region}")
 
+        gcloud_cmd = get_gcloud_path()
         check_result = subprocess.run(
             [
-                "gcloud",
+                gcloud_cmd,
                 "tasks",
                 "queues",
                 "describe",
@@ -2283,13 +2380,14 @@ class SecretManager:
         log("   🔄 Updating secret versions securely...")
 
         success_count = 0
+        gcloud_cmd = get_gcloud_path()
         for secret_name, secret_value in secrets_data:
             try:
                 log(f"  Updating {secret_name}...")
                 # ✅ SECURE: Use subprocess input to avoid shell escaping issues
                 subprocess.run(
                     [
-                        "gcloud",
+                        gcloud_cmd,
                         "secrets",
                         "versions",
                         "add",
@@ -2434,9 +2532,10 @@ def cleanup_old_images_parallel(
         if not validate_gcp_project_id(project_id):
             raise ConfigurationError(f"Invalid project ID: {project_id}")
 
+        gcloud_cmd = get_gcloud_path()
         result = subprocess.run(
             [
-                "gcloud",
+                gcloud_cmd,
                 "container",
                 "images",
                 "list-tags",
@@ -2891,8 +2990,9 @@ def ensure_cloud_tasks_queue(project_id: str, region: str, environment: str) -> 
     queue_name = f"rag-processing-queue-{env_suffix}"
 
     # Check if queue exists
+    gcloud_cmd = get_gcloud_path()
     check_args = [
-        "gcloud",
+        gcloud_cmd,
         "tasks",
         "queues",
         "describe",
@@ -2909,7 +3009,7 @@ def ensure_cloud_tasks_queue(project_id: str, region: str, environment: str) -> 
         # Update existing queue to ensure proper retry and concurrency configuration
         log("   🔄 Updating queue retry and concurrency configuration...")
         update_args = [
-            "gcloud",
+            gcloud_cmd,
             "tasks",
             "queues",
             "update",
@@ -2941,7 +3041,7 @@ def ensure_cloud_tasks_queue(project_id: str, region: str, environment: str) -> 
     log(f"   📝 Creating Cloud Tasks queue '{queue_name}'...")
 
     create_args = [
-        "gcloud",
+        gcloud_cmd,
         "tasks",
         "queues",
         "create",
@@ -2963,3 +3063,54 @@ def ensure_cloud_tasks_queue(project_id: str, region: str, environment: str) -> 
     else:
         log(f"   ❌ Failed to create queue: {result.stderr}", Colors.RED)
         return False
+
+
+def main() -> None:
+    """Main entry point for production environment setup"""
+    from .deployment_config import get_config_dict
+
+    try:
+        # Production-specific welcome and confirmation
+        log("🚀 RAG SaaS Production Environment Setup", Colors.CYAN + Colors.BOLD)
+        log("=" * 50)
+        log("Setting up production infrastructure for live traffic.")
+        log("")
+        log("Production Environment Features:")
+        log("  ✅ High-performance resources")
+        log("  ✅ Auto-scaling for traffic spikes")
+        log("  ✅ Production-level monitoring")
+        log("  ✅ Optimized for reliability and performance")
+        log("")
+        log(
+            "⚠️  WARNING: This sets up PRODUCTION infrastructure",
+            Colors.YELLOW + Colors.BOLD,
+        )
+        log("   • Higher resource costs than development")
+        log("   • Designed for live user traffic")
+        log("   • Auto-scaling up to 20 instances")
+        log("")
+
+        # Confirmation
+        response = input(
+            f"{Colors.CYAN}Continue with PRODUCTION setup? [y/N]: {Colors.RESET}"
+        )
+        if response.lower() not in ["y", "yes"]:
+            log("Setup cancelled by user")
+            sys.exit(0)
+
+        # Get production config as dict (includes all computed properties)
+        prod_env_config = get_config_dict("production")
+
+        # Call main setup with prod config
+        setup_gcp_environment(prod_env_config)
+
+    except KeyboardInterrupt:
+        log("Setup interrupted by user", Colors.RED)
+        sys.exit(1)
+    except Exception as e:
+        log(f"❌ Production setup failed: {e}", Colors.RED)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
