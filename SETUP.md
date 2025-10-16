@@ -385,10 +385,10 @@ Check each required tool and **tell the user exactly what they need to install**
    - ✅ If shows version: **"UV is installed correctly"**
    - ❌ If command fails: **"You need to install UV package manager"**
 
-4. **Check Google Cloud SDK**
+4. **Check Google Cloud SDK and Beta component**
    - Run: `gcloud --version`
-   - ✅ If shows gcloud version and beta version: **"Google Cloud SDK and Beta component are installed correctly"**
-   - ❌ If command fails: **"You need to install Google Cloud SDK"**
+   - ✅ If shows gcloud version and beta component version: **"Google Cloud SDK and Beta component are installed correctly"**
+   - ❌ If command fails: **"You need to install Google Cloud SDK and Beta component"**
 
 5. **Check Stripe CLI (for billing setup)**
    - Run: `stripe --version`
@@ -1690,18 +1690,24 @@ gcloud auth login
 
 **🤖 AI ASSISTANT TASK - Authenticate and Configure gcloud:**
 
-1. **Set Project from Environment File**
+1. **Get Project ID from Environment File**
 
 ```bash
-# Get project ID from environment file
-python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID
+# Make sure we're in the root folder
+pwd
 
-# Set the project (AI will extract the project ID from the environment file)
-PROJECT_ID=$(python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
-gcloud config set project $PROJECT_ID
+# First time running this command will automatically sync dependencies
+uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only
 ```
 
-2. **Verify setup:**
+2. **Only if step 1 was successful, Set the gcloud project to the extracted project id**
+
+```bash
+# Set the project
+gcloud config set project <extracted project id>
+```
+
+3. **Verify Setup**
 
 ```bash
 # Verify your project is set correctly
@@ -1798,7 +1804,7 @@ pwd
 npm run setup:gcp:dev
 ```
 
-After the GCP setup script completes successfully, it will display a comprehensive success summary at the END.:
+After the GCP setup script completes successfully, it will display a comprehensive success summary at the END:
 
 ```
 🎉 DEVELOPMENT INFRASTRUCTURE SETUP SUCCESSFUL! 🎉
@@ -1852,10 +1858,10 @@ I'll check if the GCP setup script already updated both environment files with t
 
 ```bash
 # Check RAG processor environment file
-python scripts/read_env.py apps/rag-processor/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
+uv run python scripts/read_env.py apps/rag-processor/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
 
 # Check web app environment file
-python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
+uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
 ```
 
 **✅ IF both files show a long base64 string (not empty or placeholder values):**
@@ -1868,7 +1874,7 @@ python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_SERVICE_ACCOUNT_KEY
 
 ```bash
 # Create authentication key manually for the EXISTING service account
-PROJECT_ID=$(gcloud config get-value project)
+PROJECT_ID=$(uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
 gcloud iam service-accounts keys create web-app-service-account-key.json \
     --iam-account=rag-processor-dev@$PROJECT_ID.iam.gserviceaccount.com
 
