@@ -1064,8 +1064,7 @@ npm run db:migrate
      - `document_processing_jobs` - Background job tracking with detailed processing stages
      - `conversations` - Chat conversation records linked to users
      - `messages` - Individual chat messages with model tracking
-     - `user_usage` - Usage tracking for billing periods and message limits
-     - `webhook_events` - Stripe webhook event processing for idempotency
+     - `user_usage_events` - Usage tracking for billing periods, message limits, and document uploads
 
    💡 **If you don't see these tables:** The migrations may not have completed successfully. Check the terminal output for any errors. Ask the AI assistant to check the status of the migrations and fix any issues.
 
