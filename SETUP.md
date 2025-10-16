@@ -1697,7 +1697,7 @@ gcloud auth login
 pwd
 
 # First time running this command will automatically sync dependencies
-uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only
+uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID
 ```
 
 2. **Only if step 1 was successful, Set the gcloud project to the extracted project id**
