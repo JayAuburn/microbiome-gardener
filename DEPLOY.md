@@ -849,8 +849,7 @@ pwd
 uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID
 
 # Set the project (extract project ID from environment file)
-PROJECT_ID=$(uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
-gcloud config set project $PROJECT_ID
+gcloud config set project $(uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
 
 # Verify the correct project is selected
 gcloud config get-value project
@@ -1666,8 +1665,7 @@ Please confirm you can see:
 
 ```bash
 # Switch to development project (from your original .env.local)
-PROJECT_ID=$(uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
-gcloud config set project $PROJECT_ID
+gcloud config set project $(uv run python scripts/read_env.py apps/web/.env.local GOOGLE_CLOUD_PROJECT_ID --value-only)
 ```
 
 **Now re-deploy the development services with updated staging credentials:**
