@@ -43,6 +43,8 @@ tmp/
 temp/
 *.tmp
 *.temp
+tmpclaude-*
+nul
 
 # Build outputs that might appear at root
 dist/
