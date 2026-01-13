@@ -47,6 +47,5 @@
     ],
     "deny": [],
     "ask": []
-  },
-  "enabledMcpjsonServers": ["context7", "time"]
+  }
 }

@@ -175,7 +175,7 @@ export function useDocumentPolling({
         // Clean up optimistic documents that now have real counterparts
         if (allJobUpdates.length > 0) {
           const serverFilenames = new Set(
-            allJobs.map(
+            allJobUpdates.map(
               (doc: DocumentWithProcessingJob) => doc.originalFilename,
             ),
           );
