@@ -1,0 +1,142 @@
+graph TB
+    subgraph "User Interface Layer"
+        Landing[Landing Page]
+        Assessment[Growing Knowledge Path Assessment]
+        Documents[Knowledge Base Browser]
+        Chat[AI Microbiome Chat]
+        Profile[Growing Profile]
+        Admin[Admin Knowledge Manager]
+    end
+
+    subgraph "Application Layer - Template Foundation"
+        AuthAPI[Supabase Auth API]
+        ChatAPI[Streaming Chat API - /api/chat]
+        StripeAPI[Stripe Webhook API]
+        DocumentAPI[Document Upload API]
+    end
+
+    subgraph "Application Layer - Extensions"
+        AssessmentAPI[Assessment Scoring API]
+        ClimateAPI[Climate Intelligence API]
+        RecommendationAPI[Plant Recommendation API]
+        AdminAPI[Admin Knowledge Update API]
+    end
+
+    subgraph "Data Layer - Template Foundation"
+        UsersTable[(users - Stripe customers, roles)]
+        ConversationsTable[(conversations)]
+        MessagesTable[(messages)]
+        DocumentsTable[(documents - GCS paths, status)]
+        ChunksTable[(document_chunks - dual embeddings)]
+        JobsTable[(document_processing_jobs)]
+        UsageTable[(usage_events - tier limits)]
+    end
+
+    subgraph "Data Layer - Extensions"
+        ProfileData[(users extended - location, hemisphere, climate, pets, goals)]
+        PlantFamilies[(plant_families - microbiome data)]
+        Plants[(plants - growing guides, brix targets)]
+        HealthGoals[(user_health_goals - junction table)]
+        Assessments[(assessments + responses - conversion tracking)]
+        Articles[(research_articles + tags - separate from documents)]
+        Premium[(garden_activities + brix_measurements - Phase 2)]
+    end
+
+    subgraph "RAG Processing Pipeline - Cloud Run"
+        ProcessorService[RAG Processor - FastAPI]
+        GCSHandler[GCS Event Handler - Cloud Function]
+        TaskProcessor[Task Queue Processor]
+
+        subgraph "Processing Services"
+            DocParser[Docling - PDF/Text Extraction]
+            Chunker[Semantic Chunking Service]
+            TextEmbed[Vertex AI - text-embedding-004<br/>768 dimensions]
+            MultimodalEmbed[Vertex AI - multimodalembedding@001<br/>1408 dimensions]
+        end
+    end
+
+    subgraph "Storage Layer"
+        GCS[Google Cloud Storage - Documents & Media]
+        VectorIndex[pgvector HNSW Indexes<br/>Text: 768d cosine<br/>Multimodal: 1408d cosine]
+    end
+
+    subgraph "External Services"
+        GeminiAPI[Google Gemini 2.5 - Chat AI]
+        StripeService[Stripe - Subscription Billing]
+        SupabaseAuth[Supabase - Authentication]
+        VertexAI[Vertex AI - Embeddings]
+    end
+
+    %% User Interface Connections
+    Landing -->|signup/login| AuthAPI
+    Assessment -->|submit answers| AssessmentAPI
+    Documents -->|browse articles| DocumentAPI
+    Chat -->|ask questions| ChatAPI
+    Profile -->|update location/goals| ClimateAPI
+    Admin -->|correct content| AdminAPI
+
+    %% Application Layer - Template
+    AuthAPI -->|validate| SupabaseAuth
+    ChatAPI -->|retrieve context| ChunksTable
+    ChatAPI -->|generate response| GeminiAPI
+    StripeAPI -->|webhook events| StripeService
+    DocumentAPI -->|signed URL| GCS
+
+    %% Application Layer - Extensions
+    AssessmentAPI -->|score & save| Assessments
+    AssessmentAPI -->|detect hemisphere| ProfileData
+    ClimateAPI -->|match climate conditions| ProfileData
+    RecommendationAPI -->|match goals→plants| HealthGoals
+    RecommendationAPI -->|filter by hemisphere| Plants
+    AdminAPI -->|update knowledge| Articles
+    AdminAPI -->|update plant data| Plants
+
+    %% RAG Pipeline Flow
+    GCS -.->|upload event| GCSHandler
+    GCSHandler -.->|create job| JobsTable
+    GCSHandler -.->|trigger| TaskProcessor
+    TaskProcessor -->|fetch job| JobsTable
+    TaskProcessor -->|download| GCS
+    TaskProcessor -->|process| ProcessorService
+
+    ProcessorService -->|parse| DocParser
+    DocParser -->|chunk| Chunker
+    Chunker -->|text content| TextEmbed
+    Chunker -->|images/video| MultimodalEmbed
+    TextEmbed -->|768d vectors| ChunksTable
+    MultimodalEmbed -->|1408d vectors| ChunksTable
+    ChunksTable -->|build index| VectorIndex
+
+    %% Data Layer Connections
+    UsersTable -.->|extend with| ProfileData
+    DocumentsTable -.->|specialized| Articles
+    ChunksTable -->|similarity search| ChatAPI
+    HealthGoals -->|many-to-many| ProfileData
+    HealthGoals -->|many-to-many| PlantFamilies
+    Plants -->|belongs to| PlantFamilies
+    Articles -->|chunks & embeddings| ChunksTable
+    Assessments -->|user responses| ProfileData
+
+    %% Usage & Billing
+    ChatAPI -->|log request| UsageTable
+    DocumentAPI -->|log upload| UsageTable
+    UsageTable -->|enforce limits| StripeService
+
+    %% Styling
+    classDef userInterface fill:#1E88E5,stroke:#1565C0,stroke-width:2px,color:#fff
+    classDef frontend fill:#42A5F5,stroke:#1976D2,stroke-width:2px,color:#fff
+    classDef backend fill:#66BB6A,stroke:#388E3C,stroke-width:2px,color:#fff
+    classDef database fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
+    classDef aiServices fill:#AB47BC,stroke:#7B1FA2,stroke-width:2px,color:#fff
+    classDef processing fill:#8E24AA,stroke:#6A1B9A,stroke-width:2px,color:#fff
+    classDef external fill:#FF7043,stroke:#D84315,stroke-width:2px,color:#fff
+    classDef payment fill:#FFA726,stroke:#F57C00,stroke-width:2px,color:#fff
+    classDef storage fill:#26A69A,stroke:#00695C,stroke-width:2px,color:#fff
+
+    class Landing,Assessment,Documents,Chat,Profile,Admin userInterface
+    class AuthAPI,ChatAPI,StripeAPI,DocumentAPI,AssessmentAPI,ClimateAPI,RecommendationAPI,AdminAPI backend
+    class UsersTable,ConversationsTable,MessagesTable,DocumentsTable,ChunksTable,JobsTable,UsageTable,ProfileData,PlantFamilies,Plants,HealthGoals,Assessments,Articles,Premium database
+    class ProcessorService,GCSHandler,TaskProcessor,DocParser,Chunker processing
+    class TextEmbed,MultimodalEmbed,GeminiAPI,VertexAI aiServices
+    class StripeService,SupabaseAuth external
+    class GCS,VectorIndex storage
