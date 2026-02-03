@@ -6,14 +6,14 @@ const nextConfig: NextConfig = {
       // Supabase Storage - signed URLs (private buckets)
       {
         protocol: "https",
-        hostname: "your-project-id.supabase.co",
+        hostname: "oejlndstybsezbyudixm.supabase.co",
         port: "",
         pathname: "/storage/v1/object/sign/**",
       },
       // Supabase Storage - authenticated URLs (private buckets)
       {
         protocol: "https",
-        hostname: "your-project-id.supabase.co",
+        hostname: "oejlndstybsezbyudixm.supabase.co",
         port: "",
         pathname: "/storage/v1/object/authenticated/**",
       },

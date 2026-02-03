@@ -29,9 +29,9 @@ export const IMAGE_UPLOAD_CONSTRAINTS = {
 // =============================================================================
 
 export const MODEL_CONFIG = {
-  name: "gemini-2.5-flash",
-  provider: "Google",
-  displayName: "Gemini 2.5 Flash",
+  name: "gpt-4o",
+  provider: "OpenAI",
+  displayName: "GPT-4o",
 } as const;
 
 // =============================================================================

@@ -7,35 +7,35 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: {
-    template: "%s | RAGI",
-    default: "RAGI: Chat with Your Documents Using AI",
+    template: "%s | Rewild.bio",
+    default: "Rewild.bio - Restore Your Microbiome Naturally",
   },
   description:
-    "Upload your documents, images, and videos, then chat with them using powerful Gemini AI models. RAGI turns your files into interactive knowledge you can query instantly.",
+    "Expert guidance for restoring gut microbiome diversity through personalized growing. Adaptive protocols for your climate, space, and experience level.",
   keywords: [
-    "RAG",
-    "Document AI",
-    "Chat with Documents",
-    "Gemini AI",
-    "Document Search",
-    "AI Knowledge Base",
-    "Document Analysis",
-    "File Upload AI",
-    "Intelligent Search",
-    "Document Intelligence",
+    "microbiome restoration",
+    "gut health gardening",
+    "soil microbiome",
+    "regenerative gardening",
+    "AI garden coach",
+    "microbiome diversity",
+    "rewilding",
+    "plant-based probiotics",
+    "soil to gut",
+    "endophytes",
   ],
   openGraph: {
-    title: "RAGI: Chat with Your Documents Using AI",
+    title: "Rewild.bio - Restore Your Microbiome Naturally",
     description:
-      "Upload your documents, images, and videos, then chat with them using powerful Gemini AI models. Turn your files into interactive knowledge.",
+      "Expert guidance for restoring gut microbiome diversity through personalized growing. Adaptive protocols for your climate, space, and experience level.",
     url: new URL(defaultUrl),
-    siteName: "RAGI",
+    siteName: "Rewild.bio",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "A preview of the RAGI document intelligence interface.",
+        alt: "Rewild.bio - Expert guidance for microbiome restoration",
       },
     ],
     locale: "en_US",
@@ -43,9 +43,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "RAGI: Chat with Your Documents Using AI",
+    title: "Rewild.bio - Restore Your Microbiome Naturally",
     description:
-      "Upload your documents, images, and videos, then chat with them using powerful Gemini AI models. Turn your files into interactive knowledge.",
+      "Expert guidance for restoring gut microbiome diversity through personalized growing. Adaptive protocols for your climate, space, and experience level.",
     images: ["/twitter-image.png"],
   },
   robots: {
@@ -69,14 +69,14 @@ export const generateLegalMetadata = (
   description: string,
 ): Metadata => {
   return {
-    title: `${title} | RAGI`,
+    title: `${title} | Rewild.bio`,
     description,
     robots: {
       index: true,
       follow: true,
     },
     openGraph: {
-      title: `${title} | RAGI`,
+      title: `${title} | Rewild.bio`,
       description,
       type: "website",
     },

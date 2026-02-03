@@ -1731,7 +1731,25 @@ gcloud config get-value project
 GEMINI_API_KEY=your-gemini-api-key
 ```
 
-**🔑 Important:** The web app handles all AI functionality. Backend services get configuration automatically during deployment.
+**🔑 Important:** The web app uses Gemini for embeddings (RAG). Backend services get configuration automatically during deployment.
+
+### Step 5.4b: Get OpenAI API Key (Chat – GPT-4o 128k context)
+
+**👤 USER TASK - Configure OpenAI API for chat:**
+
+1. **Create OpenAI API Key**
+   - Go to [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+   - Sign in or create an account
+   - Click **"Create new secret key"**
+   - **📝 Copy the API key** (starts with `sk-proj-...` or `sk-...`)
+
+2. **📋 Add to your `apps/web/.env.local` file:**
+
+```bash
+OPENAI_API_KEY=your-openai-api-key
+```
+
+**🔑 Important:** The chat interface uses OpenAI GPT-4o (128k context) for completions. Embeddings and RAG processing still use Google (Gemini).
 
 ### Step 5.5: Verify gcloud CLI Setup
 
@@ -1743,6 +1761,7 @@ Before proceeding with gcloud CLI verification, please confirm you have complete
 - ✅ **Step 5.2 & 5.3:** Authenticated gcloud CLI and configured project from environment file
 - ✅ **Step 5.4:** Created Gemini API key and updated the `apps/web/.env.local` file with:
   - `GEMINI_API_KEY=your-actual-gemini-api-key`
+- ✅ **Step 5.4b:** Created OpenAI API key and added `OPENAI_API_KEY` to `apps/web/.env.local`
 
 **Please confirm you have completed all the above steps and you're ready to proceed with gcloud CLI verification.**
 
@@ -2311,9 +2330,13 @@ SUPABASE_URL=https://abcdefghij.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiI...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiI...
 
-# --- Google AI Configuration ---
+# --- Google AI Configuration (embeddings, RAG processor) ---
 # Get API key from: https://aistudio.google.com/app/apikey
 GEMINI_API_KEY=AIzaSyD...
+
+# --- OpenAI Configuration (chat - GPT-4o 128k context) ---
+# Get API key from: https://platform.openai.com/api-keys
+OPENAI_API_KEY=sk-proj-...
 
 # --- Google Cloud Configuration (for file storage and other services) ---
 GOOGLE_CLOUD_PROJECT_ID=my-rag-project-123

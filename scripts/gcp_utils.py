@@ -325,7 +325,14 @@ class Colors:
 
 def log(message: str, color: str = Colors.RESET) -> None:
     """Print colored log message"""
-    print(f"{color}{message}{Colors.RESET}")
+    try:
+        print(f"{color}{message}{Colors.RESET}")
+    except UnicodeEncodeError:
+        # Fallback for Windows console encoding issues - strip emojis
+        import re
+        # Remove emoji characters
+        clean_message = re.sub(r'[^\x00-\x7F]+', '', message)
+        print(f"{color}{clean_message}{Colors.RESET}")
 
 
 def log_step(step: str, message: str) -> None:

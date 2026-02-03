@@ -11,8 +11,11 @@ export const env = createEnv({
     SUPABASE_ANON_KEY: z.string().min(1),
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
 
-    // Google AI (for text embeddings and chat)
+    // Google AI (for text embeddings and multimodal embeddings)
     GEMINI_API_KEY: z.string().min(1),
+
+    // OpenAI (for chat completions – GPT-4o 128k context)
+    OPENAI_API_KEY: z.string().min(1),
 
     // Google Cloud Vertex AI (for multimodal embeddings only)
     GOOGLE_CLOUD_PROJECT_ID: z.string().min(1),
@@ -45,6 +48,9 @@ export const env = createEnv({
 
     // Google AI
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+
+    // OpenAI (chat)
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 
     // Google Cloud Vertex AI (for multimodal embeddings)
     GOOGLE_CLOUD_PROJECT_ID: process.env.GOOGLE_CLOUD_PROJECT_ID,

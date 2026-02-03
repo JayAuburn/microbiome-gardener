@@ -1,149 +1,193 @@
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const PricingSection = () => {
-  const plans = [
-    {
-      name: "Free",
-      price: "$0",
-      period: "/month",
-      description: "Perfect for trying out RAGI",
-      features: [
-        "Up to 10 documents",
-        "100 MB storage",
-        "10 requests per day",
-        "All file types except video",
-      ],
-      cta: "Start Free",
-      popular: false,
-    },
-    {
-      name: "Basic",
-      price: "$29",
-      period: "/month",
-      description: "For professionals and small teams",
-      features: [
-        "Up to 1,000 documents",
-        "5 GB storage",
-        "1,000 requests per month",
-        "All file types including video",
-        "Email support",
-      ],
-      cta: "Go Basic",
-      popular: true,
-    },
-    {
-      name: "Pro",
-      price: "$99",
-      period: "/month",
-      description: "For power users and heavy usage",
-      features: [
-        "Unlimited documents",
-        "50 GB storage",
-        "Unlimited requests",
-        "All file types including video",
-        "Priority support",
-      ],
-      cta: "Go Pro",
-      popular: false,
-    },
-  ];
-
   return (
-    <section
-      id="pricing"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900"
-    >
+    <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/30">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Pricing That Scales with Your Knowledge
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Choose Your Plan
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Start free and upgrade as your document library grows. All plans
-            include powerful Gemini AI models.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-2">
+            Select the level of support that fits how much responsibility you want to carry.
+          </p>
+          <p className="text-sm text-primary font-semibold">
+            🎉 Founding Member Pricing — Lock in your rate permanently
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={cn(
-                "relative p-6 sm:p-8 rounded-2xl border-2 transition-all duration-300 animate-fade-in flex flex-col",
-                plan.popular
-                  ? "border-primary shadow-xl scale-105 bg-primary/5 dark:bg-primary/10"
-                  : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600",
-                index === 0 && "[animation-delay:0s]",
-                index === 1 && "[animation-delay:0.2s]",
-                index === 2 && "[animation-delay:0.4s]",
-              )}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
-                    Most Popular
-                  </span>
-                </div>
-              )}
-
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                  {plan.name}
-                </h3>
-                <div className="flex items-baseline justify-center gap-1 mb-2">
-                  <span className="text-5xl font-bold text-gray-900 dark:text-white">
-                    {plan.price}
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {plan.period}
-                  </span>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {plan.description}
-                </p>
+        {/* Three-Tier Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Basic Tier */}
+          <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-xl font-bold text-foreground mb-1">Basic</h3>
+            <p className="text-sm text-muted-foreground mb-4">Understand Your Path</p>
+            
+            <div className="mb-4">
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg text-muted-foreground line-through">$67</span>
+                <span className="text-3xl font-bold text-foreground">$47</span>
+                <span className="text-muted-foreground">/month</span>
               </div>
-
-              <ul className="space-y-4 mb-8 flex-1">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {feature}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link href="/profile" className="w-full">
-                <Button
-                  className={`w-full ${
-                    plan.popular
-                      ? "bg-primary hover:bg-primary-600 text-white"
-                      : "bg-gray-900 dark:bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-gray-900"
-                  }`}
-                  size="lg"
-                >
-                  {plan.cta}
-                </Button>
-              </Link>
+              <p className="text-xs text-primary mt-1">Save $240/year</p>
             </div>
-          ))}
+
+            <p className="text-xs font-semibold text-muted-foreground mb-3">Best for: Apartments, small spaces</p>
+
+            <ul className="space-y-2 mb-6 min-h-[280px]">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Personalized growing protocols</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Buying guidance (food quality context)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Environmental protection guidance</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Lifestyle optimization context</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Unlimited system access</span>
+              </li>
+              <li className="flex items-start gap-2 pt-2 mt-2 border-t border-border">
+                <span className="text-xs text-muted-foreground italic">You manage timing and decisions</span>
+              </li>
+            </ul>
+
+            <Button asChild variant="outline" className="w-full border-primary/50 hover:bg-primary/10 hover:border-primary">
+              <Link href="/assessment?tier=basic">Start with Basic</Link>
+            </Button>
+          </div>
+
+          {/* Premium Tier - Highlighted */}
+          <div className="relative bg-card border-2 border-primary rounded-lg p-6 shadow-lg">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold">
+              Most Popular
+            </div>
+
+            <h3 className="text-xl font-bold text-foreground mb-1">Premium</h3>
+            <p className="text-sm text-muted-foreground mb-4">We Hold the Line for You</p>
+            
+            <div className="mb-4">
+              <div className="flex items-baseline gap-2">
+                <span className="text-lg text-muted-foreground line-through">$497</span>
+                <span className="text-3xl font-bold text-foreground">$397</span>
+                <span className="text-muted-foreground">/month</span>
+              </div>
+              <p className="text-xs text-primary mt-1">Save $1,200/year</p>
+            </div>
+
+            <p className="text-xs font-semibold text-muted-foreground mb-3">Best for: Homeowners with yards (0.25-5 acres)</p>
+
+            <p className="text-xs font-semibold text-foreground mb-2">Everything in Basic PLUS:</p>
+
+            <ul className="space-y-2 mb-4 min-h-[280px]">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground"><strong>Property design guidance:</strong> Water harvesting, swale placement, food forest layout</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Progress tracking & system monitoring</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Weekly action prompts</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Seasonal timing management</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Drift prevention (system flags misalignment)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Expert oversight with decades of experience</span>
+              </li>
+            </ul>
+
+            <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 mb-4">
+              <p className="text-xs text-foreground italic text-center">
+                "Stop wondering if you're doing it right — we manage the timing and direction"
+              </p>
+            </div>
+
+            <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Link href="/assessment?tier=premium">Start with Premium</Link>
+            </Button>
+          </div>
+
+          {/* Ultra-Premium Tier */}
+          <div className="bg-card border border-border rounded-lg p-6">
+            <h3 className="text-xl font-bold text-foreground mb-1">Ultra-Premium</h3>
+            <p className="text-sm text-muted-foreground mb-4">White-Glove Service</p>
+            
+            <div className="mb-4">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-bold text-foreground">$2,497</span>
+                <span className="text-muted-foreground">/month</span>
+              </div>
+            </div>
+
+            <p className="text-xs font-semibold text-muted-foreground mb-3">Best for: Large properties (2-20+ acres)</p>
+
+            <p className="text-xs font-semibold text-foreground mb-2">Everything in Premium PLUS:</p>
+
+            <ul className="space-y-2 mb-4 min-h-[280px]">
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground"><strong>Digital property mapping</strong> (CAD plans, GIS integration)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground"><strong>Monthly 1:1 video calls</strong> (60-90 min)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Expert protocol review</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Custom troubleshooting</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Professional deliverables (material lists, timelines)</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                <span className="text-xs text-foreground">Priority support (2-hour response)</span>
+              </li>
+            </ul>
+
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 mb-4">
+              <p className="text-xs text-foreground font-semibold text-center">
+                Limited to 30 clients
+              </p>
+            </div>
+
+            <Button asChild variant="outline" className="w-full border-primary/50 hover:bg-primary/10 hover:border-primary">
+              <Link href="/assessment?tier=ultra">Apply for Ultra</Link>
+            </Button>
+          </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            All plans include access to Gemini 2.5 Flash and Pro models, secure
-            encryption, and regular updates.
+        {/* Guarantee */}
+        <div className="text-center mt-8">
+          <p className="text-sm text-muted-foreground">
+            30-day money-back guarantee • Upgrade anytime • Founding members grandfathered forever
           </p>
-          <div className="flex flex-wrap justify-center gap-8 text-sm text-gray-500">
-            <span>✓ 99.9% uptime SLA</span>
-            <span>✓ SOC 2 compliant</span>
-            <span>✓ 30-day money back guarantee</span>
-            <span>✓ Cancel anytime</span>
-          </div>
         </div>
       </div>
     </section>

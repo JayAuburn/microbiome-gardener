@@ -68,14 +68,16 @@ This roadmap is a **feature-based build order** for a solo developer, following 
   - CTA: "Discover Your Growing Knowledge Path"
 - [ ] Update problem framing in `apps/web/components/landing/ProblemSection.tsx`:
   - "Why store-bought (even organic) may not restore beneficial microbes"
-  - Research credibility messaging (studies showing different practices transfer different microbes)
+  - **Key science:** "Plants contain microbes inside them - growing method determines if they help or harm your gut"
+  - **Critical insight:** "Even cooking doesn't eliminate the problem - endotoxins from pathogenic microbes persist"
+  - Research credibility messaging (Graz study on microbes in plants, studies showing different practices transfer different microbes)
   - Use public-safe, ad-compliant language throughout
 - [ ] Add/update the indoor air quality hook in `apps/web/components/landing/FeaturesSection.tsx`:
   - "Plants filter ALL pollutants (PFAS, chemicals, dust, pesticides)"
   - Indoor and outdoor protection messaging
   - Public-safe, no medical claims
 - [ ] Update or add complete system teaser in `apps/web/components/landing/RAGDemoSection.tsx`:
-  - Visual/text flow: Seed endophytes → Soil (4+ families) → Plant → Food → Gut connection
+  - Visual/text flow: Seed (endophytes) → Soil (4+ families, quorum sensing) → Plant (microbes grow INSIDE plant) → Food (cooked or raw, endotoxins persist) → Gut (beneficial or pathogenic based on growing method)
   - Universal principles message: "Adapted to YOUR climate"
   - Works globally (any hemisphere, any location)
 - [ ] Update pricing tiers and plan names in `apps/web/components/landing/PricingSection.tsx`:
@@ -209,10 +211,14 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 - [ ] Build report component: `apps/web/components/assessment/DiscoveryPathReport.tsx`
 - [ ] Render member-track messaging with educational disclaimers:
   - Welcome: "Here's what you're about to discover that changes everything"
-  - Three-level problem education (conventional harmful, organic limited, this = only access)
+  - **Critical revelation:** "Plants contain microbes inside them (research shows significant portion of plant's microbes are internal, not just on surface)"
+  - **Growing method determines beneficial vs pathogenic:** Chemically grown = pathogenic microbes; Organic = beneficial; Better practices = greatly increased beneficial
+  - **Cooking revelation:** "Even cooking doesn't solve it - endotoxins and chemical signals from dead pathogenic microbes persist and damage your gut"
+  - **Medical field gap:** "This is why 'eat more plants' advice fails - medical researchers don't consider HOW plants were grown; soil microbiologists understand these connections"
+  - Three-level problem education (conventional actively harmful via endotoxins, organic mostly beneficial, better practices = greatly increased benefits)
   - Core truth: "You can't replace what you don't have access to"
   - Indoor air quality revelation (ALL pollutants)
-  - Complete system overview (seed → soil → plant → ferment → gut)
+  - Complete system overview (seed → soil → plant (microbes IN plant) → food (cooked or raw) → gut)
   - Personalized first step based on their space/constraints
 - [ ] Add "Next step" CTAs from the report into Basic tier features (Planting Guide, Plant Database, AI Coach)
 - [ ] Include health disclaimer component throughout the report
@@ -340,6 +346,7 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 [Goal: Reuse the working upload pipeline and attach research metadata + tags.]
 
 - [ ] Create admin upload UI: `apps/web/components/admin/research/ArticleUploadForm.tsx`
+- [ ] **Priority research to upload:** Graz study on microbes in plants (apple study showing significant portion of microbes are inside plant, not just surface)
 - [ ] Use the existing signed URL upload endpoint and completion flow under `apps/web/app/api/documents/*` for PDF ingestion
 - [ ] Create server actions: `apps/web/app/actions/admin/research.ts`
   - [ ] createResearchArticle (creates `documents` row with kind='kb_research' + `research_articles` row, sets tier_access/admin_approved defaults)
@@ -357,6 +364,15 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 [Goal: Build a flexible module system for organizing knowledge into categories that can be added without code changes.]
 
 - [ ] Define initial module taxonomy as constants in `apps/web/lib/constants/modules.ts`:
+  - **Microbes IN Plants (CRITICAL NEW MODULE - HIGH PRIORITY):**
+    - Graz study reference (significant portion of plant's microbes are inside, varies by plant)
+    - Growing method determines beneficial vs pathogenic microbes inside plant
+    - Chemically grown plants contain pathogenic microbes that persist as endotoxins after cooking
+    - Organic plants contain mostly beneficial microbes
+    - Better microbial practices greatly increase beneficial microbes inside plants
+    - Cooking/heating kills microbes but endotoxins and chemical signaling remain
+    - Medical field gap: "eat more plants" advice without considering growing method
+    - Soil microbiologist vs medical researcher knowledge gap
   - Core Principles (4+ families, quorum sensing, endophytes, autoinduction mechanisms)
   - Seed Quality (heritage/landrace, sourcing, endophyte richness)
   - Advanced Techniques (autoinducers seed treatment, foliar feeds, Brix as indicator tool)
@@ -570,7 +586,10 @@ This roadmap is a **feature-based build order** for a solo developer, following 
     - **Plant image gallery** (display multiple angles/growth stages from image_urls array)
     - Basic info with visual identification
     - **Beneficial microbe potential section** (NOT fixed profile - general patterns):
-      - "Plants in this family typically support these beneficial microbe types"
+      - **"Plants contain microbes inside them"** (Graz study: significant portion of plant's microbes are internal)
+      - "Plants in this family typically support these beneficial microbe types INSIDE the plant when grown with proper practices"
+      - **Growing method impact:** Chemically grown = pathogenic; Organic = beneficial; Better practices = greatly increased beneficial
+      - **Cooking note:** "Even cooked, endotoxins and signals from pathogenic microbes persist - growing method matters regardless of preparation"
       - Endophyte hosting potential indicator (varies by growing conditions)
       - Quorum sensing contribution (how this plant contributes to soil microbe communication)
       - Explanation: actual microbes vary by soil, growing method, and conditions
@@ -669,19 +688,27 @@ This roadmap is a **feature-based build order** for a solo developer, following 
   - [ ] Update `apps/web/app/actions/chat.ts` to include profile context in embeddings/prompts
 - [ ] Build prompt engineering system in `apps/web/lib/chat/prompts.ts`:
   - Base assumption: user knows "plants are healthy" but NOT that growing methods affect microbiome
+  - **CRITICAL FOUNDATION:** Plants contain microbes inside them (significant portion, varies by plant type)
+  - **Growing method revelation:** Chemically grown = pathogenic microbes; Organic = beneficial; Better practices = greatly increased beneficial
+  - **Cooking/endotoxin education:** Even cooked plants carry endotoxins and chemical signals from dead microbes - this is why chemically-grown plants harm gut even when cooked
+  - **Medical field gap:** Address why "eat more plants" advice fails without considering growing method
   - Progressive disclosure templates (start simple, go deeper as understanding grows)
   - Member messaging track with disclaimers embedded
-  - Complete system education flow (seed → soil → plant → ferment → gut)
+  - Complete system education flow (seed → soil → plant (microbes IN plant) → food (cooked or raw, endotoxins persist) → gut)
   - Plant family diversity emphasis in every response (minimum 4, more is better)
   - **Zone planting and design systems emphasis** (major knowledge area)
   - Response templates for common question patterns:
     - "What should I plant?" → Emphasize plant family diversity + spacing for root proximity
+    - **"Why does HOW I grow matter?"** → Plants contain microbes inside them; chemically grown = pathogenic (endotoxins persist even when cooked); organic = beneficial; better practices = greatly increased beneficial
+    - **"Can I just buy organic?"** → Organic is better (beneficial vs pathogenic) but limited microbe range; growing your own with proper practices greatly increases beneficial microbes inside plants
+    - **"What about cooking?"** → Cooking kills microbes but endotoxins and chemical signaling from dead pathogenic microbes remain and damage gut - growing method matters regardless of cooking
+    - **"Why hasn't my doctor mentioned this?"** → Medical field gap - researchers recommend "eat more plants" without considering growing method; soil microbiologists understand these connections but medical field generally doesn't
     - "How do I design my garden?" → **Ecological zones (perimeter/production/ecosystem), water management, fire protection**
     - "How do I deal with HOA?" → Compliant solutions maintaining effectiveness + local bylaws navigation
     - "How do I deal with water?" → **Swales, rainwater collection, natural ponds, hydrology design**
     - "Fire protection?" → **Fire-resistant perimeter planting, defensible space design**
     - "Flood issues?" → **Flood management, water flow design, elevation strategies**
-    - "Should I grow or buy?" → Access to missing microbes explanation
+    - "Should I grow or buy?" → Growing = control beneficial microbes inside plants; buying = risk of pathogenic microbes and endotoxins (even organic has limited range)
     - "How do I store produce?" → Pick-and-eat benefits, storage methods, optional fermentation
     - Questions about animals → Ecosystem integration (dogs, pollinators, chickens)
     - Questions about techniques → Contextual education (autoinducers seed treatment only, Brix as indicator, etc.)
@@ -1191,6 +1218,12 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 [Goal: Ensure knowledge base covers all specified topics from prep docs.]
 
 - [ ] Create admin checklist for knowledge coverage:
+  - **Microbes IN Plants (CRITICAL FOUNDATION - HIGHEST PRIORITY):**
+    - Graz study and similar research (plants contain significant portion of microbes internally)
+    - Growing method determines beneficial vs pathogenic microbes inside plants
+    - Endotoxins and chemical signaling persist after cooking
+    - Medical field gap (eat more plants without considering growing method)
+    - Soil microbiologist vs medical researcher knowledge divide
   - Core principles (4+ families, quorum sensing, Brix as indicator tool, endophytes, autoinduction)
   - Seed quality and sourcing
   - Advanced techniques (autoinducers seed treatment, foliar feeds)
@@ -1286,11 +1319,14 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 **MicrobiomeGardener.ai is complete when:**
 
 ✅ Users can complete Growing Knowledge Path Assessment during signup  
-✅ Discovery Path report delivers member-track education with disclaimers  
+✅ Discovery Path report delivers member-track education with disclaimers including critical microbes-in-plants science  
+✅ Discovery Path explains endotoxins persist after cooking (why chemically-grown plants harm gut even when cooked)  
 ✅ Onboarding email sequence works (welcome emails sent immediately)  
 ✅ Users can manage full growing profile and health goals  
 ✅ AI Coach provides personalized microbiome gardening guidance with RAG context  
-✅ AI Coach uses progressive education system (seed → soil → plant → ferment → gut)  
+✅ AI Coach educates on microbes IN plants (growing method determines beneficial vs pathogenic, endotoxins persist after cooking)  
+✅ AI Coach uses progressive education system (seed → soil → plant (microbes IN plant) → food (cooked/raw) → gut)  
+✅ AI Coach addresses medical field gap (why "eat more plants" advice fails without considering growing method)  
 ✅ Users can browse comprehensive plant database with beneficial microbe potential info (general patterns, not fixed profiles) and plant images  
 ✅ Users can access curated research articles with tier-appropriate limits  
 ✅ Research bookmarks work for Premium users  
@@ -1311,6 +1347,11 @@ This roadmap is a **feature-based build order** for a solo developer, following 
 ✅ All features respect tier-based access control  
 ✅ Member messaging with disclaimers displays appropriately  
 ✅ Background jobs send ongoing emails and notifications  
+✅ **Knowledge base covers CRITICAL FOUNDATION: Microbes IN Plants**
+  - Graz study on microbes inside plants (uploaded to research feed)
+  - Growing method determines beneficial vs pathogenic microbes inside plants
+  - Endotoxins and chemical signaling persist after cooking
+  - Medical field gap and soil microbiologist knowledge
 ✅ **Knowledge base covers zone planting and water management extensively (MAJOR FOCUS):**
   - Perimeter planting (fire, flood, pollution protection)
   - Water harvesting (swales, rainwater collection, natural ponds)

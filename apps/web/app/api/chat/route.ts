@@ -6,7 +6,7 @@ import {
   type TextUIPart,
   type FileUIPart,
 } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { openai } from "@ai-sdk/openai";
 import { getCurrentUserId } from "@/lib/auth";
 import { checkMessageLimits, recordUsageEvent } from "@/lib/usage-tracking";
 import { searchForRAGContext } from "@/lib/rag/search-service";
@@ -21,11 +21,6 @@ type UiPart = TextUIPart | FileUIPart;
 
 const isTextPart = (part: UiPart): part is TextUIPart => part.type === "text";
 const isFilePart = (part: UiPart): part is FileUIPart => part.type === "file";
-
-// Create Google AI provider instance with API key
-const google = createGoogleGenerativeAI({
-  apiKey: env.GEMINI_API_KEY,
-});
 
 // Set max duration for vercel functions
 export const maxDuration = 60;
@@ -205,11 +200,13 @@ Only include the Sources section when you actually use information from the prov
     // Track if there was an error during streaming
     let hasStreamError = false;
 
-    // Use AI SDK with Google provider for streaming
+    // Use AI SDK with OpenAI provider for streaming (GPT-4o 128k context)
     const result = streamText({
-      model: google(MODEL_CONFIG.name),
+      model: openai(MODEL_CONFIG.name, {
+        apiKey: env.OPENAI_API_KEY,
+      }),
       system: systemPrompt,
-      messages: convertToModelMessages(processedMessages),
+      messages: await convertToModelMessages(processedMessages),
       temperature: 0.7,
       // Forward the abort signal for proper cancellation
       abortSignal: req.signal,
@@ -318,16 +315,24 @@ Only include the Sources section when you actually use information from the prov
       errorMessage.includes("404") ||
       errorMessage.includes("model_not_found")
     ) {
-      return new Response("Gemini model not found", { status: 404 });
+      return new Response("OpenAI model not found", { status: 404 });
     }
 
-    if (errorMessage.includes("401") || errorMessage.includes("unauthorized")) {
-      return new Response("Invalid Google AI API credentials", { status: 401 });
+    if (
+      errorMessage.includes("401") ||
+      errorMessage.includes("403") ||
+      errorMessage.includes("unauthorized") ||
+      errorMessage.includes("PERMISSION_DENIED") ||
+      errorMessage.includes("invalid_api_key")
+    ) {
+      return new Response("Invalid OpenAI API key", {
+        status: 401,
+      });
     }
 
     if (errorMessage.includes("429") || errorMessage.includes("rate_limit")) {
       return new Response(
-        "Google AI API rate limit exceeded. Please try again later.",
+        "OpenAI rate limit exceeded. Please try again later.",
         { status: 429 },
       );
     }

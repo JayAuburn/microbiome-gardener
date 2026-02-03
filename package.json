@@ -1,5 +1,5 @@
 {
-  "name": "ragi-saas",
+  "name": "microbiome-gardener",
   "private": true,
   "workspaces": [
     "apps/*"

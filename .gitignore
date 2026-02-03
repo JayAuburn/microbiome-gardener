@@ -12,6 +12,10 @@ __pycache__/
 .env*.local
 .env.prod
 
+# Service account keys (security)
+service-account-key.json
+*service-account*.json
+
 # IDE and Editor files
 .vscode/
 .idea/

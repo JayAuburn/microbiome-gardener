@@ -1,6 +1,6 @@
-# RAG SaaS Template
+# MicrobiomeGardener.ai
 
-A complete **Retrieval-Augmented Generation (RAG) SaaS application** built with modern technologies. This template allows users to upload documents and ask questions about them through an intelligent chat interface.
+An AI-powered microbiome restoration coaching platform that teaches people to rebuild gut microbiome diversity through soil-based regenerative growing methods. Built with **Next.js 15**, **Python**, and **Google Cloud** RAG infrastructure.
 
 ## 🌟 Cross-Platform Ready
 

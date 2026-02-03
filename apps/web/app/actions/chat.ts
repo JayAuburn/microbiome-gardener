@@ -14,13 +14,8 @@ import { IMAGE_UPLOAD_CONSTRAINTS, MODEL_CONFIG } from "@/lib/app-utils";
 import { generateImagePath } from "@/lib/attachments";
 import { eq, desc, and } from "drizzle-orm";
 import { generateText } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { openai } from "@ai-sdk/openai";
 import { env } from "@/lib/env";
-
-// Create Google AI provider instance for title generation
-const google = createGoogleGenerativeAI({
-  apiKey: env.GEMINI_API_KEY,
-});
 
 /**
  * Vector Search Results for RAG Integration
@@ -318,9 +313,9 @@ export async function generateConversationTitle(
 
 **Return only the title text - no quotes, explanations, or additional formatting.**`;
 
-    // Generate title using Google AI
+    // Generate title using OpenAI (GPT-4o)
     const result = await generateText({
-      model: google(MODEL_CONFIG.name),
+      model: openai(MODEL_CONFIG.name, { apiKey: env.OPENAI_API_KEY }),
       system: systemPrompt,
       prompt: `Generate a conversation title for this user message: ${messageForAI}`,
       temperature: 0.3, // Lower temperature for more consistent, focused titles

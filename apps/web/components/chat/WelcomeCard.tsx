@@ -69,7 +69,7 @@ export function WelcomeCard() {
 
           <CardDescription className="text-sm sm:text-base mt-1 max-w-xl mx-auto leading-relaxed">
             Turn your documents into intelligent, queryable knowledge. Upload
-            files and chat with your content using Google&apos;s Gemini AI.
+            files and chat with your content using {MODEL_CONFIG.displayName}.
           </CardDescription>
         </CardHeader>
 
